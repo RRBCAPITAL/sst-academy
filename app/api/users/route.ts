@@ -1,7 +1,12 @@
-import { sql } from "@vercel/postgres";
-
-export async function Handler(req, { params }) {
-
-const likes = 100;
-const { rows } = await sql`SELECT * FROM posts WHERE likes > ${likes};`;
+import type { NextApiRequest, NextApiResponse } from 'next'
+ 
+type ResponseData = {
+  message: string
+}
+ 
+export default function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  res.status(200).json({ message: 'Hello from Next.js!' })
 }
