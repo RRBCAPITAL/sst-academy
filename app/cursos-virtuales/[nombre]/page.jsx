@@ -4,10 +4,10 @@ import { useParams } from 'next/navigation'
 import { deslugify } from '@/utils/deslugify'
 import Curso from '@/pages/Curso'
 
-const page = () => {
+const RouteCursoDetalle = () => {
 
     const { nombre } = useParams();
-    
+
     const formatNombre = deslugify(nombre);
 
   return (
@@ -17,4 +17,4 @@ const page = () => {
   )
 }
 
-export default page
+export default RouteCursoDetalle
