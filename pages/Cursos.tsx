@@ -1,13 +1,14 @@
 "use client"
 
-import React from 'react'
-import axios from 'axios'
-import { useEffect, useState } from 'react';
-import { Curso } from '../Types/curso.types';
+import { useState, useEffect } from 'react';
+import { Curso } from '@/Types/curso.types';
+import axios from 'axios';
+import Link from 'next/link';
+import { slugify } from '@/utils/slugify';
 
-const Inicio = () => {
+const Cursos = () => {
 
-    // Estado para almacenar los cursos
+     // Estado para almacenar los cursos
   const [cursos, setCursos] = useState<Curso[]>([]);
 
   useEffect(() => {
@@ -22,26 +23,24 @@ const Inicio = () => {
     fetchCursos(); // Llama a la función para obtener los cursos al cargar el componente
   }, []);
 
-  console.log(cursos);
-  
-
   return (
     <div>
-    <h1>Lista de Cursos</h1>
-    <ul>
+        <ul>
       {cursos.length > 0 ? (
         cursos.map(curso => (
           <li key={curso.curso_id}>
+            <Link href={`/cursos-virtuales/${slugify(curso.nombre)}`}>
             <h2 className='text-white'>Curso {curso.nombre}</h2>
             {/* Puedes agregar más detalles del curso aquí */}
+            </Link>
           </li>
         ))
       ) : (
-        <p>No hay cursos disponibles.</p>
+        <p></p>
       )}
     </ul>
-  </div>
+    </div>
   )
 }
 
-export default Inicio
+export default Cursos
