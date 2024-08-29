@@ -5,7 +5,11 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import VimeoPlayer from '@/components/VimeoPlayer';
 
-const Curso = ({ nombre }) => {
+interface NombreDelCurso {
+  nombre: string;
+}
+
+const Curso = (props: NombreDelCurso) => {
 
     // Estado para almacenar los cursos
     const [curso, setCurso] = useState<CursoDetallado[]>([]);
