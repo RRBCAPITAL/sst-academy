@@ -31,13 +31,20 @@ const Curso = (props: NombreDelCurso) => {
     console.log('Este es el curso ', curso);
 
   return (
-    <div className='w-screen p-20'>
-      <div className='w-1/2 min-h-screen'>
+    <div className='w-screen p-20 flex flex-row gap-4'>
+      <div className='w-1/2 min-h-fit p-4'>
       {curso?.map(curso => (
                 <div key={curso.curso_id}>
                     <VimeoPlayer video_url={curso.video_intro} />
-                    <h1 className='text-4xl font-bold mt-4'>{curso.curso_nombre}</h1>
-                    <p className='mt-4 font-light'>{curso.curso_descripcion}</p>
+                    <h1 className='text-4xl font-bold mt-4 px-10'>{curso.curso_nombre}</h1>
+                    <p className='mt-4 font-light px-10'>{curso.curso_descripcion}</p>
+                    <button className='bg-blue-500 mt-4 font-light px-10'>Comprar ahora</button>
+                    <p className='mt-4 font-light px-10'>15% de dscto.</p>
+                    <p className='mt-4 font-light px-10'>S/ {curso.curso_precio}</p>
+                    <p className='mt-4 font-light px-10'>{curso.curso_duracion} horas</p>
+                    <p className='mt-4 font-light px-10'>{curso.curso_materiales} materiales</p>
+                    <p className='mt-4 font-light px-10'>{curso.curso_calificacion} estrellas</p>
+                    
                     {/* {curso.unidades.map(unidad => (
                         <div key={unidad.unidad}>
                             <h3>{unidad.unidad_nombre}</h3>
@@ -52,6 +59,24 @@ const Curso = (props: NombreDelCurso) => {
                     ))} */}
                 </div>
             ))}
+      </div>
+      <div className='w-1/2 min-h-fit p-4'>
+        <h1 className='font-bold py-4 px-10'>Contenido</h1>
+        {curso?.map(curso => (
+                <div key={curso.curso_id}>
+                    {curso.unidades.map(unidad => (
+                        <div key={unidad.unidad} className='py-4'>
+                            <h3><strong className='text-blue-500'>{unidad.unidad}:</strong> {unidad.unidad_nombre}</h3>
+                            <h2>Temas</h2>
+                            {unidad.lecciones.map(leccion => (
+                                <div key={leccion.nombre}>                                 
+                                    <p> - {leccion.nombre}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+    </div>
+))}
       </div>
     </div>
   )

@@ -13,7 +13,7 @@ export async function GET(request: Request) {
         if (!userId) {
             // Si userId es nulo o vacío, devuelve solo la primera lección de la primera unidad
             query = sql`
-                WITH primera_leccion AS (
+                WITH lecciones_agregadas AS (
                     SELECT
                         u.curso_id,
                         u.unidad,
@@ -24,31 +24,42 @@ export async function GET(request: Request) {
                     FROM unidad u
                     LEFT JOIN leccion l ON u.unidad_id = l.unidad_id
                     WHERE u.curso_id = ${cursoId}
-                    ORDER BY u.unidad ASC, l.leccion_id ASC
-                    LIMIT 1
+                ),
+                unidades_agregadas AS (
+                    SELECT
+                        curso_id,
+                        unidad,
+                        unidad_nombre,
+                        JSON_AGG(
+                            JSON_BUILD_OBJECT(
+                                'nombre', leccion_nombre,
+                                'video_url', video_url,
+                                'material_descarga', material_descarga
+                            )
+                        ) AS lecciones
+                    FROM lecciones_agregadas
+                    GROUP BY curso_id, unidad, unidad_nombre
                 )
                 SELECT
                     c.curso_id,
                     c.nombre AS curso_nombre,
                     c.descripcion AS curso_descripcion,
+                    c.calificacion as curso_calificacion,
+                    c.materiales as curso_materiales,
+                    c.duracion as curso_duracion,
+                    c.precio AS curso_precio,
                     c.video_intro AS video_intro,
                     JSON_AGG(
                         JSON_BUILD_OBJECT(
-                            'unidad', pl.unidad,
-                            'unidad_nombre', pl.unidad_nombre,
-                            'lecciones', JSON_BUILD_ARRAY(
-                                JSON_BUILD_OBJECT(
-                                    'nombre', pl.leccion_nombre,
-                                    'video_url', pl.video_url,
-                                    'material_descarga', pl.material_descarga
-                                )
-                            )
+                            'unidad', unidad,
+                            'unidad_nombre', unidad_nombre,
+                            'lecciones', lecciones
                         )
                     ) AS unidades
                 FROM curso c
-                LEFT JOIN primera_leccion pl ON c.curso_id = pl.curso_id
+                LEFT JOIN unidades_agregadas ua ON c.curso_id = ua.curso_id
                 WHERE c.curso_id = ${cursoId}
-                GROUP BY c.curso_id, c.nombre;
+                GROUP BY c.curso_id, c.nombre, c.descripcion, c.video_intro;
             `;
         } else {
             // Si userId no es nulo o vacío, devuelve las unidades y lecciones asignadas al usuario
@@ -86,6 +97,7 @@ export async function GET(request: Request) {
                     c.curso_id,
                     c.nombre AS curso_nombre,
                     c.descripcion AS curso_descripcion,
+                    c.precio AS curso_precio,
                     c.video_intro AS video_intro,
                     JSON_AGG(
                         JSON_BUILD_OBJECT(

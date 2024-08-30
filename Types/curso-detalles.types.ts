@@ -16,6 +16,10 @@ export interface CursoDetallado {
     curso_id: string;
     curso_nombre: string;
     curso_descripcion: string;
+    curso_calificacion: number;
+    curso_materiales: string;
+    curso_duracion: number;
+    curso_precio: number; 
     video_intro: string;
     unidades: Unidad[];
 }
