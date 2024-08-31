@@ -28,19 +28,8 @@ const Inicio = () => {
 
   return (
     <div>
-    <h1>Lista de Cursos</h1>
-    <ul>
-      {cursos.length > 0 ? (
-        cursos.map(curso => (
-          <li key={curso.curso_id}>
-            <h2 className='text-white'>Curso {curso.nombre}</h2>
-            {/* Puedes agregar más detalles del curso aquí */}
-          </li>
-        ))
-      ) : (
-        <p>No hay cursos disponibles.</p>
-      )}
-    </ul>
+    <h1>SST ACADEMY</h1>
+    <h2>LA MEJOR ACADEMIA VIRTUAL DEL PERU</h2>
   </div>
   )
 }

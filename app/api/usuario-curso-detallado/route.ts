@@ -116,7 +116,11 @@ export async function GET(request: Request) {
         }
 
         const { rows } = await query;
-        return NextResponse.json({ curso: rows });
+        if(rows.length > 0){
+            return NextResponse.json({ success: true, curso: rows });
+        } else{
+            return NextResponse.json({ success: false });
+        }
 
     } catch (error) {
         return NextResponse.json({ error });
