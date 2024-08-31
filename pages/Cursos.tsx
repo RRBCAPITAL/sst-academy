@@ -27,15 +27,15 @@ const Cursos = () => {
       <ul>
         {cursos.length > 0 ? (
           cursos.map((curso) => (
-            <Link href={`/cursos-virtuales/${slugify(curso.nombre)}`}>
-              <li
-                key={curso.curso_id}
-                className="bg-blue-500 w-fit h-fit mt-4 p-4"
-              >
+            <li
+              key={curso.curso_id}
+              className="bg-blue-500 w-fit h-fit mt-4 p-4"
+            >
+              <Link href={`/cursos-virtuales/${slugify(curso.nombre)}`}>
                 <h2 className="text-white">Curso {curso.nombre}</h2>
                 {/* Puedes agregar más detalles del curso aquí */}
-              </li>
-            </Link>
+              </Link>
+            </li>
           ))
         ) : (
           <p></p>
