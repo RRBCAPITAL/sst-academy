@@ -5,14 +5,14 @@ import React, { useState } from 'react';
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [activeSubMenu, setActiveSubMenu] = useState(null);
+  const [activeSubMenu, setActiveSubMenu] = useState('');
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
 
-  const toggleSubMenu = (menu) => {
-    setActiveSubMenu(activeSubMenu === menu ? null : menu);
+  const toggleSubMenu = (menu: string) => {
+    setActiveSubMenu(activeSubMenu === menu ? '' : menu);
   };
 
   return (
