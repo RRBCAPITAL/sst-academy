@@ -48,7 +48,7 @@ const CursoDashboard = (props: CursoId) => {
  
   }, [user, changeLeccion]); // Dependencias de useEffect
 
-  const handleLeccionHecha = async (leccion_id) => {
+  const handleLeccionHecha = async (leccion_id: any) => {
 
     const response = await axios.post(
       `/api/usuario-leccion-hecha`,
