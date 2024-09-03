@@ -178,6 +178,6 @@ export async function GET(request: Request) {
             }
         }
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message });
+        return NextResponse.json({ success: false, error: error });
     }
 }
