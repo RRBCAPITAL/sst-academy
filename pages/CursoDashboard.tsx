@@ -67,7 +67,7 @@ const CursoDashboard = (props: CursoId) => {
   return (
     <div className="w-screen p-20 flex flex-row gap-4">
       <div className="w-1/2 min-h-fit p-4">
-        {curso?.map((curso) => (
+        {curso?.map((curso: any) => (
           <div key={curso.curso_id}>
             <h1 className="text-4xl font-bold mt-4 mb-4 px-10">{curso.curso_nombre}</h1>
             <VimeoPlayer video_url={curso.video_intro} />
