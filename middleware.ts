@@ -12,6 +12,16 @@ export function middleware(req: NextRequest) {
     });
   }
 
+  const response = NextResponse.next();
+
+  response.headers.set('Access-Control-Allow-Origin', 'https://dashboard-admin-sst-academy-git-main-rrbcapital.vercel.app');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    return new NextResponse(null, { status: 200 });
+  }
+
   return NextResponse.next();
 }
 
