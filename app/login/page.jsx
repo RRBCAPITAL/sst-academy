@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import axios from '../../utils/axios.config';
 import { useRouter } from 'next/navigation';
+import SlotsSignIn from '../../components/Login'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -40,7 +41,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}>
         <div>LOGIN</div>
         <div>
           <label htmlFor="username">Usuario</label>
@@ -68,8 +69,9 @@ const LoginPage = () => {
         <p>
           No tienes una cuenta? <span className="text-red-500">Incríbete a un curso</span>
         </p>
-      </form>
-      
+      </form> */}
+  
+      <SlotsSignIn />
     </div>
   );
 };
