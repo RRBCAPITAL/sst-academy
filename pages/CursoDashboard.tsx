@@ -2,7 +2,7 @@
 
 import { CursoDetallado } from "@/Types/curso-detalles.types";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/utils/axios.config";
 import VimeoPlayer from "@/components/VimeoPlayer";
 
 interface CursoId {

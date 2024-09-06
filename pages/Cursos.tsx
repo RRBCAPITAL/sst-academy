@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Curso } from "@/Types/curso.types";
-import axios from "axios";
+import axios from "@/utils/axios.config";
 import Link from "next/link";
 import { slugify } from "@/utils/slugify";
 
