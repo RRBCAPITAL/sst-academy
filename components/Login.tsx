@@ -15,13 +15,25 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
-import { AppProvider, SignInPage } from '@toolpad/core';
+import { AppProvider } from '@toolpad/core';
 import { useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
 
-const providers = [{ id: 'credentials', name: 'Email and Password' }];
+// Interfaces for props
+interface CustomEmailFieldProps {
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-function CustomEmailField({ value, onChange }) {
+interface CustomPasswordFieldProps {
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickShowPassword: () => void;
+  onMouseDownPassword: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  showPassword: boolean;
+}
+
+function CustomEmailField({ value, onChange }: CustomEmailFieldProps) {
   return (
     <TextField
       id="username"
@@ -45,7 +57,13 @@ function CustomEmailField({ value, onChange }) {
   );
 }
 
-function CustomPasswordField({ value, onChange, onClickShowPassword, onMouseDownPassword, showPassword }) {
+function CustomPasswordField({
+  value,
+  onChange,
+  onClickShowPassword,
+  onMouseDownPassword,
+  showPassword
+}: CustomPasswordFieldProps) {
   return (
     <FormControl sx={{ my: 2 }} fullWidth variant="outlined">
       <InputLabel size="small" htmlFor="outlined-adornment-password">
@@ -115,24 +133,23 @@ function ForgotPasswordLink() {
 
 export default function SlotsSignIn() {
   const theme = useTheme();
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [username, setUsername] = React.useState<string>('');
+  const [password, setPassword] = React.useState<string>('');
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const router = useRouter();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event: React.MouseEvent) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Realizar la solicitud API con Axios
     axios.post('/api/login', { username, password })
       .then(response => {
-
         if (response.data.success) {
           // Realizar acciones en caso de éxito, como redirigir al usuario
           console.log('Usuario autenticado con éxito');

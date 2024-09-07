@@ -15,6 +15,7 @@ const Curso = (props: NombreDelCurso) => {
     const [curso, setCurso] = useState<CursoDetallado[]>([]);
     const userId = '';
     const cursoId = 'A-1';
+    console.log('Hola mundo');
 
     useEffect(() => {
       // Función para obtener la lista de cursos
