@@ -1,6 +1,6 @@
 "use client";
 
-import { CursoDetallado } from '@/types/curso-detalles.types';
+import { CursoDetallado } from '@/Types/curso-detalles.types';
 import React, { useEffect, useState } from 'react';
 import axios from '@/utils/axios.config';
 import VimeoPlayer from '@/components/VimeoPlayer';

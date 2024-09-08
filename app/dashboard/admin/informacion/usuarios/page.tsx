@@ -5,7 +5,7 @@ import DashboardCard from '@/app/dashboard/admin/components/shared/DashboardCard
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import axios from '@/utils/axios.config'; // Ajusta la ruta según tu estructura
-import { DataUser } from '@/types/user.types';
+import { DataUser } from '@/Types/user.types';
 import TableUsers from '../../components/dashboard/TableUsers';
 
 const Item = styled(Paper)(({ theme }) => ({

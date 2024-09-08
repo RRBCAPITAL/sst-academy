@@ -3,7 +3,7 @@
 import React from 'react'
 import axios from '@/utils/axios.config'
 import { useEffect, useState } from 'react';
-import { Curso } from '../types/curso.types';
+import { Curso } from '../Types/curso.types';
 import VimeoPlayer from '@/components/VimeoPlayer';
 
 const Inicio = () => {
