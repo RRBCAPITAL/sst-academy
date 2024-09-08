@@ -36,7 +36,7 @@ const LoginForm: React.FC = () => {
         // Almacena la información del usuario en el localStorage
         localStorage.setItem('user', JSON.stringify(res.data.usuario));
 
-        if (res.data.usuario.rol === 'Administrador') {
+        if (res.data.usuario.rol === 'administrador') {
           router.push('/dashboard/admin');
         } else {
           // Redirige al usuario a la página de inicio
