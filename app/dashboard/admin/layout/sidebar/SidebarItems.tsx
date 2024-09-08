@@ -7,7 +7,7 @@ import NavGroup from "./NavGroup/NavGroup";
 
 const SidebarItems = ({ toggleMobileSidebar }: any) => {
   const pathname = usePathname();
-  const pathDirect = pathname;
+  const pathDirect = pathname ?? '';
 
   return (
     <Box sx={{ px: 3 }}>
@@ -24,7 +24,7 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
               <NavItem
                 item={item}
                 key={item.id}
-                pathDirect={pathDirect}
+                pathDirect={pathDirect} // pathDirect siempre es una cadena
                 onClick={toggleMobileSidebar}
               />
             );
@@ -34,4 +34,5 @@ const SidebarItems = ({ toggleMobileSidebar }: any) => {
     </Box>
   );
 };
+
 export default SidebarItems;
