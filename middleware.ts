@@ -1,23 +1,45 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
+import { parse } from 'cookie';
 
-export function middleware(req: NextRequest) {
+export async function middleware(request: NextRequest) {
+  const url = request.nextUrl.clone();
+  const path = url.pathname;
+
+  // Manejo de CORS
   const response = NextResponse.next();
-
-  // Configura los encabezados CORS
   response.headers.set('Access-Control-Allow-Origin', '*');
   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   response.headers.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization');
 
   // Maneja solicitudes OPTIONS para CORS
-  if (req.method === 'OPTIONS') {
+  if (request.method === 'OPTIONS') {
     return new NextResponse(null, { status: 200 });
+  }
+
+  // Obtener y analizar las cookies
+  const cookies = parse(request.headers.get('cookie') || '');
+  const token = cookies.token;
+  const user = cookies.user ? JSON.parse(cookies.user) : null;
+
+  // Verifica autenticación
+  if (!token) {
+    if (path.startsWith('/dashboard')) {
+      url.pathname = '/login'; // Redirige al login si no está autenticado
+      return NextResponse.redirect(url);
+    }
+  } else {
+    // Verifica autorización
+    if (path.startsWith('/dashboard/admin') && (!user || user.rol !== 'administrador')) {
+      // Redirige si el rol no es administrador
+      url.pathname = '/dashboard/estudiante';
+      return NextResponse.redirect(url);
+    }
   }
 
   return response;
 }
 
-// Configura el middleware para aplicar en las rutas de API
+// Configura el middleware para aplicar en las rutas de API y dashboard
 export const config = {
-  matcher: '/api/:path*',
+  matcher: ['/api/:path*', '/dashboard/:path*'],
 };

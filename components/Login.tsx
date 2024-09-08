@@ -5,6 +5,7 @@ import { Box, TextField, Button, Grid, Typography, useMediaQuery, useTheme } fro
 import { useForm, Controller } from 'react-hook-form';
 import axios from '@/utils/axios.config'; // Ajusta la ruta según tu configuración
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 // Define una interfaz para los datos del formulario de inicio de sesión
 interface LoginFormData {
@@ -35,15 +36,17 @@ const LoginForm: React.FC = () => {
       if (res.data.success) {
         // Almacena la información del usuario en el localStorage
         localStorage.setItem('user', JSON.stringify(res.data.usuario));
+        // Almacena el token y los datos del usuario en las cookies
+        Cookies.set('token', res.data.token, { expires: 1 }); // Token con expiración de 1 día
+        Cookies.set('user', JSON.stringify(res.data.usuario), { expires: 1 }); // Datos del usuario
 
         if (res.data.usuario.rol === 'administrador') {
           router.push('/dashboard/admin');
         } else {
-          // Redirige al usuario a la página de inicio
           router.push('/dashboard/estudiante');
         }
       } else {
-        alert('Credenciales incorrectas.'); // Manejo de error específico
+        alert('Credenciales incorrectas.');
       }
     } catch (error) {
       console.error('Error durante el inicio de sesión:', error);
