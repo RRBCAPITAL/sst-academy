@@ -1,211 +1,153 @@
-import * as React from 'react';
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-  InputAdornment,
-  Link,
-  IconButton,
-  Box,
-  Typography
-} from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import axios from 'axios';
-import { AppProvider } from '@toolpad/core';
-import { useTheme } from '@mui/material/styles';
+"use client";
+
+import React, { useState } from 'react';
+import { Box, TextField, Button, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import axios from '@/utils/axios.config'; // Ajusta la ruta según tu configuración
 import { useRouter } from 'next/navigation';
 
-// Interfaces for props
-interface CustomEmailFieldProps {
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+// Define una interfaz para los datos del formulario de inicio de sesión
+interface LoginFormData {
+  username: string;
+  password: string;
 }
 
-interface CustomPasswordFieldProps {
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClickShowPassword: () => void;
-  onMouseDownPassword: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  showPassword: boolean;
-}
-
-function CustomEmailField({ value, onChange }: CustomEmailFieldProps) {
-  return (
-    <TextField
-      id="username"
-      label="Usuario"
-      name="username"
-      type="text"
-      size="small"
-      required
-      fullWidth
-      value={value}
-      onChange={onChange}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <AccountCircle fontSize="inherit" />
-          </InputAdornment>
-        ),
-      }}
-      variant="outlined"
-    />
-  );
-}
-
-function CustomPasswordField({
-  value,
-  onChange,
-  onClickShowPassword,
-  onMouseDownPassword,
-  showPassword
-}: CustomPasswordFieldProps) {
-  return (
-    <FormControl sx={{ my: 2 }} fullWidth variant="outlined">
-      <InputLabel size="small" htmlFor="outlined-adornment-password">
-        Contraseña
-      </InputLabel>
-      <OutlinedInput
-        id="outlined-adornment-password"
-        type={showPassword ? 'text' : 'password'}
-        name="password"
-        size="small"
-        value={value}
-        onChange={onChange}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={onClickShowPassword}
-              onMouseDown={onMouseDownPassword}
-              edge="end"
-              size="small"
-            >
-              {showPassword ? (
-                <VisibilityOff fontSize="inherit" />
-              ) : (
-                <Visibility fontSize="inherit" />
-              )}
-            </IconButton>
-          </InputAdornment>
-        }
-        label="Password"
-      />
-    </FormControl>
-  );
-}
-
-function CustomButton() {
-  return (
-    <Button
-      type="submit"
-      variant="outlined"
-      color="info"
-      size="small"
-      disableElevation
-      fullWidth
-      sx={{ my: 2 }}
-    >
-      Inicio de sesión
-    </Button>
-  );
-}
-
-function SignUpLink() {
-  return (
-    <Link href="/" variant="body2">
-      Sign up
-    </Link>
-  );
-}
-
-function ForgotPasswordLink() {
-  return (
-    <Link href="/" variant="body2">
-      Forgot password?
-    </Link>
-  );
-}
-
-export default function SlotsSignIn() {
+const LoginForm: React.FC = () => {
+  const { control, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter(); // Hook para la redirección
   const theme = useTheme();
-  const [username, setUsername] = React.useState<string>('');
-  const [password, setPassword] = React.useState<string>('');
-  const [showPassword, setShowPassword] = React.useState<boolean>(false);
-  const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md')); // Verifica si es móvil o tablet
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const onSubmit = async (data: LoginFormData) => {
+    setLoading(true);
+    try {
+      console.log('credenciales ', data);
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
+      // Enviar los datos de inicio de sesión al backend
+      const res = await axios.post('/api/login', data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+      // Verifica si la respuesta indica éxito
+      if (res.data.success) {
+        // Almacena la información del usuario en el localStorage
+        localStorage.setItem('user', JSON.stringify(res.data.usuario));
 
-    // Realizar la solicitud API con Axios
-    axios.post('/api/login', { username, password })
-      .then(response => {
-        if (response.data.success) {
-          // Realizar acciones en caso de éxito, como redirigir al usuario
-          console.log('Usuario autenticado con éxito');
-          console.log(response.data.usuario);
-          
-          // Almacena la información del usuario en el almacenamiento local
-          localStorage.setItem('user', JSON.stringify(response.data.usuario));
-          console.log('Usuario almacenado en localStorage:', localStorage.getItem('user'));
+        if (res.data.usuario.rol === 'Administrador') {
+          router.push('/dashboard/admin');
+        } else {
           // Redirige al usuario a la página de inicio
           router.push('/dashboard/estudiante');
-        } else {
-          // Manejar caso de error en la autenticación
-          console.log('Error de autenticación');
         }
-      })
-      .catch(error => {
-        console.error('Error logging in:', error);
-        // Manejar el error aquí
-      });
+      } else {
+        alert('Credenciales incorrectas.'); // Manejo de error específico
+      }
+    } catch (error) {
+      console.error('Error durante el inicio de sesión:', error);
+      alert('Error en el inicio de sesión');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <AppProvider theme={theme}>
-      <Box
-        sx={{
-          maxWidth: 400,
-          margin: 'auto',
-          padding: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2
-        }}
-      >
-        <Typography variant="h5" align="center">Iniciar sesión</Typography>
-        <form onSubmit={handleSubmit} className='p-10 bg-slate-200'>
-          <CustomEmailField value={username} onChange={(e) => setUsername(e.target.value)} />
-          <CustomPasswordField
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onClickShowPassword={handleClickShowPassword}
-            onMouseDownPassword={handleMouseDownPassword}
-            showPassword={showPassword}
+    <Grid container sx={{ height: '100vh' }}>
+      {/* Imagen en pantallas grandes */}
+      {!isMobile && (
+        <Grid item xs={12} md={7} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <img
+            src="https://zegelvirtual.nyc3.cdn.digitaloceanspaces.com/assets/business/zegel-virtual/login-portada.png" // Cambia la ruta a la imagen que deseas mostrar
+            alt="Background"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
-          <CustomButton />
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              mt: 2
-            }}
+        </Grid>
+      )}
+
+      {/* Formulario de inicio de sesión */}
+      <Grid item xs={12} md={5} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 3 }}>
+        <Box
+          sx={{
+            width: '100%',
+            maxWidth: 400,
+            backgroundColor: '#fff42',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            borderRadius: 2,
+            boxShadow: 1,
+            padding: 3,
+          }}
+        >
+          <Typography variant="h4" sx={{padding: '10px 0px', fontSize: '30px'}} gutterBottom>
+            SST ACADEMIA
+          </Typography>
+          <Typography variant="h4" sx={{padding: '10px 0px'}} gutterBottom>
+            Iniciar Sesión
+          </Typography>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            style={{ width: '100%' }}
           >
-            <SignUpLink />
-            <ForgotPasswordLink />
-          </Box>
-        </form>
-      </Box>
-    </AppProvider>
+            <Grid container spacing={2} direction="column">
+              <Grid item xs={12}>
+                <Controller
+                  name="username"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Usuario"
+                      variant="outlined"
+                      fullWidth
+                      required
+                      error={!!errors.username}
+                      helperText={errors.username ? 'Usuario es requerido' : ''}
+                    />
+                  )}
+                  rules={{ required: true }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Controller
+                  name="password"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Contraseña"
+                      variant="outlined"
+                      fullWidth
+                      type="password"
+                      required
+                      error={!!errors.password}
+                      helperText={errors.password ? 'Contraseña es requerida' : ''}
+                    />
+                  )}
+                  rules={{ required: true }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  disabled={loading}
+                >
+                  {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Box>
+      </Grid>
+    </Grid>
   );
-}
+};
+
+export default LoginForm;

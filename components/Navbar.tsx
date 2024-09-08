@@ -1,99 +1,147 @@
-"use client"
-
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
 import Link from 'next/link';
-import React, { useState } from 'react';
 
-const Navbar = () => {
-  const [isMenuOpen, setMenuOpen] = useState(false);
-  const [activeSubMenu, setActiveSubMenu] = useState('');
+const pages = ['Inicio', 'Cursos'];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
+function ResponsiveAppBar() {
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
   };
 
-  const toggleSubMenu = (menu: string) => {
-    setActiveSubMenu(activeSubMenu === menu ? '' : menu);
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   return (
-    <nav className="shadow">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0">
-            {/* Logo u otro contenido aquí */}
-            <Link href={'/'} className="text-xl font-bold">SST ACADEMY</Link>
-          </div>
-          <div className="hidden md:flex items-center space-x-8">
-            {/* Menú principal para pantallas más grandes */}
-            <ul className="flex space-x-4">
-              <li className="relative">
-                <Link href={'/'} className=" hover:text-blue-500">
-                  Inicio
-                </Link>      
-              </li>
-              <li className="relative">
-                <button onClick={() => toggleSubMenu('courses')} className=" hover:text-blue-500">
-                  Cursos
-                </button>
-                {activeSubMenu === 'courses' && (
-                  <ul className="absolute left-0 mt-2 bg-white border rounded shadow-md">
-                  <li><Link href={'/cursos-virtuales'} className="block px-1 py-2 text-sm text-gray-700 hover:bg-gray-100">Todos</Link></li>
-                  <li><a href="index_2.html" className="block px-1 py-2 text-sm text-gray-700 hover:bg-gray-100">Populares</a></li>
-                </ul>
-                )}
-              </li>
-              <li><a href="contact.html" className=" hover:text-blue-500">Contact</a></li>
-            </ul>
-          </div>
-          <div>
-            <Link href={'/login'} className='px-2 py-1 bg-blue-500'>Ingresar</Link>
-          </div>
-          <div className="-mr-2 flex md:hidden">
-            {/* Botón para menú en dispositivos móviles */}
-            <button onClick={toggleMenu} className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-blue-500 focus:outline-none">
-              <span className="sr-only">Open main menu</span>
-              <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          {/* Logo al principio */}
+          <Box sx={{ flexGrow: 0 }}>
+            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            <Typography
+              variant="h6"
+              noWrap
+              component={Link}
+              href="/"
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              LOGO
+            </Typography>
+          </Box>
 
-      {/* Menú colapsable para dispositivos móviles */}
-      {isMenuOpen && (
-        <div className="md:hidden">
-          <ul className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <li>
-              <button onClick={() => toggleSubMenu('home')} className="block text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium">
-                Home
-              </button>
-              {activeSubMenu === 'home' && (
-                <ul className="pl-4 mt-2 space-y-1">
-                  <li><a href="index_1.html" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home V.1</a></li>
-                  <li><a href="index_2.html" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home V.2</a></li>
-                </ul>
-              )}
-            </li>
-            <li>
-              <button onClick={() => toggleSubMenu('courses')} className="block text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium">
-                Courses
-              </button>
-              {activeSubMenu === 'courses' && (
-                <ul className="pl-4 mt-2 space-y-1">
-                  <li><a href="course.html" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Courses Grid</a></li>
-                  <li><a href="course_list.html" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Courses List</a></li>
-                  <li><a href="course_details.html" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Course Details V.1</a></li>
-                  <li><a href="course_details_2.html" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Course Details V.2</a></li>
-                </ul>
-              )}
-            </li>
-            <li><a href="contact.html" className="block text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-base font-medium">Contact</a></li>
-          </ul>
-        </div>
-      )}
-    </nav>
+          {/* Icono del menú en dispositivos móviles */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="menu"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" component={Link} href={page === 'Inicio' ? '/' : '/cursos-virtuales'}>
+                    {page}
+                  </Typography>
+                </MenuItem>
+              ))}
+              <MenuItem>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  fullWidth
+                  onClick={handleCloseNavMenu}
+                  component={Link}
+                  href="/login"
+                >
+                  Ingresar
+                </Button>
+              </MenuItem>
+            </Menu>
+          </Box>
+
+          {/* Enlaces de navegación en el centro */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+            {pages.map((page) => (
+              <Button
+                key={page}
+                onClick={handleCloseNavMenu}
+                component={Link}
+                href={page === 'Inicio' ? '/' : '/cursos-virtuales'}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {page}
+              </Button>
+            ))}
+          </Box>
+
+          {/* Botón de acción al final */}
+          <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'block' } }}>
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ my: 2 }}
+              component={Link}
+              href="/login"
+            >
+              Ingresar
+            </Button>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
-};
+}
 
-export default Navbar;
+export default ResponsiveAppBar;

@@ -1,51 +1,77 @@
-import { NextResponse } from 'next/server'
-import { sql } from "@vercel/postgres";
- 
+import { NextResponse } from 'next/server';
+import { sql } from '@vercel/postgres';
+
+// GET: Obtener cursos asignados a un usuario
 export async function GET(request: Request) {
     try {
         const url = new URL(request.url);
         const userId = url.searchParams.get('user_id');
 
         const { rows } = await sql`SELECT *
-FROM curso
-WHERE curso_id IN (SELECT curso_id FROM usuario_curso WHERE user_id = ${userId}); `;
-        return NextResponse.json({ curso: rows })
+            FROM curso
+            WHERE curso_id IN (SELECT curso_id FROM usuario_curso WHERE user_id = ${userId});`;
+        return NextResponse.json({ curso: rows });
 
     } catch (error) {
-        return NextResponse.json({ error })
+        return NextResponse.json({ error }, { status: 500 });
     }
 }
 
+// PUT: Agregar o quitar cursos a un usuario
 export async function PUT(request: Request) {
     try {
-        // Obtiene los parámetros de la solicitud
-        const url = new URL(request.url);
-        const userId = url.searchParams.get('user_id');
-        const cursoId = url.searchParams.get('curso_id');
-        const action = url.searchParams.get('action'); // 'add' o 'remove'
+        const { userId, cursoIds, action } = await request.json();
 
-        if (!userId || !cursoId || !action) {
+        if (!userId || !cursoIds || !action) {
             return NextResponse.json({ error: 'Faltan parámetros necesarios.' }, { status: 400 });
         }
 
+        if (!Array.isArray(cursoIds)) {
+            return NextResponse.json({ error: 'cursoIds debe ser un array.' }, { status: 400 });
+        }
+
         if (action === 'add') {
-            // Agrega el usuario al curso
-            await sql`
-                INSERT INTO usuario_curso (user_id, curso_id)
-                VALUES (${userId}, ${cursoId})
-                ON CONFLICT (user_id, curso_id) DO NOTHING;  -- Evita duplicados
-            `;
-            return NextResponse.json({ message: 'Usuario agregado al curso exitosamente.' });
+            // Agrega múltiples cursos al usuario
+            await Promise.all(cursoIds.map(cursoId => 
+                sql`
+                    INSERT INTO usuario_curso (user_id, curso_id)
+                    VALUES (${userId}, ${cursoId})
+                    ON CONFLICT (user_id, curso_id) DO NOTHING;`
+            ));
+            return NextResponse.json({ message: 'Cursos agregados al usuario exitosamente.' });
         } else if (action === 'remove') {
-            // Quita al usuario del curso
-            await sql`
-                DELETE FROM usuario_curso
-                WHERE user_id = ${userId} AND curso_id = ${cursoId};
-            `;
-            return NextResponse.json({ message: 'Usuario eliminado del curso exitosamente.' });
+            // Elimina múltiples cursos del usuario
+            await Promise.all(cursoIds.map(cursoId => 
+                sql`
+                    DELETE FROM usuario_curso
+                    WHERE user_id = ${userId} AND curso_id = ${cursoId};`
+            ));
+            return NextResponse.json({ message: 'Cursos eliminados del usuario exitosamente.' });
         } else {
             return NextResponse.json({ error: 'Acción no válida.' }, { status: 400 });
         }
+    } catch (error) {
+        return NextResponse.json({ error }, { status: 500 });
+    }
+}
+
+// POST: Asignar varios cursos a un nuevo usuario
+export async function POST(request: Request) {
+    try {
+        const { userId, cursos } = await request.json();
+
+        // Asigna cursos al nuevo usuario si se proporcionaron
+        if (cursos && Array.isArray(cursos)) {
+            await Promise.all(cursos.map(cursoId => 
+                sql`
+                    INSERT INTO usuario_curso (user_id, curso_id)
+                    VALUES (${userId}, ${cursoId})
+                    ON CONFLICT (user_id, curso_id) DO NOTHING;`
+            ));
+        }
+
+        return NextResponse.json({ user: { user_id: userId } });
+
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 });
     }

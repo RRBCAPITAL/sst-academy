@@ -1,13 +1,18 @@
-import Cursos from '@/pages/Cursos'
-import React from 'react'
+import React from 'react';
+import Cursos from '@/pages/Cursos';
+import { Container, Typography, Box } from '@mui/material';
 
-const page = () => {
+const Page: React.FC = () => {
   return (
-    <div>
-        <h1>TODOS LOS CURSOS DISPONIBLES</h1>
+    <Container maxWidth="lg">
+      <Box sx={{ padding: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Cursos Disponibles
+        </Typography>
         <Cursos />
-    </div>
-  )
-}
+      </Box>
+    </Container>
+  );
+};
 
-export default page
+export default Page;

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import axios from '../../utils/axios.config';
 import { useRouter } from 'next/navigation';
 import SlotsSignIn from '../../components/Login'
+import LoginForm from '../../components/Login';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -41,37 +42,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      {/* <form onSubmit={handleSubmit}>
-        <div>LOGIN</div>
-        <div>
-          <label htmlFor="username">Usuario</label>
-          <input
-            type="text"
-            id="username"
-            className="text-black"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            className="text-black"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" className="px-2 py-1 bg-blue-500">
-          Ingresar
-        </button>
-        <p>
-          No tienes una cuenta? <span className="text-red-500">Incríbete a un curso</span>
-        </p>
-      </form> */}
-  
-      <SlotsSignIn />
+      <LoginForm />
     </div>
   );
 };
