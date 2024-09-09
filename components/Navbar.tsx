@@ -37,12 +37,11 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+    <AppBar position="static"  sx={{ boxShadow: 'none'}}>
+      <Container maxWidth="xl" sx={{ bgcolor: 'primary.light', color: 'primary.main'}}>
+        <Toolbar disableGutters sx={{ padding: '0 30px' }}>
           {/* Logo al principio */}
           <Box sx={{ flexGrow: 0 }}>
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
             <Typography
               variant="h6"
               noWrap
@@ -57,7 +56,7 @@ function ResponsiveAppBar() {
                 textDecoration: 'none',
               }}
             >
-              LOGO
+              SST ACADEMIA
             </Typography>
           </Box>
 
@@ -69,7 +68,7 @@ function ResponsiveAppBar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              sx={{color: 'text.primary'}}
             >
               <MenuIcon />
             </IconButton>
@@ -119,7 +118,7 @@ function ResponsiveAppBar() {
                 onClick={handleCloseNavMenu}
                 component={Link}
                 href={page === 'Inicio' ? '/' : '/cursos-virtuales'}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'text.primary', display: 'block', fontSize: '16px', fontWeight: 'bold' }}
               >
                 {page}
               </Button>
@@ -130,8 +129,14 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'block' } }}>
             <Button
               variant="contained"
-              color="secondary"
-              sx={{ my: 2 }}
+              sx={{
+                my: 2,
+                backgroundColor: 'white',
+                border: '1px solid #1F1D0D',
+                color: '#1F1D0D',
+                fontWeight: 'bold',
+                boxShadow: 'none',
+              }}
               component={Link}
               href="/login"
             >

@@ -8,7 +8,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -19,43 +18,17 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
+import { Select, MenuItem, InputLabel, FormControl, TextField } from '@mui/material'; // Importamos Select, MenuItem y TextField
 import { DataUser } from '@/Types/user.types';
 
-// Comparador para ordenar
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-type Order = 'asc' | 'desc';
-
-// Función para obtener el comparador
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key,
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
 interface HeadCell {
-  disablePadding: boolean;
   id: keyof DataUser;
   label: string;
   numeric: boolean;
+  disablePadding: boolean;
 }
 
-// Definición de las cabeceras de la tabla
+// Definir las columnas de la tabla (headCells)
 const headCells: readonly HeadCell[] = [
   {
     id: 'user_id',
@@ -88,132 +61,56 @@ const headCells: readonly HeadCell[] = [
     label: 'Correo',
   },
   {
+    id: 'usuario',
+    numeric: false,
+    disablePadding: false,
+    label: 'Usuario',
+  },
+  {
+    id: 'contrasenia',
+    numeric: false,
+    disablePadding: false,
+    label: 'contraseña',
+  },
+  {
     id: 'rol',
     numeric: false,
     disablePadding: false,
     label: 'Rol',
   },
+  {
+    id: 'fecha_creacion',
+    numeric: false,
+    disablePadding: false,
+    label: 'Creado el',
+  },
 ];
-
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof DataUser) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: keyof DataUser;
-  rowCount: number;
-}
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: keyof DataUser) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all users' }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-}
-
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
-  return (
-    <Toolbar
-      sx={[
-        {
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-        },
-        numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        },
-      ]}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} seleccionados
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Usuarios
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Eliminar">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filtrar lista">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-}
 
 interface TableUsersProps {
   usuarios: DataUser[];
 }
 
 export default function TableUsers({ usuarios }: TableUsersProps) {
-  const [order, setOrder] = React.useState<Order>('asc');
+  const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof DataUser>('user_id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  // Estado para el filtro de rol y la búsqueda
+  const [filterRole, setFilterRole] = React.useState<string>('Todos');
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
+
+  // Maneja la selección del rol
+  const handleRoleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setFilterRole(event.target.value as string);
+  };
+
+  // Maneja la búsqueda por texto
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof DataUser) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -264,36 +161,91 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
-  // Evitar un salto en el diseño al llegar a la última página con filas vacías
+  // Filtrar usuarios por rol y por el término de búsqueda
+  const filteredUsers = usuarios.filter((usuario) => {
+    const searchFilter =
+      usuario.nombres.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      usuario.apellidos.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      usuario.dni.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      usuario.correo.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const roleFilter = filterRole === 'Todos' || usuario.rol.toLowerCase() === filterRole.toLowerCase();
+
+    return searchFilter && roleFilter;
+  });
+
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - usuarios.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredUsers.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
-      [...usuarios]
-        // .sort(getComparator(order, orderBy))
+      [...filteredUsers]
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage, usuarios],
+    [order, orderBy, page, rowsPerPage, filteredUsers],
   );
 
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <Toolbar>
+          <Typography
+            sx={{ flex: '1 1 100%' }}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            Usuarios
+          </Typography>
+
+          {/* Input de búsqueda */}
+          <TextField
+            label="Buscar"
+            variant="outlined"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            sx={{ marginRight: 2 }}
+          />
+
+          {/* Filtro por rol */}
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel id="filter-role-label">Filtrar por Rol</InputLabel>
+            <Select
+              labelId="filter-role-label"
+              id="filter-role"
+              value={filterRole}
+              onChange={handleRoleChange}
+              label="Filtrar por Rol"
+            >
+              <MenuItem value="Todos">Todos</MenuItem>
+              <MenuItem value="Estudiante">Estudiante</MenuItem>
+              <MenuItem value="Administrador">Administrador</MenuItem>
+            </Select>
+          </FormControl>
+        </Toolbar>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={usuarios.length}
-            />
+            <TableHead>
+              <TableRow>
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    color="primary"
+                    inputProps={{ 'aria-label': 'select all users' }}
+                  />
+                </TableCell>
+                {headCells.map((headCell) => (
+                  <TableCell
+                    key={headCell.id}
+                    align={headCell.numeric ? 'right' : 'left'}
+                  >
+                    {headCell.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.user_id);
@@ -308,7 +260,6 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
                     tabIndex={-1}
                     key={row.user_id}
                     selected={isItemSelected}
-                    sx={{ cursor: 'pointer' }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
@@ -331,7 +282,10 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
                     <TableCell align="left">{row.apellidos}</TableCell>
                     <TableCell align="left">{row.dni}</TableCell>
                     <TableCell align="left">{row.correo}</TableCell>
+                    <TableCell align="left">{row.usuario}</TableCell>
+                    <TableCell align="left">{row.contrasenia}</TableCell>
                     <TableCell align="left">{row.rol}</TableCell>
+                    <TableCell align="left">{row.fecha_creacion}</TableCell>
                   </TableRow>
                 );
               })}
@@ -350,7 +304,7 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={usuarios.length}
+          count={filteredUsers.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

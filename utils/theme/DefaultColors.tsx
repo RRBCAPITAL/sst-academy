@@ -16,10 +16,15 @@ const baselightTheme = createTheme({
       light: "#ECF2FF",
       dark: "#4570EA",
     },
+    // primary: {
+    //   main: "#f7ff68",
+    //   light: "#fffef2",
+    //   dark: "#f7ff68",
+    // },
     secondary: {
-      main: "#49BEFF",
-      light: "#E8F7FF",
-      dark: "#23afdb",
+      main: "#ffd940",
+      light: "#ffcc00",
+      dark: "#ffd21c",
     },
     success: {
       main: "#13DEB9",

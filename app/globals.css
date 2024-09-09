@@ -17,6 +17,7 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+  
 
 body {
   color: rgb(var(--foreground-rgb));
@@ -33,3 +34,15 @@ body {
     text-wrap: balance;
   }
 } */
+
+/* styles/globals.css */
+.cursor-follow {
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  border-radius: 50%;
+  position: absolute;
+  pointer-events: none; /* Evita interferencias con otros elementos */
+  transition: transform 0.1s ease; /* Transición suave para el movimiento */
+  z-index: 9999; /* Asegura que esté por encima de todo */
+}
