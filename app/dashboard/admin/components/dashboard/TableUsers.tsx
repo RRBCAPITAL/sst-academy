@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -17,8 +18,9 @@ import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { Select, MenuItem, InputLabel, FormControl, TextField, SelectChangeEvent } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import { Select, MenuItem, InputLabel, FormControl, TextField, SelectChangeEvent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { DataUser } from '@/Types/user.types';
 
 interface HeadCell {
@@ -30,60 +32,15 @@ interface HeadCell {
 
 // Definir las columnas de la tabla (headCells)
 const headCells: readonly HeadCell[] = [
-  {
-    id: 'user_id',
-    numeric: false,
-    disablePadding: true,
-    label: 'N.',
-  },
-  {
-    id: 'nombres',
-    numeric: false,
-    disablePadding: false,
-    label: 'Nombres',
-  },
-  {
-    id: 'apellidos',
-    numeric: false,
-    disablePadding: false,
-    label: 'Apellidos',
-  },
-  {
-    id: 'dni',
-    numeric: false,
-    disablePadding: false,
-    label: 'DNI',
-  },
-  {
-    id: 'correo',
-    numeric: false,
-    disablePadding: false,
-    label: 'Correo',
-  },
-  {
-    id: 'usuario',
-    numeric: false,
-    disablePadding: false,
-    label: 'Usuario',
-  },
-  {
-    id: 'contrasenia',
-    numeric: false,
-    disablePadding: false,
-    label: 'Contraseña',
-  },
-  {
-    id: 'rol',
-    numeric: false,
-    disablePadding: false,
-    label: 'Rol',
-  },
-  {
-    id: 'fecha_creacion',
-    numeric: false,
-    disablePadding: false,
-    label: 'Creado el',
-  },
+  { id: 'user_id', numeric: false, disablePadding: true, label: 'N.' },
+  { id: 'nombres', numeric: false, disablePadding: false, label: 'Nombres' },
+  { id: 'apellidos', numeric: false, disablePadding: false, label: 'Apellidos' },
+  { id: 'dni', numeric: false, disablePadding: false, label: 'DNI' },
+  { id: 'correo', numeric: false, disablePadding: false, label: 'Correo' },
+  { id: 'usuario', numeric: false, disablePadding: false, label: 'Usuario' },
+  { id: 'contrasenia', numeric: false, disablePadding: false, label: 'Contraseña' },
+  { id: 'rol', numeric: false, disablePadding: false, label: 'Rol' },
+  { id: 'fecha_creacion', numeric: false, disablePadding: false, label: 'Creado el' },
 ];
 
 interface TableUsersProps {
@@ -91,6 +48,7 @@ interface TableUsersProps {
 }
 
 export default function TableUsers({ usuarios }: TableUsersProps) {
+  const navigate = useRouter(); // Hook para redirección
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof DataUser>('user_id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -99,6 +57,7 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [filterRole, setFilterRole] = React.useState<string>('Todos');
   const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
   // Maneja la selección del rol
   const handleRoleChange = (event: SelectChangeEvent<string>) => {
@@ -110,12 +69,14 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
     setSearchTerm(event.target.value);
   };
 
+  // Maneja la solicitud de ordenación
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof DataUser) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
+  // Maneja la selección de todos los elementos
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelected = usuarios.map((n) => n.user_id);
@@ -125,6 +86,7 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
     }
   };
 
+  // Maneja la selección individual de filas
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
@@ -144,17 +106,49 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
     setSelected(newSelected);
   };
 
+  // Maneja el cambio de página
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
+  // Maneja el cambio de número de filas por página
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // Maneja el cambio en la densidad de la tabla
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDense(event.target.checked);
+  };
+
+  // Maneja la eliminación de usuarios
+  const handleDeleteUsers = async () => {
+    try {
+      // Aquí va la llamada a la API para eliminar los usuarios
+      // Por ejemplo, podrías usar fetch o axios para hacer la solicitud
+      await fetch('/api/deleteUsers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user_ids: selected }),
+      });
+      // Actualiza el estado después de eliminar
+      setSelected([]);
+    } catch (error) {
+      console.error('Error al eliminar usuarios:', error);
+    } finally {
+      setOpenDeleteDialog(false);
+    }
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const openDeleteDialogT = () => {
+    setOpenDeleteDialog(true);
   };
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -201,6 +195,18 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
           >
             Usuarios
           </Typography>
+
+          {/* Icono de eliminar */}
+          {selected.length > 0 && (
+            <Tooltip title="Eliminar">
+              <IconButton
+                color="error"
+                onClick={openDeleteDialogT}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          )}
 
           {/* Input de búsqueda */}
           <TextField
@@ -255,6 +261,7 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
                     {headCell.label}
                   </TableCell>
                 ))}
+                <TableCell align="center">Acciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -281,12 +288,7 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
                         }}
                       />
                     </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
+                    <TableCell component="th" id={labelId} scope="row" padding="none">
                       {index + 1}
                     </TableCell>
                     <TableCell align="left">{row.nombres}</TableCell>
@@ -298,6 +300,20 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
                     <TableCell align="left">{row.rol}</TableCell>
                     <TableCell align="left">
                       {new Date(row.fecha_creacion).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        color="primary"
+                        onClick={() => navigate.push(`/view/${row.user_id}`)}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                      <IconButton
+                        color="secondary"
+                        onClick={() => navigate.push(`/edit/${row.user_id}`)}
+                      >
+                        <EditIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 );
@@ -328,6 +344,23 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+
+      {/* Modal de confirmación de eliminación */}
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+      >
+        <DialogTitle>Confirmar Eliminación</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Está seguro de que desea eliminar {selected.length} usuario(s)?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Cancelar</Button>
+          <Button onClick={handleDeleteUsers} color="error">Eliminar</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
