@@ -18,7 +18,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { Select, MenuItem, InputLabel, FormControl, TextField } from '@mui/material'; // Importamos Select, MenuItem y TextField
+import { Select, MenuItem, InputLabel, FormControl, TextField, SelectChangeEvent } from '@mui/material';
 import { DataUser } from '@/Types/user.types';
 
 interface HeadCell {
@@ -70,7 +70,7 @@ const headCells: readonly HeadCell[] = [
     id: 'contrasenia',
     numeric: false,
     disablePadding: false,
-    label: 'contraseña',
+    label: 'Contraseña',
   },
   {
     id: 'rol',
@@ -97,13 +97,11 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  // Estado para el filtro de rol y la búsqueda
   const [filterRole, setFilterRole] = React.useState<string>('Todos');
   const [searchTerm, setSearchTerm] = React.useState<string>('');
 
   // Maneja la selección del rol
-  const handleRoleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleRoleChange = (event: SelectChangeEvent<string>) => {
     setFilterRole(event.target.value as string);
   };
 
@@ -122,9 +120,9 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
     if (event.target.checked) {
       const newSelected = usuarios.map((n) => n.user_id);
       setSelected(newSelected);
-      return;
+    } else {
+      setSelected([]);
     }
-    setSelected([]);
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
@@ -180,6 +178,13 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
   const visibleRows = React.useMemo(
     () =>
       [...filteredUsers]
+        .sort((a, b) => {
+          if (order === 'asc') {
+            return a[orderBy] > b[orderBy] ? 1 : -1;
+          } else {
+            return a[orderBy] < b[orderBy] ? 1 : -1;
+          }
+        })
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [order, orderBy, page, rowsPerPage, filteredUsers],
   );
@@ -233,6 +238,8 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
                 <TableCell padding="checkbox">
                   <Checkbox
                     color="primary"
+                    checked={selected.length === usuarios.length}
+                    onChange={handleSelectAllClick}
                     inputProps={{ 'aria-label': 'select all users' }}
                   />
                 </TableCell>
@@ -240,6 +247,10 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
                   <TableCell
                     key={headCell.id}
                     align={headCell.numeric ? 'right' : 'left'}
+                    padding={headCell.disablePadding ? 'none' : 'normal'}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                    onClick={(event) => handleRequestSort(event, headCell.id)}
+                    sx={{ cursor: 'pointer' }}
                   >
                     {headCell.label}
                   </TableCell>
@@ -285,7 +296,9 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
                     <TableCell align="left">{row.usuario}</TableCell>
                     <TableCell align="left">{row.contrasenia}</TableCell>
                     <TableCell align="left">{row.rol}</TableCell>
-                    <TableCell align="left">{row.fecha_creacion}</TableCell>
+                    <TableCell align="left">
+                      {new Date(row.fecha_creacion).toLocaleDateString()}
+                    </TableCell>
                   </TableRow>
                 );
               })}
