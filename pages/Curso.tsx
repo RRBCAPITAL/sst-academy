@@ -7,6 +7,7 @@ import VimeoPlayer from '@/components/VimeoPlayer';
 import { Box, Container, Typography, Button, Card, CardContent, Grid, Collapse, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { deslugify } from '@/utils/deslugify';
 
 interface NombreDelCurso {
   nombre: string;
@@ -16,12 +17,14 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
   const [curso, setCurso] = useState<CursoDetallado[]>([]);
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
   const userId = ''; // Implementar lógica para obtener el userId real
-  const cursoId = 'A-1'; // Implementar lógica para obtener el cursoId real
+  const nombreCurso = deslugify(props.nombre);
+
+  console.log(nombreCurso);
 
   useEffect(() => {
     const fetchCursos = async () => {
       try {
-        const response = await axios.get(`/api/usuario-curso-detallado?user_id=${userId}&curso_id=${cursoId}`);
+        const response = await axios.get(`/api/usuario-curso-detallado?curso_nombre=${nombreCurso}`);
         setCurso(response.data.curso);
       } catch (error) {
         console.error('Error fetching course details:', error);
@@ -29,7 +32,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
     };
 
     fetchCursos();
-  }, [userId, cursoId]);
+  }, []);
 
   const handleUnitClick = (unidadId: string) => {
     setExpandedUnit(expandedUnit === unidadId ? null : unidadId);

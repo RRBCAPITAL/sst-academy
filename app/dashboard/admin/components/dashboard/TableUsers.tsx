@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -22,6 +20,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import { Select, MenuItem, InputLabel, FormControl, TextField, SelectChangeEvent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { DataUser } from '@/Types/user.types';
+import EditUserForm from '@/components/EditUserForm';
+import { User } from '@/Types/user.types';
+import ViewUser from '@/components/ViewUser';
 
 interface HeadCell {
   id: keyof DataUser;
@@ -45,10 +46,12 @@ const headCells: readonly HeadCell[] = [
 
 interface TableUsersProps {
   usuarios: DataUser[];
+  onUpdateUser: (onUpdateUser: DataUser) => void
 }
 
-export default function TableUsers({ usuarios }: TableUsersProps) {
-  const navigate = useRouter(); // Hook para redirección
+export default function TableUsers({ usuarios, onUpdateUser }: TableUsersProps) {
+  const [selectedUser, setSelectedUser] = React.useState<DataUser | null>(null);
+  const [viewingUser, setViewingUser] = React.useState<DataUser | null>(null); // Para visualizar
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof DataUser>('user_id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -58,6 +61,24 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
   const [filterRole, setFilterRole] = React.useState<string>('Todos');
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+
+  // user edit
+  const handleEditClick = (user: DataUser) => {
+    setSelectedUser(user);
+  };
+
+  const handleCloseEditForm = () => {
+    setSelectedUser(null); // Cerramos el formulario de visualización
+  };
+
+  //user view
+  const handleViewClick = (user: DataUser) => {
+    setViewingUser(user);
+  };
+
+  const handleCloseViewUser = () => {
+    setViewingUser(null); // Cerramos el formulario de visualización
+  };
 
   // Maneja la selección del rol
   const handleRoleChange = (event: SelectChangeEvent<string>) => {
@@ -183,6 +204,14 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
     [order, orderBy, page, rowsPerPage, filteredUsers],
   );
 
+  if (selectedUser) {
+    // Si se seleccionó un usuario para editar, renderizamos el formulario de edición
+    return <EditUserForm user={selectedUser} onClose={handleCloseEditForm} onUpdateUser = {onUpdateUser}/>;
+  }
+  // } else if(viewingUser){
+  //   return <ViewUser user={viewingUser} onClose={handleCloseViewUser}/>;
+  // }
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -304,13 +333,13 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
                     <TableCell align="center">
                       <IconButton
                         color="primary"
-                        onClick={() => navigate.push(`/view/${row.user_id}`)}
+                        onClick={() => handleViewClick(row)}
                       >
                         <VisibilityIcon />
                       </IconButton>
                       <IconButton
                         color="secondary"
-                        onClick={() => navigate.push(`/edit/${row.user_id}`)}
+                        onClick={() => handleEditClick(row)}
                       >
                         <EditIcon />
                       </IconButton>
@@ -361,6 +390,7 @@ export default function TableUsers({ usuarios }: TableUsersProps) {
           <Button onClick={handleDeleteUsers} color="error">Eliminar</Button>
         </DialogActions>
       </Dialog>
+      <ViewUser user={viewingUser} onClose={handleCloseViewUser} />
     </Box>
   );
 }

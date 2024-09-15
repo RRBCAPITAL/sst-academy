@@ -5,6 +5,8 @@ import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { baselightTheme } from "@/utils/theme/DefaultColors";
+import Head from "next/head";
+import Footer from "@/components/Footer";
 
 export default function RootLayout({
   children,
@@ -19,6 +21,12 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
       <body>
         <ThemeProvider theme={baselightTheme}>
           <CssBaseline />

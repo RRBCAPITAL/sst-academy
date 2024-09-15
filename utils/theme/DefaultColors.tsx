@@ -70,7 +70,8 @@ const baselightTheme = createTheme({
     divider: "#e5eaef",
   },
   typography: {
-    fontFamily: plus.style.fontFamily,
+    //fontFamily: plus.style.fontFamily,
+    fontFamily: "'Barlow', sans-serif",
     h1: {
       fontWeight: 600,
       fontSize: "2.25rem",

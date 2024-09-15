@@ -20,6 +20,16 @@ const Usuarios = () => {
   const [usuarios, setUsuarios] = useState<DataUser[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const updateUser = (updatedUser: DataUser) => {
+ 
+    setUsuarios((prevUsuarios) =>
+      prevUsuarios.map((user) =>
+        user.user_id === updatedUser.user_id ? updatedUser : user
+      )
+    );
+  };
+
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
@@ -49,7 +59,7 @@ const Usuarios = () => {
     <PageContainer title="Shadow" description="this is Shadow">
       <DashboardCard title="Todos los usuarios disponibles">
         <Grid container spacing={2}>
-          <TableUsers usuarios = {usuarios} />
+          <TableUsers usuarios = {usuarios} onUpdateUser = {updateUser}/>
         </Grid>
       </DashboardCard>
     </PageContainer>

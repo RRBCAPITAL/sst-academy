@@ -3,8 +3,21 @@ import { sql } from "@vercel/postgres";
  
 export async function GET(request: Request) {
     try {
-        const { rows } = await sql`SELECT * FROM usuario`;
-        return NextResponse.json({ user: rows })
+        const { searchParams } = new URL(request.url);
+        const userId = searchParams.get('userId');
+
+        if (!userId) {
+            return NextResponse.json({ error: 'User ID no proporcionado' }, { status: 400 });
+        }
+
+        // Realizamos la consulta con el userId capturado
+        const { rows } = await sql`SELECT * FROM usuario WHERE user_id = ${userId}`;
+
+        if (rows.length === 0) {
+            return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
+        }
+
+        return NextResponse.json({ user: rows[0] });
 
     } catch (error) {
         return NextResponse.json({ error })
@@ -30,7 +43,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
     try {
-        const { user_id, nombres, apellidos, dni, celular, correo, usuario, contrasenia, rol, fecha_creacion, fecha_actualizacion } = await request.json();
+        const { user_id, nombres, apellidos, dni, celular, correo, usuario, contrasenia, rol } = await request.json();
 
         // Consulta SQL de actualización
         const { rows } = await sql`
@@ -42,8 +55,7 @@ export async function PUT(request: Request) {
                 correo = COALESCE(${correo}, correo),
                 usuario = COALESCE(${usuario}, usuario),
                 contrasenia = COALESCE(${contrasenia}, contrasenia),
-                rol = COALESCE(${rol}, rol),
-                fecha_actualizacion = COALESCE(${fecha_actualizacion}, fecha_actualizacion)
+                rol = COALESCE(${rol}, rol)
             WHERE user_id = ${user_id}
             RETURNING *;`; // Devuelve el registro actualizado para confirmar la operación
 

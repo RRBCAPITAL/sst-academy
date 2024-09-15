@@ -4,12 +4,22 @@ import { sql } from "@vercel/postgres";
 export async function GET(request: Request) {
     try {
         const url = new URL(request.url);
-        const userId = url.searchParams.get('user_id');
-        const cursoId = url.searchParams.get('curso_id');
+        const userId = url.searchParams.get('user_id') || null;
+        let cursoId = url.searchParams.get('curso_id') || null;
+        const cursoNombre = url.searchParams.get('curso_nombre') || null;
 
         // Verifica si userId está vacío o nulo
         let query;
+        let queryCursoNombre;
 
+
+        if(cursoNombre){
+            queryCursoNombre = sql`SELECT curso_id FROM curso WHERE LOWER(nombre) = LOWER(${cursoNombre});`   
+            const { rows } = await queryCursoNombre;
+            if(rows.length > 0){
+            cursoId = rows[0].curso_id
+            }     
+        }     
         if (!userId) {
             // Si userId es nulo o vacío, devuelve solo la primera lección de la primera unidad
             query = sql`

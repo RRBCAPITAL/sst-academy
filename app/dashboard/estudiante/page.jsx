@@ -5,6 +5,7 @@ import { Curso } from "@/Types/curso.types";
 import axios from "../../../utils/axios.config"
 import Link from "next/link";
 import { slugify } from "@/utils/slugify";
+import DashEstudiante from "@/components/DashEstudiante";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -45,7 +46,12 @@ const Dashboard = () => {
       <h1 className='text-4xl mt-10'>{user && user.nombres + ' ' + user.apellidos}</h1>
       {/* Resto del contenido del dashboard */}
       <div>
-        <h1 className="mt-10">CURSOS ACTIVOS</h1>
+        <div>
+          <input type="radio"  />
+          <label htmlFor="">Cursos Activos</label>
+          <input type="radio" />
+          <label htmlFor="">Cursos Finalizados</label>
+        </div>
         <ul>
         {cursos && cursos.length > 0 ? (
           cursos.map((curso) => (
@@ -67,6 +73,8 @@ const Dashboard = () => {
         )}
       </ul>
       </div>
+
+      
     </div>
   );
 };

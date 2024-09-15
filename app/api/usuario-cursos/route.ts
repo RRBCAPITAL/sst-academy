@@ -20,18 +20,17 @@ export async function GET(request: Request) {
 // PUT: Agregar o quitar cursos a un usuario
 export async function PUT(request: Request) {
     try {
-        const { userId, cursoIds, action } = await request.json();
+        const { userId, cursoIds } = await request.json();
 
-        if (!userId || !cursoIds || !action) {
+        if (!userId || !cursoIds) {
             return NextResponse.json({ error: 'Faltan parámetros necesarios.' }, { status: 400 });
         }
 
         if (!Array.isArray(cursoIds)) {
             return NextResponse.json({ error: 'cursoIds debe ser un array.' }, { status: 400 });
         }
-
-        if (action === 'add') {
-            // Agrega múltiples cursos al usuario
+            await sql`DELETE FROM usuario_curso where user_id = ${userId}`
+            
             await Promise.all(cursoIds.map(cursoId => 
                 sql`
                     INSERT INTO usuario_curso (user_id, curso_id)
@@ -39,17 +38,7 @@ export async function PUT(request: Request) {
                     ON CONFLICT (user_id, curso_id) DO NOTHING;`
             ));
             return NextResponse.json({ message: 'Cursos agregados al usuario exitosamente.' });
-        } else if (action === 'remove') {
-            // Elimina múltiples cursos del usuario
-            await Promise.all(cursoIds.map(cursoId => 
-                sql`
-                    DELETE FROM usuario_curso
-                    WHERE user_id = ${userId} AND curso_id = ${cursoId};`
-            ));
-            return NextResponse.json({ message: 'Cursos eliminados del usuario exitosamente.' });
-        } else {
-            return NextResponse.json({ error: 'Acción no válida.' }, { status: 400 });
-        }
+
     } catch (error) {
         return NextResponse.json({ error }, { status: 500 });
     }
