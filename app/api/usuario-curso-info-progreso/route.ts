@@ -15,7 +15,7 @@ interface CursoProgreso {
 export async function GET(request: NextRequest) {
     try {
         const url = new URL(request.url);
-        const userId = url.searchParams.get('user_id');
+        const userId = url?.searchParams?.get('user_id');
 
         if (!userId || userId.trim() === "") {
             return NextResponse.json({ success: false, error: 'User ID is required' });

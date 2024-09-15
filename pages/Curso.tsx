@@ -16,11 +16,12 @@ interface NombreDelCurso {
 const Curso: React.FC<NombreDelCurso> = (props) => {
   const [curso, setCurso] = useState<CursoDetallado[]>([]);
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
-  const nombreCurso = deslugify(props?.nombre);
-
-  console.log(nombreCurso);
 
   useEffect(() => {
+    const nombreCurso = deslugify(props?.nombre);
+
+    if(!nombreCurso) return;
+
     const fetchCursos = async () => {
       try {
         const response = await axios.get(`/api/usuario-curso-detallado?curso_nombre=${nombreCurso}`);
@@ -33,7 +34,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
     if(nombreCurso){
       fetchCursos();
     }
-  }, []);
+  }, [props.nombre]);
 
   const handleUnitClick = (unidadId: string) => {
     setExpandedUnit(expandedUnit === unidadId ? null : unidadId);

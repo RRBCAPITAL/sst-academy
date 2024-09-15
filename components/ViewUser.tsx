@@ -40,9 +40,10 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
       try {
         // Verifica si ya tienes los datos
         if (!progreCurso.length) {
-          const userProgreCursosResponse = await axios.get<{ progresoCurso: ProgresoCurso[] }>(
+          const userProgreCursosResponse = await axios.get<{ progresoCurso: ProgresoCurso[]}>(
             `/api/usuario-curso-info-progreso?user_id=${user?.user_id}`
           );
+          if(!userProgreCursosResponse) return
           setProgreCurso(userProgreCursosResponse.data.progresoCurso);
         }
 
@@ -50,6 +51,7 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
           const userCalificacionCursosResponse = await axios.get<{ calificacion: CalificacionCurso[] }>(
             `/api/calificacion?user_id=${user?.user_id}`
           );
+          if(!userCalificacionCursosResponse) return
           setCalificacionCurso(userCalificacionCursosResponse.data.calificacion);
         }
 
@@ -57,15 +59,18 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
           const userCursosResponse = await axios.get<{ curso: Curso[] }>(
             `/api/usuario-cursos?user_id=${user.user_id}`
           );
-          setCursosActivos(userCursosResponse.data.curso);
+          userCursosResponse && setCursosActivos(userCursosResponse.data.curso)
+          
         }
       } catch (error) {
         console.error('Error fetching user or courses data:', error);
       }
     };
 
-    fetchCursos();
-  }, [user?.user_id]); // Solo vuelve a ejecutar si `user.user_id` cambia
+    if(user && user.user_id){
+      fetchCursos();
+    }
+  }, [user && user.user_id]); // Solo vuelve a ejecutar si `user.user_id` cambia
 
   const handleCalificacion = (
     curso_id: string,
