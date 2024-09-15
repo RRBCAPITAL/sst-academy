@@ -33,7 +33,7 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
   const [dataCalificacion, setDataCalificacion] = useState<DataCalificacion | null>(null);
 
   useEffect(() => {
-    if (!user) return; // Verificar si hay un usuario antes de ejecutar el efecto
+    if (!user || !user.user_id) return; // Verificar si hay un usuario antes de ejecutar el efecto
 
     // Cargar los cursos activos y el progreso del usuario
     const fetchCursos = async () => {
@@ -56,7 +56,7 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
     };
 
     fetchCursos();
-  }, [user?.user_id]);
+  }, [user]);
 
   const handleCalificacion = (curso_id: string, user_id: number, curso_nombre: string, user_nombre: string, porcentaje_avance: number) => {
         const data = {

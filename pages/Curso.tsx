@@ -16,8 +16,7 @@ interface NombreDelCurso {
 const Curso: React.FC<NombreDelCurso> = (props) => {
   const [curso, setCurso] = useState<CursoDetallado[]>([]);
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
-  const userId = ''; // Implementar lógica para obtener el userId real
-  const nombreCurso = deslugify(props.nombre);
+  const nombreCurso = deslugify(props?.nombre);
 
   console.log(nombreCurso);
 
@@ -31,7 +30,9 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
       }
     };
 
-    fetchCursos();
+    if(nombreCurso){
+      fetchCursos();
+    }
   }, []);
 
   const handleUnitClick = (unidadId: string) => {
@@ -42,7 +43,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
     <Container maxWidth="lg" sx={{ paddingY: 4, minHeight: '100vh' }}>
       <Grid container spacing={4}>
         <Grid item xs={12} md={8} sx={{ position: 'relative' }}>
-          {curso.map(curso => (
+          {curso && curso?.map(curso => (
             <Card key={curso.curso_id} variant="outlined" sx={{ display: 'flex', flexDirection: 'column', mb: 4 }}>
               <Box
                 sx={{

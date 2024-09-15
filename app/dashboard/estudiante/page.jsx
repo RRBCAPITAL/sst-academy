@@ -21,24 +21,17 @@ const Dashboard = () => {
       setUser(JSON.parse(userData));
     }
 
-    // const fetchCursos = async () => {
-    //     // Realiza la solicitud HTTP para obtener los cursos
-    //     const response = await axios.get(`/api/usuario-curso-info-progreso?user_id=${userParse.user_id}`); // Cambia la URL según tu configuración de API
-    //     // Actualiza el estado con los cursos obtenidos
-    //     setCursos(response.data.cursos);
-    //   };
-  
-    //   fetchCursos(); // Llama a la función para obtener los cursos al cargar el componente
-
     const fetchProgresoCursos = async () => {
+        if (!userParse || !userParse.user_id) return;
         // Realiza la solicitud HTTP para obtener los cursos
         const response = await axios.get(`/api/usuario-curso-info-progreso?user_id=${userParse.user_id}&`); // Cambia la URL según tu configuración de API
-        // Actualiza el estado con los cursos obtenidos
-        console.log('cursos 1 ', response);
+
         setCursos(response.data.progresoCurso);
       };
 
-      fetchProgresoCursos();
+      if (userParse && userParse.user_id) {
+        fetchProgresoCursos();
+      }
   }, []);
 
   return (
