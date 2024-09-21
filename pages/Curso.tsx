@@ -59,13 +59,35 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ paddingY: 4, minHeight: "100vh" }}>
-      <Rutas />
-      <Grid container spacing={4}
+    <Box sx={{ paddingBottom: '20px', minHeight: "100vh", maxWidth: '100vw' }}>
+      <Box
       sx={{ 
-      flexDirection: { xs: "column", md: "row" } // Para pantallas pequeñas, columna; para grandes, fila
+        display: 'flex', // Para habilitar flexbox
+        justifyContent: 'center', // Centrado horizontal
+        alignItems: 'center', // Centrado vertical
+        background: '#ff914d',
+        width: '100%',
+        height: '124px',
+        textAlign: 'center',
+        fontSize: '2rem',
+        color: 'white',
+        fontWeight: '500',
+        overflowX: 'hidden',
+        margin: '0',
+        padding: '0'
       }}
       >
+         {curso?.length > 0 ? curso[0].curso_nombre : "Cargando..."}
+      </Box>
+     
+      <Grid container spacing={4}
+      sx={{ 
+      flexDirection: { xs: "column", md: "row" }, // Para pantallas pequeñas, columna; para grandes, fila
+      maxWidth: '1200px',
+      margin: 'auto'
+      }}
+      >
+         <Rutas />
         <Grid item xs={12} md={8} sx={{ position: "relative"}} >
           {curso &&
             curso?.map((curso) => (
@@ -91,29 +113,30 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                 </Box>
                 <CardContent
                   sx={{
-                    background: "#eaeaf1",
-                    border: "2px solid #002fff",
+                    background: "#f1edea",
+                    border: "2px solid #ff914d",
                     borderRadius: "10px",
                   }}
                 >
-                  <Typography
+                  {/* <Typography
                     variant="h2"
                     component="h1"
+                    color="primary"
                     gutterBottom
                     sx={{
-                      color: "blue",
                       fontWeight: "bold",
                       fontSize: "2.6rem",
                       lineHeight: "1.1",
                     }}
                   >
                     {curso.curso_nombre}
-                  </Typography>
+                  </Typography> */}
                   <Typography
                     variant="h4"
                     paragraph
                     sx={{
-                      my: 4,
+                      my: 0,
+                      marginBottom: '40px',
                       fontSize: "1.2rem",
                       color: "black",
                       textShadow: " 0 0 1px rgba(0, 0, 0, 0.1);",
@@ -149,7 +172,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                           color: "white",
                           fontWeight: "bold",
                           padding: '2px 20px',
-                          background: "#da0000",
+                          background: "#ff0000",
                         }}
                       >
                       15% de dscto.
@@ -157,8 +180,8 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                       <Typography
                         variant="h1"
                         color="text.secondary"
-                        sx={{ fontSize: "1.6rem", color: "#0e0538" }}
-                      >
+                        sx={{ fontSize: "1.6rem", color: '#737373', }}
+                      > 
                         S/ {curso.curso_precio}{" "}
                         {/* Cambia este valor si es necesario */}
                       </Typography>
@@ -182,13 +205,6 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                     >
                       <AccessTimeIcon sx={{paddingRight: '4px'}} /> {curso.curso_duracion} horas
                     </Typography>
-                    {/* <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ fontSize: "1rem" }}
-                    >
-                      <strong>Materiales:</strong> {curso.curso_materiales}
-                    </Typography> */}
                     <Typography
                       variant="body2"
                       color="text.secondary"
@@ -205,7 +221,6 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                   </Box>
                   <Button
                     variant="contained"
-                    color="primary"
                     sx={{
                       mt: 2,
                       mb: 4,
@@ -214,8 +229,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                       padding: "10px 0",
                       borderRadius: "10px",
                       width: "100%",
-                      backgroundColor: "#1976d2",
-                      "&:hover": { backgroundColor: "#115293" },
+                      color: 'white'
                     }}
                   >
                    <WhatsAppIcon sx={{paddingRight: '4px'}}/> Comprar ahora
@@ -228,10 +242,10 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
           <Typography
             variant="h5"
             component="h2"
+            color="primary"
             gutterBottom
             sx={{
               mb: 2,
-              color: "blue",
               fontWeight: "bold",
               fontSize: "1.5rem",
             }}
@@ -248,8 +262,9 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                     sx={{
                       mb: 1,
                       width: "100%",
-                      border: "1px solid #002fff",
-                      color: "#3f3f3f",
+                      border: "1px solid #ff914d",
+                      background: "#f6f3f0",
+                      color: "#281e1e",
                     }}
                   >
                     <CardContent
@@ -272,10 +287,9 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                           component="h3"
                           sx={{
                             fontSize: "1rem",
+                            color:'#737373',
                             fontWeight: "bold",
                             flexGrow: 1,
-                            //overflowWrap: "break-word",
-                            //whiteSpace: "nowrap",
                             textOverflow: "ellipsis",
                           }}
                         >
@@ -324,7 +338,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
             ))}
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

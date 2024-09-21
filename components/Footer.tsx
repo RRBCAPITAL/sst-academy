@@ -8,6 +8,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import Button from '@mui/material/Button';
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 
 const Footer = (props: any) => {
   
@@ -16,7 +17,7 @@ const Footer = (props: any) => {
   return (
     <Box
       sx={{
-        backgroundColor: '#1F1D0D',
+        backgroundColor: '#1f140d',
         color: 'white',
         padding: '80px',
         position: 'relative', // Para asegurar el posicionamiento correcto
@@ -28,24 +29,28 @@ const Footer = (props: any) => {
         <Grid container spacing={4}>
           {/* Sección de información */}
           <Grid item xs={12} md={4}>
-            <Typography variant="h1" gutterBottom>
-              SST Academy
-            </Typography>
-            <Typography variant="h2" sx={{ marginBottom: '20px' }}>
+          <Box sx={{ display: 'flex', flexGrow: 0, position: 'absolute', top: '18px', left: '0', padding: '0 100px', width: '100%', borderBottom: '1px solid #737373' }}>
+            <Link href="/" passHref style={{outline: 'none', textDecoration: 'none', color: 'white', fontSize: '1.6rem', fontWeight: 'bold', marginBottom: '18px'}}>
+              <strong style={{color: '#ff914d'}} >SST</strong> ACADEMY
+            </Link>
+          </Box>
+            
+            <Box sx={{width: '240px'}}>
+            <Typography sx={{ margin: '15px 0', fontSize: '1.1rem', fontWeight:'bold' }}>
              Verifica el certificado
             </Typography>
             <Typography variant="body1" sx={{ marginBottom: '20px' }}>
              Valida el certificado SST ACADEMY ingresando el código único.
             </Typography>
             <Button
-                  
                   variant="contained"
-                  color="primary"
+                  sx={{color: 'white', fontWeight: 'bold', padding: '8px'}}
                   onClick={() => router.push('/validar-certificado')}
                   fullWidth
                 >
                 Verificar Certificado
             </Button>
+            </Box>
 
             {/* <Typography variant="body2">
               © 2024 SST Academy. Todos los derechos reservados.
@@ -54,21 +59,21 @@ const Footer = (props: any) => {
 
           {/* Sección de Links */}
           <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'center' } }}>
-            <Typography variant="h6" gutterBottom sx={{ color: '#FFD32B',}}>
-              Enlaces útiles
+            <Typography variant="h6" gutterBottom color='secondary'>
+              Enlaces
             </Typography>
             <MuiLink href="/" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
               Inicio
             </MuiLink>
-            <MuiLink href="/about" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
-              Sobre Nosotros
+            <MuiLink href="/" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
+              Cursos Virtuales
             </MuiLink>
-            <MuiLink href="/services" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
-              Servicios
+            <MuiLink href="/aula-virtual-login" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
+              Aula Virtual
             </MuiLink>
-            <MuiLink href="/contact" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
+            {/* <MuiLink href="/contact" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
               Contacto
-            </MuiLink>
+            </MuiLink> */}
           </Grid>
 
           {/* Sección de redes sociales */}
@@ -79,8 +84,8 @@ const Footer = (props: any) => {
             <IconButton
               href="https://facebook.com"
               target="_blank"
+              color='secondary'
               sx={{
-                color: '#FFD32B',
                 marginRight: '10px',
               }}
             >
@@ -89,8 +94,8 @@ const Footer = (props: any) => {
             <IconButton
               href="https://twitter.com"
               target="_blank"
+              color='secondary'
               sx={{
-                color: '#FFD32B',
                 marginRight: '10px',
               }}
             >
@@ -99,8 +104,8 @@ const Footer = (props: any) => {
             <IconButton
               href="https://instagram.com"
               target="_blank"
+              color='secondary'
               sx={{
-                color: '#FFD32B',
                 marginRight: '10px',
               }}
             >
@@ -109,9 +114,7 @@ const Footer = (props: any) => {
             <IconButton
               href="https://linkedin.com"
               target="_blank"
-              sx={{
-                color: '#FFD32B',
-              }}
+              color='secondary'
             >
               <LinkedInIcon />
             </IconButton>

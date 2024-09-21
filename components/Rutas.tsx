@@ -16,21 +16,22 @@ const Rutas = () => {
 
         return (
             <>
-                <MuiLink href="/" color="inherit" sx={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-                    <HomeIcon fontSize="small" />
-                </MuiLink>
-                <ArrowForwardIosIcon fontSize="small" sx={{ marginLeft: 1, marginRight: 1, width: '12px', height: '12px', color: '#4F4F4F' }} />
+
                 {pathSegments?.includes('cursos-virtuales') && (
                     <>
-                        <MuiLink href="/cursos-virtuales" color="inherit" sx={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="body1" component="span" sx={{ color: '#4F4F4F', fontWeight: 'bold', fontSize: { xs: '1.1rem', sm: '1rem' } }}>
-                                Cursos Virtuales
+                                        <MuiLink href="/" color="inherit" sx={{color: '#737373', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                    <HomeIcon fontSize="small" />
+                </MuiLink>
+                <ArrowForwardIosIcon fontSize="small" sx={{ marginLeft: 1, marginRight: 1, width: '12px', height: '12px', color: '#737373', }} />
+                        <MuiLink href="/" color="inherit" sx={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                            <Typography variant="body1" component="span" sx={{ color: '#737373', fontWeight: 'bold', fontSize: { xs: '1.1rem', sm: '1rem' } }}>
+                            Programas de Especialización
                             </Typography>
                         </MuiLink>
                         {lastSegment !== 'cursos-virtuales' && (
                             <>
-                                <ArrowForwardIosIcon fontSize="small" sx={{ marginLeft: 1, marginRight: 1, width: '12px', height: '12px', color: '#4F4F4F' }} />
-                                <Typography variant="body1" component="span" sx={{ color: '#4F4F4F', fontWeight: 'bold', fontSize: { xs: '1.1rem', sm: '1rem' } }}>
+                                <ArrowForwardIosIcon fontSize="small" sx={{ marginLeft: 1, marginRight: 1, width: '12px', height: '12px', color: '#737373', }} />
+                                <Typography variant="body1" component="span" sx={{ color: '#737373', fontWeight: 'bold', fontSize: { xs: '1.1rem', sm: '1rem' } }}>
                                     {deslugify(lastSegment)}
                                 </Typography>
                             </>
@@ -42,7 +43,7 @@ const Rutas = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', marginTop: 4, marginLeft: 4 }}>
             {renderPath()}
         </Box>
     );

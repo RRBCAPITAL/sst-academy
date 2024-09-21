@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import axios from '../utils/axios.config'
+import Link from 'next/link';
 
 
 const ValidarCertificado = (props: any) => {
@@ -33,6 +34,7 @@ const ValidarCertificado = (props: any) => {
 
       if (response.data.success) {
         router.push(`/certificado/${props.codigo}`);
+        props.setOpen(false);
       } else {
         alert("Ingresa un código válido.");
       }
@@ -40,7 +42,7 @@ const ValidarCertificado = (props: any) => {
       console.error("Error en la petición:", error);
     }
 
-    props.setOpen(false);
+
   };
 
   const modalStyle = {
@@ -57,10 +59,21 @@ const ValidarCertificado = (props: any) => {
   return (
     <Modal open={props.open} onClose={() => props.setOpen(true)} aria-labelledby="modal-title">
         <Box sx={modalStyle}>
-          <Typography id="modal-title" variant="h2" component="h2" sx={{marginBottom: '20px', fontWeight: 'bold', color: '#0055ff'}}>
-            SST ACADEMIA
-          </Typography>
-          <Typography id="modal-title" variant="h4" component="h3" sx={{marginBottom: '20px'}}>
+        <Box sx={{ display: 'flex', flexGrow: 0 }}>
+            <Link href="/" passHref>
+              <img
+                src="/images/logos/logo-sst.png" // Ruta a la imagen de tu logo
+                alt="SST Academia Logo"
+                style={{
+                  display: 'block',
+                  width: '260px', // Ajusta el tamaño según sea necesario
+                  height: 'auto',
+                  marginBottom: '24px'
+                }}
+              />
+            </Link>
+          </Box>
+          <Typography id="modal-title" variant="h4" component="h3" sx={{marginBottom: '20px',}}>
             Verificar un certificado
           </Typography>
           <TextField
@@ -76,10 +89,9 @@ const ValidarCertificado = (props: any) => {
           </Typography>
           <Button
             variant="contained"
-            color="primary"
             fullWidth
             onClick={handleBuscar}
-            sx={{fontSize: '20px'}}
+            sx={{fontSize: '20px', color: 'white', fontWeight: 'bold'}}
           >
             Validar
           </Button>

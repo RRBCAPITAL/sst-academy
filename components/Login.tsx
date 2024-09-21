@@ -6,6 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import axios from '@/utils/axios.config'; // Ajusta la ruta según tu configuración
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import Link from 'next/link';
 
 // Define una interfaz para los datos del formulario de inicio de sesión
 interface LoginFormData {
@@ -84,10 +85,20 @@ const LoginForm: React.FC = () => {
             padding: 3,
           }}
         >
-          <Typography variant="h4" sx={{padding: '10px 0px', fontSize: '30px'}} gutterBottom>
-            SST ACADEMIA
-          </Typography>
-          <Typography variant="h4" sx={{padding: '10px 0px'}} gutterBottom>
+          <Box sx={{ display: 'flex', flexGrow: 0 }}>
+            <Link href="/" passHref>
+              <img
+                src="/images/logos/logo-sst.png" // Ruta a la imagen de tu logo
+                alt="SST Academia Logo"
+                style={{
+                  display: 'block',
+                  width: '260px', // Ajusta el tamaño según sea necesario
+                  height: 'auto',
+                }}
+              />
+            </Link>
+          </Box>
+          <Typography variant="h4" sx={{padding: '10px 20px', fontSize: '1.2rem', fontWeight: 'bold', color: '#737373'}} gutterBottom>
             Iniciar Sesión
           </Typography>
           <form
@@ -138,13 +149,17 @@ const LoginForm: React.FC = () => {
                 <Button
                   type="submit"
                   variant="contained"
-                  color="primary"
                   fullWidth
                   disabled={loading}
+                  sx={{color: 'white', fontWeight: 'bold', fontSize: '0.8re'}}
                 >
                   {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                 </Button>
               </Grid>
+
+              <Typography variant="h4" sx={{padding: '10px 20px', fontSize: '0.8rem', color: '#737373', lineHeight: '1.3'}} gutterBottom>
+            Obtén tus credenciales comprando un curso. <Link href={'/'} style={{color: '#ff7017', fontWeight: 'bold'}}>Comprar</Link>
+            </Typography>
             </Grid>
           </form>
         </Box>

@@ -20,13 +20,31 @@ import axios from "@/utils/axios.config";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 import ValidarCertificado from "@/components/ValidarCertificado";
+import CursosVirtuales from "@/components/CursosVirtuales";
 
 const Inicio = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [codigo, setCodigo] = useState<string>("");
 
   return (
-    <Container
+    <Box sx={{with: '100vw'}}>
+      <Box
+      sx={{ 
+        display: 'flex', // Para habilitar flexbox
+        justifyContent: 'center', // Centrado horizontal
+        alignItems: 'center', // Centrado vertical
+        background: '#ff914d',
+        width: '100%',
+        height: '124px',
+        textAlign: 'center',
+        fontSize: '2rem',
+        color: 'white',
+        fontWeight: '500'
+      }}
+      >
+        Programas de Especialización
+      </Box>
+      <Container
       maxWidth={false}
       sx={{
         height: "100vh",
@@ -38,233 +56,11 @@ const Inicio = () => {
         padding: "20px",
       }}
     >
-      {/* Sección de portada */}
-      <Box
-  sx={{
-    width: "100%",
-    marginBottom: "50px",
-    backgroundColor: "#1F1D0D", // Fondo negro
-    padding: { xs: "40px", md:"60px 80px",},
-    borderRadius: "10px",
-  }}
->
-  <Grid container spacing={2} alignItems="center">
-    {/* Contenido a la izquierda */}
-    <Grid item xs={12} md={6}>
-      <Box
-        sx={{
-          textAlign: { xs: "center", md: "left" }, // Centrado en pantallas pequeñas, alineado a la izquierda en grandes
-          paddingRight: { md: "10px" }, // Espacio entre el contenido y la imagen en pantallas grandes
-          fontWeight: 'bold'
-        }}
-      >
-        <Typography
-          variant="h1"
-          gutterBottom
-          sx={{
-            color: "white", // Título en amarillo
-            fontSize: { xs: "2rem", md: "3.5rem" }, // Ajuste de tamaño de fuente para diferentes pantallas
-          }}
-        >
-         La Mejor Plataforma de Cursos Virtuales
-        </Typography>
-        <Typography
-          variant="h6"
-          color="white"
-          sx={{
-            fontSize: { xs: "0.8rem", md: "1rem" }, // Aumento del tamaño de la fuente
-          }}
-        >
-          Aprende desde cualquier lugar con cursos diseñados por expertos.
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          sx={{ marginTop: "20px", backgroundColor: '#F7FF62', color: '#1F1D0D', fontWeight: 'bold', fontSize: '18px', padding: '10px 40px', borderRadius: '10px' }}
-        >
-          Ver Cursos
-        </Button>
-      </Box>
-    </Grid>
-
-    {/* Imagen a la derecha */}
-    <Grid item xs={12} md={6}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: { xs: "center", md: "flex-end" },
-        }}
-      >
-        <img
-          src="https://html.merku.love/collab/assets/images/banner/hero_banner_img_1.jpg" // Cambia esta ruta por la imagen que quieras usar
-          alt="Portada Cursos Virtuales"
-          style={{
-            width: "100%",
-            maxWidth: "500px", // Tamaño máximo de la imagen en dispositivos grandes
-            borderRadius: "10px",
-          }}
-        />
-      </Box>
-    </Grid>
-  </Grid>
-</Box>
-
-     {/* Sección de ventajas */}
-<Box sx={{ width: "100%", marginTop: "50px", padding: {xs:'0px 20px', md: '0px 100px'} }}>
-  <Grid container spacing={4} alignItems="center">
-    {/* Título, descripción e imagen a la izquierda */}
-    <Grid item xs={12} md={6}>
-      <Box>
-        <Typography
-          variant="h3"
-          gutterBottom
-          sx={{
-            color: "black",
-            fontSize: { xs: "2rem", md: "2.5rem" }, // Ajuste de tamaño de fuente para diferentes pantallas
-            fontWeight: 'bold'
-          }}
-        >
-          Mira nuestros cursos ya!
-        </Typography>
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          sx={{
-            fontSize: { xs: "1rem", md: "1.2rem" }, // Ajuste de tamaño de fuente
-            marginBottom: "20px",
-            marginTop: "20px",
-          }}
-        >
-          Los cursos virtuales que harán desarrollar tu potencial.
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: { xs: "center", md: "flex-start" },
-          }}
-        >
-          <img
-            src="https://html.merku.love/collab/assets/images/about/about_image_1.jpg" // Cambia esta ruta por la imagen que quieras usar
-            alt="Imagen de Ventajas"
-            style={{
-              width: "100%",
-              maxWidth: "500px", // Tamaño máximo de la imagen en dispositivos grandes
-              borderRadius: "10px",
-            }}
-          />
-        </Box>
-      </Box>
-    </Grid>
-
-    {/* Tarjetas a la derecha en columna */}
-    <Grid item xs={12} md={6}>
-      <Grid container direction="column" spacing={4}>
-        <Grid item>
-          <Card>
-            <CardMedia
-              component="img"
-              height="140"
-              image="https://pandorafms.com/blog/wp-content/uploads/2017/09/Ventajas-y-desventajas-de-los-horarios-flexibles-para-tu-empresa.png"
-              alt="Ventaja 1"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h3">
-                Flexibilidad
-              </Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ fontSize: '14px' }}>
-                Estudia a tu propio ritmo con acceso las 24 horas del día.
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item>
-          <Card>
-            <CardMedia
-              component="img"
-              height="140"
-              image="https://keystoneacademic-res.cloudinary.com/image/upload/v1672925563/iStock-1446731558_eafgly.jpg"
-              alt="Ventaja 2"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h3">
-                Certificación
-              </Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ fontSize: '14px' }}>
-                Obtén un certificado al finalizar cada curso.
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item>
-          <Card>
-            <CardMedia
-              component="img"
-              height="140"
-              image="https://talent-match.es/wp-content/uploads/2023/01/blogfoto-48.png"
-              alt="Ventaja 3"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h3">
-                Comunidad
-              </Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ fontSize: '14px' }}>
-                Únete a una comunidad de estudiantes y profesionales.
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </Grid>
-  </Grid>
-</Box>
-
-
-
-      {/* Sección de puntuaciones */}
-      <Box sx={{ width: "80%", marginTop: "50px" }}>
-        <Typography variant="h4" textAlign="center" gutterBottom>
-          Opiniones de nuestros estudiantes
-        </Typography>
-        <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Juan Pérez</Typography>
-                <Rating value={5} readOnly />
-                <Typography variant="body2" color="textSecondary">
-                  Excelente plataforma, los cursos son muy completos.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">María López</Typography>
-                <Rating value={4} readOnly />
-                <Typography variant="body2" color="textSecondary">
-                  Me encantó la flexibilidad y la calidad del contenido.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Carlos Martínez</Typography>
-                <Rating value={5} readOnly />
-                <Typography variant="body2" color="textSecondary">
-                  Recomiendo 100%, aprendí mucho con esta plataforma.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Box>     
+      <CursosVirtuales />
      {open &&  <ValidarCertificado setOpen = {setOpen} open = {open} codigo = {codigo} setCodigo = {setCodigo} /> }
       <Footer setOpen = {setOpen}/>
     </Container>
+    </Box>
   );
 };
 
