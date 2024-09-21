@@ -16,17 +16,20 @@ export default function RootLayout({
   const pathname = usePathname(); // Obtiene la ruta actual
 
   // Verifica si la ruta actual no es null y si comienza con /dashboard/admin
-  const shouldHideNavbar = pathname ? pathname.startsWith('/dashboard/admin') : false;
-  const shouldHideNavbar2 = pathname ? pathname.startsWith('/login') : false;
+  const shouldHideNavbar = pathname
+    ? pathname.startsWith("/dashboard/admin")
+    : false;
+  const shouldHideNavbar2 = pathname ? pathname.startsWith("/login") : false;
 
   return (
     <html lang="en">
       <Head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </Head>
+
       <body>
         <ThemeProvider theme={baselightTheme}>
           <CssBaseline />

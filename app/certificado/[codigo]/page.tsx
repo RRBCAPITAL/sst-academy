@@ -152,7 +152,8 @@ const Certificado: React.FC<CertificadoProps> = ({ params }) => {
         <Typography sx={bodyTextStyle}>
           Certifica que el estudiante <span style={nameStyle}>{`${usuario_nombre} ${usuario_apellidos}`}</span>, identificado con DNI <strong>{userDNI}</strong>,
           ha culminado satisfactoriamente el curso <strong>{curso_nombre}</strong>, 
-          alcanzando una calificación final de <strong>{curso_calificacion}</strong>. El curso fue completado el día <span style={highlightStyle}>{formatearFecha(fecha_calificacion)}</span>.
+          alcanzando una calificación final de <strong>{curso_calificacion}</strong>. 
+          {/* El curso fue completado el día <span style={highlightStyle}>{formatearFecha(fecha_calificacion)}</span>. */}
         </Typography>
         <Typography sx={footerStyle}>
           ¡Felicitaciones por tu logro!

@@ -19,50 +19,11 @@ import AddIcon from "@mui/icons-material/Add";
 import axios from "@/utils/axios.config";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
+import ValidarCertificado from "@/components/ValidarCertificado";
 
 const Inicio = () => {
-  const [open, setOpen] = useState(false);
-  const [codigo, setCodigo] = useState("");
-  const router = useRouter();
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleCodigoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCodigo(e.target.value);
-  };
-
-  const handleBuscar = async () => {
-    const cursoID = codigo.substring(0, 3);
-    const userDNI = codigo.substring(3);
-
-    try {
-      const response = await axios.get(
-        `/api/usuario-curso-info-acreditacion?curso_id=${cursoID}&user_dni=${userDNI}`
-      );
-
-      if (response.data.success) {
-        router.push(`/certificado/${codigo}`);
-      } else {
-        alert("Ingresa un código válido.");
-      }
-    } catch (error) {
-      console.error("Error en la petición:", error);
-    }
-
-    handleClose();
-  };
-
-  const modalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-  };
+  const [open, setOpen] = useState<boolean>(false);
+  const [codigo, setCodigo] = useState<string>("");
 
   return (
     <Container
@@ -300,46 +261,9 @@ const Inicio = () => {
             </Card>
           </Grid>
         </Grid>
-      </Box>
-
-      {/* Modal para ingresar el código */}
-      <Fab
-        color="primary"
-        aria-label="add"
-        onClick={handleOpen}
-        sx={{
-          position: "fixed",
-          bottom: 16,
-          left: 16,
-        }}
-      >
-        <AddIcon />
-      </Fab>
-
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-title">
-        <Box sx={modalStyle}>
-          <Typography id="modal-title" variant="h6" component="h2">
-            Ingresar Código
-          </Typography>
-          <TextField
-            label="Código del Curso"
-            variant="outlined"
-            fullWidth
-            value={codigo}
-            onChange={handleCodigoChange}
-            margin="normal"
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleBuscar}
-          >
-            Buscar
-          </Button>
-        </Box>
-      </Modal> 
-      <Footer />
+      </Box>     
+     {open &&  <ValidarCertificado setOpen = {setOpen} open = {open} codigo = {codigo} setCodigo = {setCodigo} /> }
+      <Footer setOpen = {setOpen}/>
     </Container>
   );
 };

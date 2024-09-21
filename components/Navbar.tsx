@@ -38,7 +38,7 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar position="static"  sx={{ boxShadow: 'none'}}>
-      <Container maxWidth="xl" sx={{ bgcolor: 'primary.light', color: 'primary.main'}}>
+      <Container maxWidth="xl" sx={{ backgroundColor: '#e8f0ff', color: 'primary.main'}}>
         <Toolbar disableGutters sx={{ padding: '0 30px' }}>
           {/* Logo al principio */}
           <Box sx={{ flexGrow: 0 }}>

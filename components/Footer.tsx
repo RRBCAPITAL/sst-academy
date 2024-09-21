@@ -1,11 +1,18 @@
+"use client"
+
 import React from 'react';
 import { Box, Typography, Container, IconButton, Grid, Link as MuiLink } from '@mui/material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import Button from '@mui/material/Button';
+import { useRouter } from "next/navigation";
 
-const Footer = () => {
+const Footer = (props: any) => {
+  
+  const router = useRouter();
+
   return (
     <Box
       sx={{
@@ -24,9 +31,22 @@ const Footer = () => {
             <Typography variant="h1" gutterBottom>
               SST Academy
             </Typography>
-            <Typography variant="body1" sx={{ marginBottom: '20px' }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <Typography variant="h2" sx={{ marginBottom: '20px' }}>
+             Verifica el certificado
             </Typography>
+            <Typography variant="body1" sx={{ marginBottom: '20px' }}>
+             Valida el certificado SST ACADEMY ingresando el código único.
+            </Typography>
+            <Button
+                  
+                  variant="contained"
+                  color="primary"
+                  onClick={() => router.push('/validar-certificado')}
+                  fullWidth
+                >
+                Verificar Certificado
+            </Button>
+
             {/* <Typography variant="body2">
               © 2024 SST Academy. Todos los derechos reservados.
             </Typography> */}
