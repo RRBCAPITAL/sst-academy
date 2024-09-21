@@ -5,7 +5,7 @@ import { Container } from '@mui/material'
 import ValidarCertificado from '../../components/ValidarCertificado'
 import { useState } from 'react'
 
-const page = () => {
+const PageValidarCertificado = () => {
 
   const [open, setOpen] = useState<boolean>(true);
   const [codigo, setCodigo] = useState<string>("");
@@ -28,4 +28,4 @@ const page = () => {
   )
 }
 
-export default page
+export default PageValidarCertificado
