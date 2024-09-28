@@ -44,7 +44,7 @@ const LoginForm: React.FC = () => {
         if (res.data.usuario.rol === 'administrador') {
           router.push('/dashboard/admin');
         } else {
-          router.push('/dashboard/estudiante');
+          router.push('/campus-virtual');
         }
       } else {
         alert('Credenciales incorrectas.');

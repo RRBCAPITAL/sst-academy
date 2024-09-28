@@ -19,7 +19,7 @@ export default function RootLayout({
   const shouldHideNavbar = pathname
     ? pathname.startsWith("/dashboard/admin")
     : false;
-  const shouldHideNavbar2 = pathname ? pathname.startsWith("/aula-virtual-login") : false;
+  const shouldHideNavbar2 = pathname ? pathname.startsWith("/campus-virtual-login") : false;
 
   return (
     <html lang="en">

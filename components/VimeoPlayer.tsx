@@ -8,17 +8,23 @@ interface VimeoPlayerProps {
 
 const VimeoPlayer = (props: VimeoPlayerProps) => {
     useEffect(() => {
-        // Carga dinámica del script de la API de Vimeo
-        const script = document.createElement('script');
-        script.src = "https://player.vimeo.com/api/player.js";
-        script.async = true;
-        document.body.appendChild(script);
+        // Verifica si el script de Vimeo ya está cargado
+        if (!document.querySelector('script[src="https://player.vimeo.com/api/player.js"]')) {
+            const script = document.createElement('script');
+            script.src = "https://player.vimeo.com/api/player.js";
+            script.async = true;
+            document.body.appendChild(script);
 
-        return () => {
-            // Limpieza del script al desmontar el componente
-            document.body.removeChild(script);
-        };
+            return () => {
+                // Limpieza del script al desmontar el componente
+                document.body.removeChild(script);
+            };
+        }
     }, []);
+
+    if (!props.video_url) {
+        return <div></div>;
+    }
 
     return (
         // <div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>

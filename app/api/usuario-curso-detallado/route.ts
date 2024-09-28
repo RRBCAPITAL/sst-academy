@@ -27,8 +27,10 @@ export async function GET(request: Request) {
                     SELECT
                         u.curso_id,
                         u.unidad,
+                        u.unidad_id,
                         u.nombre AS unidad_nombre,
                         l.nombre AS leccion_nombre,
+                        l.leccion_id AS leccion_id,
                         l.video_url,
                         l.material_descarga
                     FROM unidad u
@@ -39,16 +41,18 @@ export async function GET(request: Request) {
                     SELECT
                         curso_id,
                         unidad,
+                        unidad_id,
                         unidad_nombre,
                         JSON_AGG(
                             JSON_BUILD_OBJECT(
+                                'leccion_id', leccion_id,
                                 'nombre', leccion_nombre,
                                 'video_url', video_url,
                                 'material_descarga', material_descarga
                             )
                         ) AS lecciones
                     FROM lecciones_agregadas
-                    GROUP BY curso_id, unidad, unidad_nombre
+                    GROUP BY curso_id, unidad, unidad_id, unidad_nombre
                 )
                 SELECT
                     c.curso_id,
@@ -62,6 +66,7 @@ export async function GET(request: Request) {
                     JSON_AGG(
                         JSON_BUILD_OBJECT(
                             'unidad', unidad,
+                            'unidad_id', unidad_id,
                             'unidad_nombre', unidad_nombre,
                             'lecciones', lecciones
                         )
@@ -75,53 +80,65 @@ export async function GET(request: Request) {
             // Si userId no es nulo o vacío, devuelve las unidades y lecciones asignadas al usuario
             query = sql`
                 WITH lecciones_agregadas AS (
-                    SELECT
-                        u.curso_id,
-                        u.unidad,
-                        u.nombre AS unidad_nombre,
-                        l.nombre AS leccion_nombre,
-                        l.video_url,
-                        l.material_descarga
-                    FROM unidad u
-                    LEFT JOIN leccion l ON u.unidad_id = l.unidad_id
-                    WHERE u.curso_id IN (
-                        SELECT curso_id FROM usuario_curso WHERE user_id = ${userId} AND curso_id = ${cursoId}
-                    )
-                ),
-                unidades_agregadas AS (
-                    SELECT
-                        curso_id,
-                        unidad,
-                        unidad_nombre,
-                        JSON_AGG(
-                            JSON_BUILD_OBJECT(
-                                'nombre', leccion_nombre,
-                                'video_url', video_url,
-                                'material_descarga', material_descarga
-                            )
-                        ) AS lecciones
-                    FROM lecciones_agregadas
-                    GROUP BY curso_id, unidad, unidad_nombre
-                )
-                SELECT
-                    c.curso_id,
-                    c.nombre AS curso_nombre,
-                    c.descripcion AS curso_descripcion,
-                    c.precio AS curso_precio,
-                    c.video_intro AS video_intro,
-                    JSON_AGG(
-                        JSON_BUILD_OBJECT(
-                            'unidad', unidad,
-                            'unidad_nombre', unidad_nombre,
-                            'lecciones', lecciones
-                        )
-                    ) AS unidades
-                FROM curso c
-                LEFT JOIN unidades_agregadas ua ON c.curso_id = ua.curso_id
-                WHERE c.curso_id IN (
-                    SELECT curso_id FROM usuario_curso WHERE user_id = ${userId} AND curso_id = ${cursoId}
-                )
-                GROUP BY c.curso_id, c.nombre;
+    SELECT
+        u.curso_id,
+        u.unidad,
+        u.unidad_id,
+        u.nombre AS unidad_nombre,
+        l.nombre AS leccion_nombre,
+        l.leccion_id AS leccion_id,
+        l.video_url,
+        l.material_descarga,
+        COALESCE(
+            (SELECT p.completado
+             FROM progreso p
+             WHERE p.user_id = ${userId} AND p.leccion_id = l.leccion_id), 
+            false) AS completado -- Añadimos el campo completado
+    FROM unidad u
+    LEFT JOIN leccion l ON u.unidad_id = l.unidad_id
+    WHERE u.curso_id IN (
+        SELECT curso_id FROM usuario_curso WHERE user_id = ${userId} AND curso_id = ${cursoId}
+    )
+),
+unidades_agregadas AS (
+    SELECT
+        curso_id,
+        unidad,
+        unidad_id,
+        unidad_nombre,
+        JSON_AGG(
+            JSON_BUILD_OBJECT(
+                'leccion_id', leccion_id,
+                'nombre', leccion_nombre,
+                'video_url', video_url,
+                'material_descarga', material_descarga,
+                'completado', completado -- Añadimos el campo completado en el JSON
+            )
+        ) AS lecciones
+    FROM lecciones_agregadas
+    GROUP BY curso_id, unidad, unidad_id, unidad_nombre
+)
+SELECT
+    c.curso_id,
+    c.nombre AS curso_nombre,
+    c.descripcion AS curso_descripcion,
+    c.precio AS curso_precio,
+    c.video_intro AS video_intro,
+    JSON_AGG(
+        JSON_BUILD_OBJECT(
+            'unidad', unidad,
+            'unidad_id', unidad_id,
+            'unidad_nombre', unidad_nombre,
+            'lecciones', lecciones
+        )
+    ) AS unidades
+FROM curso c
+LEFT JOIN unidades_agregadas ua ON c.curso_id = ua.curso_id
+WHERE c.curso_id IN (
+    SELECT curso_id FROM usuario_curso WHERE user_id = ${userId} AND curso_id = ${cursoId}
+)
+GROUP BY c.curso_id, c.nombre;
+
             `;
         }
 

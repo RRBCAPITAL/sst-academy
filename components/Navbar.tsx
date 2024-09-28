@@ -110,9 +110,9 @@ function ResponsiveAppBar() {
                 boxShadow: 'none',
               }}
               component={Link}
-              href="/aula-virtual-login"
+              href="/campus-virtual-login"
             >
-              Aula Virtual
+              Campus Virtual
             </Button>
           </Box>
         </Toolbar>

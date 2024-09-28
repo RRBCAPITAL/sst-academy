@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, leccion: rows }); // Devuelve el usuario insertado como respuesta
 
     } catch (error) {
-        return NextResponse.json({ error }); // Devuelve el mensaje de error en caso de fallo
+        return NextResponse.json({ error }); //  Devuelve el mensaje de error en caso de fallo
     }
 }
 

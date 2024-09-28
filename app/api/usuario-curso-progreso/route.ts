@@ -18,7 +18,8 @@ export async function GET(request: Request) {
         const queryBase = sql`
             SELECT 
                 p.completado,
-                l.leccion  -- Agregar el campo l.leccion aquí
+                l.leccion,  -- Agregar el campo l.leccion
+                u.unidad  -- Agregar el campo u.unidad aquí
             FROM 
                 progreso p
             INNER JOIN 
@@ -39,50 +40,58 @@ export async function GET(request: Request) {
         if (rowsProgreso && rowsProgreso[0]?.completado) {
             const queryLeccionActual = sql`
             WITH ÚltimaLección AS (
-                SELECT
-                    p.user_id,
-                    l.unidad_id,
-                    l.leccion_id,
-                    l.nombre AS leccion_nombre,
-                    l.leccion,  -- Agregar el campo l.leccion aquí
-                    ROW_NUMBER() OVER (PARTITION BY l.unidad_id ORDER BY l.leccion_id DESC) AS rn
-                FROM
-                    progreso p
-                INNER JOIN
-                    leccion l ON p.leccion_id = l.leccion_id
-                WHERE
-                    p.user_id = ${userId}
-                    AND p.completado = true
-            ),
-            ÚltimaLecciónUnidad AS (
-                SELECT
-                    unidad_id,
-                    leccion_id,
-                    leccion_nombre,
-                    leccion  -- Agregar el campo l.leccion aquí
-                FROM
-                    ÚltimaLección
-                WHERE
-                    rn = 1
-            ),
+    SELECT
+        p.user_id,
+        l.unidad_id,
+        l.leccion_id,
+        l.nombre AS leccion_nombre,
+        l.leccion,
+        u.unidad,
+        ROW_NUMBER() OVER (PARTITION BY l.unidad_id ORDER BY l.leccion_id DESC) AS rn
+    FROM
+        progreso p
+    INNER JOIN
+        leccion l ON p.leccion_id = l.leccion_id
+    INNER JOIN
+        unidad u ON l.unidad_id = u.unidad_id
+    WHERE
+        p.user_id = ${userId}
+        AND p.completado = true
+),
+ÚltimaLecciónUnidad AS (
+    SELECT
+        unidad_id,
+        leccion_id,
+        leccion_nombre,
+        leccion,
+        unidad
+    FROM
+        ÚltimaLección
+    WHERE
+        rn = 1
+)
+,
             SiguienteLección AS (
                 SELECT
                     l.unidad_id,
                     l.leccion_id,
                     l.nombre AS leccion_nombre,
                     l.leccion,  -- Agregar el campo l.leccion aquí
+                    u.unidad,  -- Agregar el campo u.unidad aquí
                     l.video_url AS video_intro,
                     l.material_descarga
                 FROM
                     leccion l
                 INNER JOIN
-                    ÚltimaLecciónUnidad u ON l.unidad_id = u.unidad_id
+                    unidad u ON l.unidad_id = u.unidad_id
+                INNER JOIN
+                    ÚltimaLecciónUnidad ul ON l.unidad_id = ul.unidad_id
                 WHERE
                     l.leccion_id = (
                         SELECT MIN(leccion_id)
                         FROM leccion
-                        WHERE unidad_id = u.unidad_id
-                          AND leccion_id > u.leccion_id
+                        WHERE unidad_id = ul.unidad_id
+                          AND leccion_id > ul.leccion_id
                     )
             ),
             PrimeraLecciónSiguienteUnidad AS (
@@ -91,10 +100,13 @@ export async function GET(request: Request) {
                     l.leccion_id,
                     l.nombre AS leccion_nombre,
                     l.leccion,  -- Agregar el campo l.leccion aquí
+                    u.unidad,  -- Agregar el campo u.unidad aquí
                     l.video_url AS video_intro,
                     l.material_descarga
                 FROM
                     leccion l
+                INNER JOIN
+                    unidad u ON l.unidad_id = u.unidad_id
                 INNER JOIN
                     (SELECT MIN(unidad_id) AS siguiente_unidad
                      FROM leccion
@@ -112,9 +124,10 @@ export async function GET(request: Request) {
                 c.nombre AS curso_nombre,
                 u.unidad_id,
                 u.nombre AS unidad_nombre,
+                u.unidad,  -- Seleccionar u.unidad aquí
                 COALESCE(s.leccion_id, ps.leccion_id) AS leccion_id,
                 COALESCE(s.leccion_nombre, ps.leccion_nombre) AS leccion_nombre,
-                COALESCE(s.leccion, ps.leccion) AS leccion,  -- Agregar el campo COALESCE(s.leccion, ps.leccion) aquí
+                COALESCE(s.leccion, ps.leccion) AS leccion,  -- Seleccionar COALESCE(s.leccion, ps.leccion) aquí
                 COALESCE(s.video_intro, ps.video_intro) AS video_intro,
                 COALESCE(s.material_descarga, ps.material_descarga) AS material_descarga
             FROM
@@ -150,6 +163,7 @@ export async function GET(request: Request) {
                     c.nombre AS curso_nombre,
                     u.unidad_id,
                     u.nombre AS nombre_unidad,
+                    u.unidad,  -- Agregar el campo u.unidad aquí
                     l.leccion_id,
                     l.nombre AS leccion_nombre,
                     l.leccion,  -- Agregar el campo l.leccion aquí

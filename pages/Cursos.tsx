@@ -44,7 +44,7 @@ const Cursos = () => {
   }, []);
 
   return (
-    <Grid container spacing={4} paddingTop={0}>
+    <Grid container spacing={4} paddingTop={0} padding={0}>
       {loading ? (
         // Muestra un skeleton mientras se cargan los datos
         <Grid item xs={12}>

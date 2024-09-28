@@ -20,18 +20,19 @@ export async function middleware(request: NextRequest) {
   const cookies = parse(request.headers.get('cookie') || '');
   const token = cookies.token;
   const user = cookies.user ? JSON.parse(cookies.user) : null;
-
+  console.log(path);
+  
   // Verifica autenticación
   if (!token) {
-    if (path.startsWith('/dashboard')) {
-      url.pathname = '/login'; // Redirige al login si no está autenticado
+    if (path.startsWith('/campus-virtual')) {
+      url.pathname = '/campus-virtual-login'; // Redirige al login si no está autenticado
       return NextResponse.redirect(url);
     }
   } else {
     // Verifica autorización
     if (path.startsWith('/dashboard/admin') && (!user || user.rol !== 'administrador')) {
       // Redirige si el rol no es administrador
-      url.pathname = '/dashboard/estudiante';
+      url.pathname = '/campus-virtual';
       return NextResponse.redirect(url);
     }
   }
@@ -41,5 +42,5 @@ export async function middleware(request: NextRequest) {
 
 // Configura el middleware para aplicar en las rutas de API y dashboard
 export const config = {
-  matcher: ['/api/:path*', '/dashboard/:path*'],
+  matcher: ['/api/:path*', '/dashboard/:path*', '/campus-virtual/:path*'],
 };
