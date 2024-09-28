@@ -18,8 +18,8 @@ export async function GET(request: Request) {
         const queryBase = sql`
             SELECT 
                 p.completado,
-                l.leccion,  -- Agregar el campo l.leccion
-                u.unidad  -- Agregar el campo u.unidad aquí
+                l.leccion,
+                u.unidad
             FROM 
                 progreso p
             INNER JOIN 
@@ -32,129 +32,135 @@ export async function GET(request: Request) {
                 p.user_id = ${userId}
                 AND c.curso_id = ${cursoId}
             ORDER BY 
-                u.unidad_id, l.leccion_id;
+                u.unidad_id, l.leccion_id
+            LIMIT 1; -- Solo traer un valor
         `;
 
         const { rows: rowsProgreso } = await queryBase;
 
         if (rowsProgreso && rowsProgreso[0]?.completado) {
+            // Consulta para obtener la lección actual
             const queryLeccionActual = sql`
-            WITH ÚltimaLección AS (
-    SELECT
-        p.user_id,
-        l.unidad_id,
-        l.leccion_id,
-        l.nombre AS leccion_nombre,
-        l.leccion,
-        u.unidad,
-        ROW_NUMBER() OVER (PARTITION BY l.unidad_id ORDER BY l.leccion_id DESC) AS rn
-    FROM
-        progreso p
-    INNER JOIN
-        leccion l ON p.leccion_id = l.leccion_id
-    INNER JOIN
-        unidad u ON l.unidad_id = u.unidad_id
-    WHERE
-        p.user_id = ${userId}
-        AND p.completado = true
-),
-ÚltimaLecciónUnidad AS (
-    SELECT
-        unidad_id,
-        leccion_id,
-        leccion_nombre,
-        leccion,
-        unidad
-    FROM
-        ÚltimaLección
-    WHERE
-        rn = 1
-)
-,
-            SiguienteLección AS (
+                WITH ÚltimaLección AS (
+                    SELECT
+                        p.user_id,
+                        l.unidad_id,
+                        l.leccion_id,
+                        l.nombre AS leccion_nombre,
+                        l.leccion,
+                        u.unidad,
+                        ROW_NUMBER() OVER (PARTITION BY l.unidad_id ORDER BY l.leccion_id DESC) AS rn
+                    FROM
+                        progreso p
+                    INNER JOIN
+                        leccion l ON p.leccion_id = l.leccion_id
+                    INNER JOIN
+                        unidad u ON l.unidad_id = u.unidad_id
+                    WHERE
+                        p.user_id = ${userId}
+                        AND p.completado = true
+                ),
+                ÚltimaLecciónUnidad AS (
+                    SELECT
+                        unidad_id,
+                        leccion_id,
+                        leccion_nombre,
+                        leccion,
+                        unidad
+                    FROM
+                        ÚltimaLección
+                    WHERE
+                        rn = 1
+                    LIMIT 1
+                ),
+                SiguienteLección AS (
+                    SELECT
+                        l.unidad_id,
+                        l.leccion_id,
+                        l.nombre AS leccion_nombre,
+                        l.leccion,
+                        u.unidad,
+                        l.video_url AS video_intro,
+                        l.material_descarga
+                    FROM
+                        leccion l
+                    INNER JOIN
+                        unidad u ON l.unidad_id = u.unidad_id
+                    INNER JOIN
+                        ÚltimaLecciónUnidad ul ON l.unidad_id = ul.unidad_id
+                    WHERE
+                        l.leccion_id = (
+                            SELECT MIN(leccion_id)
+                            FROM leccion
+                            WHERE unidad_id = ul.unidad_id
+                              AND leccion_id > ul.leccion_id
+                            LIMIT 1
+                        )
+                    LIMIT 1
+                ),
+                PrimeraLecciónSiguienteUnidad AS (
+                    SELECT
+                        l.unidad_id,
+                        l.leccion_id,
+                        l.nombre AS leccion_nombre,
+                        l.leccion,
+                        u.unidad,
+                        l.video_url AS video_intro,
+                        l.material_descarga
+                    FROM
+                        leccion l
+                    INNER JOIN
+                        unidad u ON l.unidad_id = u.unidad_id
+                    INNER JOIN
+                        (SELECT MIN(unidad_id) AS siguiente_unidad
+                         FROM leccion
+                         WHERE unidad_id > (SELECT unidad_id FROM ÚltimaLecciónUnidad LIMIT 1)
+                         LIMIT 1) su ON l.unidad_id = su.siguiente_unidad
+                    WHERE
+                        l.leccion_id = (
+                            SELECT MIN(leccion_id)
+                            FROM leccion
+                            WHERE unidad_id = su.siguiente_unidad
+                            LIMIT 1
+                        )
+                    LIMIT 1
+                )
                 SELECT
-                    l.unidad_id,
-                    l.leccion_id,
-                    l.nombre AS leccion_nombre,
-                    l.leccion,  -- Agregar el campo l.leccion aquí
-                    u.unidad,  -- Agregar el campo u.unidad aquí
-                    l.video_url AS video_intro,
-                    l.material_descarga
+                    c.curso_id,
+                    c.nombre AS curso_nombre,
+                    u.unidad_id,
+                    u.nombre AS unidad_nombre,
+                    u.unidad,
+                    COALESCE(s.leccion_id, ps.leccion_id) AS leccion_id,
+                    COALESCE(s.leccion_nombre, ps.leccion_nombre) AS leccion_nombre,
+                    COALESCE(s.leccion, ps.leccion) AS leccion,
+                    COALESCE(s.video_intro, ps.video_intro) AS video_intro,
+                    COALESCE(s.material_descarga, ps.material_descarga) AS material_descarga
                 FROM
-                    leccion l
+                    curso c
                 INNER JOIN
-                    unidad u ON l.unidad_id = u.unidad_id
-                INNER JOIN
-                    ÚltimaLecciónUnidad ul ON l.unidad_id = ul.unidad_id
+                    unidad u ON c.curso_id = u.curso_id
+                LEFT JOIN
+                    SiguienteLección s ON u.unidad_id = s.unidad_id
+                LEFT JOIN
+                    PrimeraLecciónSiguienteUnidad ps ON u.unidad_id = ps.unidad_id
                 WHERE
-                    l.leccion_id = (
-                        SELECT MIN(leccion_id)
-                        FROM leccion
-                        WHERE unidad_id = ul.unidad_id
-                          AND leccion_id > ul.leccion_id
-                    )
-            ),
-            PrimeraLecciónSiguienteUnidad AS (
-                SELECT
-                    l.unidad_id,
-                    l.leccion_id,
-                    l.nombre AS leccion_nombre,
-                    l.leccion,  -- Agregar el campo l.leccion aquí
-                    u.unidad,  -- Agregar el campo u.unidad aquí
-                    l.video_url AS video_intro,
-                    l.material_descarga
-                FROM
-                    leccion l
-                INNER JOIN
-                    unidad u ON l.unidad_id = u.unidad_id
-                INNER JOIN
-                    (SELECT MIN(unidad_id) AS siguiente_unidad
-                     FROM leccion
-                     WHERE unidad_id > (SELECT unidad_id FROM ÚltimaLecciónUnidad)
-                     LIMIT 1) su ON l.unidad_id = su.siguiente_unidad
-                WHERE
-                    l.leccion_id = (
-                        SELECT MIN(leccion_id)
-                        FROM leccion
-                        WHERE unidad_id = su.siguiente_unidad
-                    )
-            )
-            SELECT
-                c.curso_id,
-                c.nombre AS curso_nombre,
-                u.unidad_id,
-                u.nombre AS unidad_nombre,
-                u.unidad,  -- Seleccionar u.unidad aquí
-                COALESCE(s.leccion_id, ps.leccion_id) AS leccion_id,
-                COALESCE(s.leccion_nombre, ps.leccion_nombre) AS leccion_nombre,
-                COALESCE(s.leccion, ps.leccion) AS leccion,  -- Seleccionar COALESCE(s.leccion, ps.leccion) aquí
-                COALESCE(s.video_intro, ps.video_intro) AS video_intro,
-                COALESCE(s.material_descarga, ps.material_descarga) AS material_descarga
-            FROM
-                curso c
-            INNER JOIN
-                unidad u ON c.curso_id = u.curso_id
-            LEFT JOIN
-                SiguienteLección s ON u.unidad_id = s.unidad_id
-            LEFT JOIN
-                PrimeraLecciónSiguienteUnidad ps ON u.unidad_id = ps.unidad_id
-            WHERE
-                c.curso_id = ${cursoId}
-            ORDER BY
-                CASE
-                    WHEN s.leccion_id IS NOT NULL THEN 1
-                    WHEN ps.leccion_id IS NOT NULL THEN 2
-                    ELSE 3
-                END
-            LIMIT 1;
+                    c.curso_id = ${cursoId}
+                ORDER BY
+                    CASE
+                        WHEN s.leccion_id IS NOT NULL THEN 1
+                        WHEN ps.leccion_id IS NOT NULL THEN 2
+                        ELSE 3
+                    END
+                LIMIT 1;
             `;
 
             const { rows: rowsLeccionActual } = await queryLeccionActual;
             if (rowsLeccionActual.length > 0) {
                 return NextResponse.json({ success: true, progreso: true, startCurso: rowsLeccionActual });
             } else {
-                return NextResponse.json({ success: false, message: 'No existe info. actualmente.' });
-            }         
+                return NextResponse.json({ success: false, message: 'No existe información actualmente.' });
+            }
         } else {
             // Consulta para obtener la primera unidad y primera lección del curso
             const noneProgreso = sql`
@@ -163,13 +169,13 @@ export async function GET(request: Request) {
                     c.nombre AS curso_nombre,
                     u.unidad_id,
                     u.nombre AS nombre_unidad,
-                    u.unidad,  -- Agregar el campo u.unidad aquí
+                    u.unidad,
                     l.leccion_id,
                     l.nombre AS leccion_nombre,
-                    l.leccion,  -- Agregar el campo l.leccion aquí
+                    l.leccion,
                     l.video_url AS video_intro,
                     l.material_descarga,
-                    0 AS completado  -- No completado
+                    0 AS completado
                 FROM 
                     curso c
                 INNER JOIN 
@@ -192,6 +198,7 @@ export async function GET(request: Request) {
             }
         }
     } catch (error) {
+        console.error('Error ejecutando la consulta:', error);
         return NextResponse.json({ success: false, error: error });
     }
 }
