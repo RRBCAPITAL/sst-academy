@@ -93,7 +93,7 @@ const CampusVirtualCurso = (props: any) => {
 
   const handleLeccionHecha = async () => {
     try {
-      const leccionId = dataLeccionActual?.[0]?.leccion_id || dataLeccionSeleccionada?.[0]?.leccion_id;
+      const leccionId = dataLeccionSeleccionada?.[0]?.leccion_id || dataLeccionActual?.[0]?.leccion_id;
   
       if (!leccionId || !user?.user_id) {
         console.log("Faltan datos de la lección o del usuario");
