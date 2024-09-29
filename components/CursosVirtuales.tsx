@@ -8,9 +8,6 @@ const CursosVirtuales: React.FC = () => {
     <Container maxWidth="lg">
       <Box sx={{ padding: '24px 0px' }}>
       <Rutas />
-        {/* <Typography variant="h4" component="h1" gutterBottom>
-          Cursos Disponibles
-        </Typography> */}
         <Cursos />
       </Box>
     </Container>

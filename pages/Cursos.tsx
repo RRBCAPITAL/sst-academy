@@ -53,7 +53,7 @@ const Cursos = () => {
       ) : cursos.length > 0 ? (
         cursos.map((curso) => (
           <Grid item xs={12} sm={6} md={4} key={curso.curso_id}>
-            <Card sx={{ boxShadow: "none" }}>
+            <Card sx={{ boxShadow: "0 0 3px rgba(255, 145, 77, 0.7), 0 0 7px rgba(255, 145, 77, 0.5), 0 0 10px rgba(255, 145, 77, 0.3)"}}>
               <CardMedia
                 component="img"
                 height="240"
@@ -86,7 +86,7 @@ const Cursos = () => {
                     padding: "10px 0",
                     fontSize: "1.2rem",
                     color: "#37423B",
-                    height: "60px",
+                    height: "80px",
                   }}
                 >
                   {curso.nombre}

@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 import ValidarCertificado from "@/components/ValidarCertificado";
 import CursosVirtuales from "@/components/CursosVirtuales";
+import ContenidoLandingInicio from "@/components/ContenidoLandingInicio";
 
 const Inicio = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -39,7 +40,8 @@ const Inicio = () => {
         textAlign: 'center',
         fontSize: '2rem',
         color: 'white',
-        fontWeight: '500'
+        fontWeight: '500',
+        lineHeight: {xs: '1.1'}
       }}
       >
         Programas de Especialización
@@ -47,7 +49,6 @@ const Inicio = () => {
       <Container
       maxWidth={false}
       sx={{
-        height: "100vh",
         maxWidth: "1440px",
         display: "flex",
         flexDirection: "column",
@@ -57,9 +58,11 @@ const Inicio = () => {
       }}
     >
       <CursosVirtuales />
+      
+    </Container>
+    <ContenidoLandingInicio />
      {open &&  <ValidarCertificado setOpen = {setOpen} open = {open} codigo = {codigo} setCodigo = {setCodigo} /> }
       <Footer setOpen = {setOpen}/>
-    </Container>
     </Box>
   );
 };
