@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect } from "react";
 import AOS from "aos";
@@ -28,15 +28,14 @@ const ContenidoLandingInicio = () => {
       }}
     >
       {/* Título principal */}
-      <Typography
+      <Box
       data-aos="fade-top"
-        variant="h4"
-        sx={{ maxWidth: "1200px", margin: 'auto', marginY: "40px", fontSize: { xs: "20px", md: "26px" } }}
+        sx={{ maxWidth: "1200px", display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center', justifyContent: 'center', margin: 'auto', marginY: "40px", fontSize: { xs: "20px", md: "26px" } }}
       >
-        <var>Educación online</var>{" "}
-        <var style={{ fontWeight: "bold" }}>para tu crecimiento</var>{" "}
-        <var style={{}}>profesional</var>
-      </Typography>
+        <Typography fontSize='26px'>Educación online</Typography>
+        <Typography fontSize='26px' style={{ fontWeight: "bold" }}>para tu crecimiento</Typography>
+        <Typography fontSize='26px' >profesional</Typography>
+      </Box>
 
       {/* Sección con los tres cuadros */}
       <Grid container spacing={1} justifyContent="center" sx={{maxWidth: "1200px", margin:'auto'}}>
