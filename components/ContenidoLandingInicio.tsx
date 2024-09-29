@@ -276,8 +276,8 @@ const ContenidoLandingInicio = () => {
                 lineHeight: "1",
               }}
             >
-              Acceso por 6 meses al{" "}
-              <strong style={{ color: "#ff6c2d" }}>aula virtual</strong>
+              Acceso por 6 meses al
+              <strong style={{ color: "#ff6c2d" }}> aula virtual</strong>
             </Typography>
             <Typography
               variant="body1"
@@ -318,8 +318,8 @@ const ContenidoLandingInicio = () => {
             color: "#737373",
           }}
         >
-          Lo que dicen nuestros{" "}
-          <strong style={{ color: "#ff6c2d" }}>alumnos</strong>
+          Lo que dicen nuestros
+          <strong style={{ color: "#ff6c2d" }}> alumnos</strong>
         </Typography>
         <Grid container spacing={4} justifyContent="center">
           {/* Reseña 1 */}
@@ -353,8 +353,8 @@ const ContenidoLandingInicio = () => {
                 variant="body1"
                 sx={{ fontStyle: "italic", color: "#737373" }}
               >
-                "Es el primer programa virtual que llevo, así que me pareció muy
-                didáctico y sobre todo entendible."
+                 &quot;Es el primer programa virtual que llevo, así que me pareció muy
+                didáctico y sobre todo entendible.&quot;
               </Typography>
             </Paper>
           </Grid>
@@ -390,9 +390,9 @@ const ContenidoLandingInicio = () => {
                 variant="body1"
                 sx={{ fontStyle: "italic", color: "#737373" }}
               >
-                "Gracias a SST Academy pude encontrar un puesto en el área SSOMA
+                 &quot;Gracias a SST Academy pude encontrar un puesto en el área SSOMA
                 ya que la mayoría de las empresas buscan que tengas certificados
-                adicionales en el área."
+                adicionales en el área.&quot;
               </Typography>
             </Paper>
           </Grid>
@@ -428,8 +428,8 @@ const ContenidoLandingInicio = () => {
                 variant="body1"
                 sx={{ fontStyle: "italic", color: "#737373" }}
               >
-                "El programa que llevé me ayudó a enriquecer mis conocimientos
-                en SST, ahora tengo un panorama más claro del área."
+                 &quot;El programa que llevé me ayudó a enriquecer mis conocimientos
+                en SST, ahora tengo un panorama más claro del área.&quot;
               </Typography>
             </Paper>
           </Grid>
@@ -447,12 +447,11 @@ const ContenidoLandingInicio = () => {
             color: "#737373",
           }}
         >
-          Convenios con{" "}
-          <strong style={{ color: "#ff6c2d" }}>empresas</strong>
+          Convenios con
+          <strong style={{ color: "#ff6c2d" }}> empresas</strong>
         </Typography>
 
         <Grid container spacing={1} justifyContent="center">
-          {/* Reseña 1 */}
           <Grid item xs={12} sm={3} data-aos="fade-up" data-aos-delay="300">
               <Avatar
                 src="/images/E1.png"
