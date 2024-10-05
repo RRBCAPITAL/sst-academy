@@ -18,6 +18,9 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { ProgresoCurso } from "@/Types/progreso-curso.types";
+import Link from "next/link";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 interface User {
   user_id: number;
@@ -132,6 +135,56 @@ const CampusVirtualCurso = (props: any) => {
       console.error("Error al marcar la lección como hecha:", error);
     }
   };
+
+  const DataMaterialsExamen = [
+    {
+      curso_id: 'A-1',
+      materiales_url: '',
+      examen_url: ''
+    },
+    {
+      curso_id: 'B-1',
+      materiales_url: '',
+      examen_url: ''
+    },
+    {
+      curso_id: 'C-1',
+      materiales_url: '',
+      examen_url: ''
+    },
+    {
+      curso_id: 'D-1',
+      materiales_url: '',
+      examen_url: ''
+    },
+    {
+      curso_id: 'E-1',
+      materiales_url: '',
+      examen_url: ''
+    },
+    {
+      curso_id: 'F-1',
+      materiales_url: '',
+      examen_url: ''
+    },
+    {
+      curso_id: 'G-1',
+      materiales_url: '',
+      examen_url: ''
+    },
+    {
+      curso_id: 'H-1',
+      materiales_url: '',
+      examen_url: ''
+    },
+    {
+      curso_id: 'I-1',
+      materiales_url: '',
+      examen_url: ''
+    },
+  ]
+
+  const MaterialExamen = DataMaterialsExamen.find(i => i.curso_id === props?.curso_id)
 
   return (
     <Box sx={{ paddingBottom: "0px", minHeight: "100vh", maxWidth: "100vw", margin: "auto" }}>
@@ -360,7 +413,101 @@ const CampusVirtualCurso = (props: any) => {
                     </Card>
                   );
                 })}
+
+                    <Card
+                    variant="outlined"
+                    sx={{
+                      mb: 1,
+                      width: "100%",
+                      border: '2px solid #ff7931',
+                      background: "#f6f3f0",
+                      "&:hover": {
+                      border: '2px solid #ff914d', // Cambia el color del borde al pasar el mouse
+                      background: "#fff5e6", // Cambia el fondo al pasar el mouse
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ display: "flex", flexDirection: "column" }}>
+                      <Box
+                        onClick={() => handleUnitClick('1')}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          cursor: "pointer",
+                          userSelect: "none",
+                          px: 1,
+                          py: 1,
+                        }}
+                      >
+                        <Link
+                          href={MaterialExamen?.materiales_url || ""}
+                          style={{
+                            fontSize: "1rem",
+                            fontWeight: "bold",
+                            flexGrow: 1,
+                            textOverflow: "ellipsis",
+                            textDecoration: 'none',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            color: "#ff7f3a",
+                          }}
+                        >
+                          Descargar Materiales
+                          <FileDownloadIcon />
+                        </Link>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                  <Card
+                    variant="outlined"
+                    sx={{
+                      mb: 1,
+                      width: "100%",
+                      border: '2px solid #ff7931',
+                      background: "#f6f3f0",
+                      "&:hover": {
+                      border: '2px solid #ff914d', // Cambia el color del borde al pasar el mouse
+                      background: "#fff5e6", // Cambia el fondo al pasar el mouse
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ display: "flex", flexDirection: "column" }}>
+                      <Box
+                        onClick={() => handleUnitClick('1')}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          cursor: "pointer",
+                          userSelect: "none",
+                          px: 1,
+                          py: 1,
+                        }}
+                      >
+                        <Link
+                          href={MaterialExamen?.examen_url || ""}
+                          style={{
+                            fontSize: "1rem",
+                            fontWeight: "bold",
+                            flexGrow: 1,
+                            textOverflow: "ellipsis",
+                            textDecoration: 'none',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            color: "#ff7f3a",
+                          }}
+                        >
+                          Ir al Examen Final
+                          <EditNoteIcon />
+                        </Link>
+                      </Box>
+                    </CardContent>
+                  </Card>
               </Box>
+              
             ))}
         </Grid>
       </Grid>

@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import axios from '@/utils/axios.config';
 import { CertificadoData } from '@/Types/certificado.types';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 interface CertificadoProps {
   params: {
@@ -141,24 +143,50 @@ const Certificado: React.FC<CertificadoProps> = ({ params }) => {
   const { usuario_nombre, usuario_apellidos, curso_nombre, curso_calificacion, fecha_calificacion } = certificadoData;
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-      <Paper elevation={3} sx={paperStyle}>
-        <Typography sx={titleStyle}>
-          SST ACADEMIA
-        </Typography>
-        {/* <Typography sx={subtitleStyle}>
-          Certificado de finalización
-        </Typography> */}
-        <Typography sx={bodyTextStyle}>
-          Certifica que el estudiante <span style={nameStyle}>{`${usuario_nombre} ${usuario_apellidos}`}</span>, identificado con DNI <strong>{userDNI}</strong>,
-          ha culminado satisfactoriamente el curso <strong>{curso_nombre}</strong>, 
-          alcanzando una calificación final de <strong>{curso_calificacion}</strong>. 
-          {/* El curso fue completado el día <span style={highlightStyle}>{formatearFecha(fecha_calificacion)}</span>. */}
-        </Typography>
-        <Typography sx={footerStyle}>
-          ¡Felicitaciones por tu logro!
-        </Typography>
-      </Paper>
+    <Box display="flex" justifyContent="center" alignItems="center"
+    sx={{
+      position: 'fixed', // Asegura que los elementos hijos se posicionen en relación con este Box
+      minWidth: '100vw',
+      minHeight: '100vh', // Hace que el contenedor ocupe toda la pantalla
+      backgroundImage: 'url(https://cdn.pixabay.com/photo/2020/07/05/09/59/students-5372390_1280.jpg)', // Ruta de la imagen de fondo
+      backgroundSize: 'cover', // Hace que la imagen cubra todo el contenedor
+      backgroundPosition: 'center', // Centra la imagen de fondo
+      backgroundRepeat: 'no-repeat', // Evita que la imagen se repita
+      display: 'flex', // Centra el contenido
+      justifyContent: 'center',
+      alignItems: 'center',
+      overflow: 'hidden'
+    }}
+    >
+
+      <TableContainer component={Paper} sx={{ opacity: 0.95, maxWidth: '1200px'}}>
+      {/* Título encima de la tabla */}
+      <Typography variant="h6" component="div" sx={{ padding: 2, textAlign: 'center', border: '1px solid #ddd', fontSize: '16px' }}>
+        Detalles del estudiante
+      </Typography>
+
+      <Table>
+        {/* Encabezado de la tabla */}
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ border: '1px solid #ddd', textAlign:'center', fontSize: '16px' }}><strong>Código</strong></TableCell>
+            <TableCell sx={{ border: '1px solid #ddd', textAlign:'center', fontSize: '16px'}}><strong>Nombre y Apellidos</strong></TableCell>
+            <TableCell sx={{ border: '1px solid #ddd', textAlign:'center', fontSize: '16px'}}><strong>Programa de Especialización</strong></TableCell>
+            <TableCell sx={{ border: '1px solid #ddd', textAlign:'center', fontSize: '16px' }}><strong>Estado</strong></TableCell>
+          </TableRow>
+        </TableHead>
+
+        {/* Cuerpo de la tabla (una sola fila) */}
+        <TableBody>
+          <TableRow>
+            <TableCell sx={{ border: '1px solid #ddd', textAlign:'center',fontSize: '16px' }}>{codigo}</TableCell>
+            <TableCell sx={{ border: '1px solid #ddd', textAlign:'center',fontSize: '16px' }}>{`${usuario_nombre} ${usuario_apellidos}`}</TableCell>
+            <TableCell sx={{ border: '1px solid #ddd', textAlign:'center',fontSize: '16px' }}>{curso_nombre}</TableCell>
+            <TableCell sx={{ border: '1px solid #ddd', textAlign:'center',fontSize: '20px' }}><FileDownloadDoneIcon style={{color: '#45c600'}} /></TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
     </Box>
   );
 };

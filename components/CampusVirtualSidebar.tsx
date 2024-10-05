@@ -128,14 +128,13 @@ export default function CampusVirtualSidebar(props: any) {
   }, []);
 
   const menuItems = [
-    { text: 'Mi perfil', url: '/' },
+    // { text: 'Mi perfil', url: '/' },
     { text: 'Cursos Activos', url: '/campus-virtual' },
-    { text: 'Cursos Finalizados', url: '/campus-virtual/cursos-finalizados' },
-    { text: 'Mi Progreso', url: '/progreso' },
+    // { text: 'Cursos Finalizados', url: '/campus-virtual/cursos-finalizados' },
+    // { text: 'Mi Progreso', url: '/progreso' },
     { text: 'Cerrar Sesión', url: '/campus-virtual-login' },
   ];
-console.log(user);
-
+  
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="fixed" open={open} sx={{ backgroundColor: 'white', boxShadow: 'none'}}>
