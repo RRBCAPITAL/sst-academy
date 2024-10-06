@@ -66,7 +66,8 @@ const Inicio = () => {
         fontSize: '2rem',
         color: 'white',
         fontWeight: '500',
-        lineHeight: {xs: '1.1'}
+        lineHeight: {xs: '1.1'},
+        marginBottom: {xs: '30px'}
       }}
       >
         Programas de Especialización

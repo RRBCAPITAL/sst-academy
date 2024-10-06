@@ -23,6 +23,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import { useTheme, useMediaQuery } from "@mui/material";
 
 interface NombreDelCurso {
   nombre: string;
@@ -31,6 +32,8 @@ interface NombreDelCurso {
 const Curso: React.FC<NombreDelCurso> = (props) => {
   const [curso, setCurso] = useState<CursoDetallado[]>([]);
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
   useEffect(() => {
     const nombreCurso = deslugify(props?.nombre);
@@ -91,7 +94,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
       }}
       >
          <Rutas />
-        <Grid item xs={12} md={8} sx={{ position: "relative"}} >
+        <Grid item xs={12} md={8} sx={{ position: "relative", padding: '20px'}} >
           {curso &&
             curso?.map((curso) => (
               <Card
@@ -171,10 +174,10 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          fontSize: "1rem",
+                          fontSize: {xs: '0.7rem', md: "1rem"},
                           color: "white",
                           fontWeight: "bold",
-                          padding: '2px 20px',
+                          padding: {xs: '2px 10px', md: '2px 20px'},
                           background: "#ff0000",
                         }}
                       >
@@ -186,7 +189,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
       variant="h1"
       color="text.secondary"
       sx={{
-        fontSize: "1.1rem",
+        fontSize: {xs: "0.9rem", md: "1.1rem"},
         color: '#494949',
         fontWeight: '400',
         textDecoration: 'line-through', // Tachado
@@ -200,7 +203,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
       variant="h1"
       color="text.secondary"
       sx={{
-        fontSize: "1.6rem",
+        fontSize: {xs: "1.4rem", md: "1.6rem"},
         color: '#ff7f3a',
         fontWeight: 'bold',
       }}
@@ -226,7 +229,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                         justifyContent: "center",
                       }}
                     >
-                      <GroupAddIcon sx={{marginRight: '10px', fontSize: '1.6rem'}} /> {curso.curso_duracion} estudiantes
+                      <GroupAddIcon sx={{marginRight: '10px', fontSize: '1.6rem'}} /> {curso.curso_duracion} {isMdUp && 'estudiantes'}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -267,7 +270,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
               </Card>
             ))}
         </Grid>
-        <Grid item xs={12} md={4} sx={{order: { xs: 2, md: 1 }}}>
+        <Grid item xs={12} md={4} sx={{order: { xs: 2, md: 1 }, padding: '20px 0'}}>
           <Typography
             variant="h5"
             component="h2"
