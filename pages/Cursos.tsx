@@ -19,6 +19,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import { packs } from "@/utils/DataPacks";
 
 // Define el componente Cursos
 const Cursos = () => {
@@ -43,6 +44,8 @@ const Cursos = () => {
 
     fetchCursos(); // Llama a la función para obtener los cursos al cargar el componente
   }, []);
+
+  
 
   return (
     <Grid container spacing={4} paddingTop={0} padding={0}>
@@ -87,7 +90,7 @@ const Cursos = () => {
                     padding: "10px 0",
                     fontSize: "1.2rem",
                     color: "#37423B",
-                    height: "60px",
+                    height: "55px",
                   }}
                 >
                   {curso.nombre}
@@ -126,7 +129,7 @@ const Cursos = () => {
         textDecoration: 'line-through', // Tachado
       }}
     >
-      S/ {Math.floor(curso.precio * 0.80)} {/* Aplica el 15% de descuento */}
+      S/ {Math.floor(curso.precio * 1.20)} {/* Aplica el 15% de descuento */}
     </Typography>
 
     {/* Precio original */}
@@ -179,6 +182,133 @@ const Cursos = () => {
           <Typography variant="body1">No se encontraron cursos.</Typography>
         </Grid>
       )}
+
+       {/* Mostrar Packs debajo de los cursos */}
+       {/* <Grid item xs={12}>
+        <Typography variant="h5" component="div" sx={{ }}>
+          Packs Disponibles
+        </Typography>
+      </Grid> */}
+      {packs.map((pack) => (
+        <Grid item xs={12} sm={6} md={4} key={pack.id}>
+          <Card>
+            <CardMedia
+              component="img"
+              width="100%"
+              height="fit-content"
+              image={pack.imagenInicio}
+              alt={`Imagen de ${pack.nombre}`}
+            />
+            <CardContent>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  padding: "6px 10px",
+                  borderRadius: "6px",
+                  fontSize: "0.8rem",
+                  color: "white",
+                  background: "#ff914d",
+                  width: "fit-content",
+                  textAlign: "center",
+                }}
+              >
+                Pack de Documentos
+              </Typography>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  padding: "10px 0",
+                  fontSize: "1.2rem",
+                  color: "#37423B",
+                  height: "40px",
+                }}
+              >
+                {pack.nombre}
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  gap: 2,
+                  width: "100%",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    fontSize: "1rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#ff7017",
+                  }}
+                >
+                  <GroupAddIcon sx={{ marginRight: '10px', fontSize: '1.6rem' }} /> {pack.estudiantes} estudiantes
+                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  {/* Precio con descuento tachado */}
+                  <Typography
+                    variant="h1"
+                    color="text.secondary"
+                    sx={{
+                      fontSize: "0.9rem",
+                      color: '#494949',
+                      fontWeight: '400',
+                      textDecoration: 'line-through', // Tachado
+                    }}
+                  >
+                    S/ {Math.floor(pack.precio * 0.80)} {/* Aplica el 15% de descuento */}
+                  </Typography>
+
+                  {/* Precio original */}
+                  <Typography
+                    variant="h1"
+                    color="text.secondary"
+                    sx={{
+                      fontSize: "1.4rem",
+                      color: '#ff7f3a',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    S/ {Math.floor(pack.precio)}
+                  </Typography>
+                </Box>
+              </Box>
+              <Link
+                href={`/packs/${pack.id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  sx={{
+                    mt: 2,
+                    fontSize: "1rem",
+                    fontWeight: "500",
+                    background: "none",
+                    border: "2px solid #ff914d",
+                    color: "#ff7017",
+                    transition: "background 0.3s ease, color 0.3s ease",
+
+                    "&:hover": {
+                      background: "#ff914d",
+                      color: "white",
+                      borderColor: "#ff914d",
+                    },
+                  }}
+                >
+                  Ver Pack
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </Grid>
+         ))}
     </Grid>
   );
 };

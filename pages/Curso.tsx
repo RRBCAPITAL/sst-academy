@@ -190,7 +190,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
         textDecoration: 'line-through', // Tachado
       }}
     >
-      S/ {(curso.curso_precio * 0.80).toFixed(2)} {/* Aplica el 15% de descuento */}
+      S/ {Math.floor(curso.curso_precio * 0.80)} {/* Aplica el 15% de descuento */}
     </Typography>
 
     {/* Precio original */}
@@ -203,7 +203,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
         fontWeight: 'bold',
       }}
     >
-      S/ {curso.curso_precio}
+      S/ {Math.floor(curso.curso_precio)}
     </Typography>
   </Box>
                     </Box>

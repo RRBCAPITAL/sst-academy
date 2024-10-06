@@ -17,7 +17,7 @@ const Rutas = () => {
         return (
             <>
 
-                {pathSegments?.includes('cursos-virtuales') && (
+                {pathSegments?.includes('cursos-virtuales') ? (
                     <>
                                         <MuiLink href="/" color="inherit" sx={{color: '#737373', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
                     <HomeIcon fontSize="small" />
@@ -37,7 +37,27 @@ const Rutas = () => {
                             </>
                         )}
                     </>
-                )}
+                ) : pathSegments?.includes('packs') ? (
+                    <>
+                                        <MuiLink href="/" color="inherit" sx={{color: '#737373', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                    <HomeIcon fontSize="small" />
+                </MuiLink>
+                <ArrowForwardIosIcon fontSize="small" sx={{ marginLeft: 1, marginRight: 1, width: '12px', height: '12px', color: '#737373', }} />
+                        <MuiLink href="/" color="inherit" sx={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                            <Typography variant="body1" component="span" sx={{ color: '#737373', fontWeight: 'bold', fontSize: { xs: '1.1rem', sm: '1rem' } }}>
+                            MegaPacks
+                            </Typography>
+                        </MuiLink>
+                        {lastSegment !== 'cursos-virtuales' && (
+                            <>
+                                <ArrowForwardIosIcon fontSize="small" sx={{ marginLeft: 1, marginRight: 1, width: '12px', height: '12px', color: '#737373', }} />
+                                <Typography variant="body1" component="span" sx={{ color: '#737373', fontWeight: 'bold', fontSize: { xs: '1.1rem', sm: '1rem' } }}>
+                                    {deslugify(lastSegment)}
+                                </Typography>
+                            </>
+                        )}
+                    </>
+                ) : ''}
             </>
         );
     };
