@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Box, TextField, Button, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, TextField, Button, Grid, Typography, useMediaQuery, useTheme, InputAdornment, IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import axios from '@/utils/axios.config'; // Ajusta la ruta según tu configuración
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 // Define una interfaz para los datos del formulario de inicio de sesión
 interface LoginFormData {
@@ -17,6 +19,7 @@ interface LoginFormData {
 const LoginForm: React.FC = () => {
   const { control, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
   const router = useRouter(); // Hook para la redirección
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md')); // Verifica si es móvil o tablet
@@ -98,7 +101,7 @@ const LoginForm: React.FC = () => {
               />
             </Link>
           </Box>
-          <Typography variant="h4" sx={{padding: '10px 20px', fontSize: '1.2rem', fontWeight: 'bold', color: '#737373'}} gutterBottom>
+          <Typography variant="h4" sx={{ padding: '10px 20px', fontSize: '1.2rem', fontWeight: 'bold', color: '#737373' }} gutterBottom>
             Iniciar Sesión
           </Typography>
           <form
@@ -136,10 +139,22 @@ const LoginForm: React.FC = () => {
                       label="Contraseña"
                       variant="outlined"
                       fullWidth
-                      type="password"
+                      type={showPassword ? 'text' : 'password'} // Cambia el tipo según el estado
                       required
                       error={!!errors.password}
                       helperText={errors.password ? 'Contraseña es requerida' : ''}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowPassword(!showPassword)} // Alterna el estado
+                              edge="end"
+                            >
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                   )}
                   rules={{ required: true }}
@@ -151,15 +166,15 @@ const LoginForm: React.FC = () => {
                   variant="contained"
                   fullWidth
                   disabled={loading}
-                  sx={{color: 'white', fontWeight: 'bold', fontSize: '0.8re'}}
+                  sx={{ color: 'white', fontWeight: 'bold', fontSize: '0.8rem' }}
                 >
                   {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                 </Button>
               </Grid>
 
-              <Typography variant="h4" sx={{padding: '10px 20px', fontSize: '0.8rem', color: '#737373', lineHeight: '1.3'}} gutterBottom>
-            Obtén tus credenciales comprando un curso. <Link href={'/'} style={{color: '#ff7017', fontWeight: 'bold'}}>Comprar</Link>
-            </Typography>
+              <Typography variant="h4" sx={{ padding: '10px 20px', fontSize: '0.8rem', color: '#737373', lineHeight: '1.3' }} gutterBottom>
+                Obtén tus credenciales comprando un curso. <Link href={'/'} style={{ color: '#ff7017', fontWeight: 'bold' }}>Comprar</Link>
+              </Typography>
             </Grid>
           </form>
         </Box>
