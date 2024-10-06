@@ -23,6 +23,7 @@ import { DataUser } from '@/Types/user.types';
 import EditUserForm from '@/components/EditUserForm';
 import { User } from '@/Types/user.types';
 import ViewUser from '@/components/ViewUser';
+import { Curso } from '@/Types/curso.types';
 
 interface HeadCell {
   id: keyof DataUser;
@@ -61,6 +62,7 @@ export default function TableUsers({ usuarios, onUpdateUser }: TableUsersProps) 
   const [filterRole, setFilterRole] = React.useState<string>('Todos');
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+  const [cursosActivos, setCursosActivos] = React.useState<Curso[]>([]);
 
   // user edit
   const handleEditClick = (user: DataUser) => {
@@ -77,6 +79,7 @@ export default function TableUsers({ usuarios, onUpdateUser }: TableUsersProps) 
   };
 
   const handleCloseViewUser = () => {
+    setCursosActivos([]);
     setViewingUser(null); // Cerramos el formulario de visualización
   };
 
@@ -390,7 +393,7 @@ export default function TableUsers({ usuarios, onUpdateUser }: TableUsersProps) 
           <Button onClick={handleDeleteUsers} color="error">Eliminar</Button>
         </DialogActions>
       </Dialog>
-      <ViewUser user={viewingUser} onClose={handleCloseViewUser} />
+      <ViewUser user={viewingUser} cursosActivos={cursosActivos} setCursosActivos={setCursosActivos} onClose={handleCloseViewUser} />
     </Box>
   );
 }

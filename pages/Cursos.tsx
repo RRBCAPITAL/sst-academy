@@ -20,12 +20,15 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { packs } from "@/utils/DataPacks";
+import { useTheme, useMediaQuery } from "@mui/material";
 
 // Define el componente Cursos
 const Cursos = () => {
   // Estado para almacenar los cursos
   const [cursos, setCursos] = useState<Curso[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Estado para controlar la carga
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
   useEffect(() => {
     // Función para obtener la lista de cursos
@@ -48,7 +51,7 @@ const Cursos = () => {
   
 
   return (
-    <Grid container spacing={4} paddingTop={0} padding={0}>
+    <Grid container spacing={4} paddingTop={0} padding={0} sx={{ width: {sm: '100vw', md: '100%'}, display: 'flex', alignItems: 'center'}}>
       {loading ? (
         // Muestra un skeleton mientras se cargan los datos
         <Grid item xs={12}>
@@ -56,8 +59,8 @@ const Cursos = () => {
         </Grid>
       ) : cursos.length > 0 ? (
         cursos.map((curso) => (
-          <Grid item xs={12} sm={6} md={4} key={curso.curso_id}>
-            <Card>
+          <Grid item  xs={12} sm={6} md={4} key={curso.curso_id} sx={{ width: '100%', margin: 'auto', padding: '0'}}>
+            <Card  sx={{width: '100%', margin: 'auto', padding: 0}}>
               <CardMedia
                 component="img"
                 height="240"
@@ -115,7 +118,7 @@ const Cursos = () => {
                       color: "#ff7017",
                     }}
                   >
-                    <GroupAddIcon sx={{marginRight: '10px', fontSize: '1.6rem'}} /> {curso.duracion} estudiantes
+                    <GroupAddIcon sx={{marginRight: '10px', fontSize: '1.6rem'}} /> {curso.duracion} {isMdUp && 'estudiantes'}
                   </Typography>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
     {/* Precio con descuento tachado */}
@@ -123,7 +126,7 @@ const Cursos = () => {
       variant="h1"
       color="text.secondary"
       sx={{
-        fontSize: "0.9rem",
+        fontSize: "0.7rem",
         color: '#494949',
         fontWeight: '400',
         textDecoration: 'line-through', // Tachado
@@ -247,7 +250,7 @@ const Cursos = () => {
                     color: "#ff7017",
                   }}
                 >
-                  <GroupAddIcon sx={{ marginRight: '10px', fontSize: '1.6rem' }} /> {pack.estudiantes} estudiantes
+                  <GroupAddIcon sx={{ marginRight: '10px', fontSize: '1.6rem' }} /> {pack.estudiantes} {isMdUp && 'estudiantes'}
                 </Typography>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   {/* Precio con descuento tachado */}

@@ -19,7 +19,7 @@ const Footer = (props: any) => {
       sx={{
         backgroundColor: '#1f140d',
         color: 'white',
-        padding: '80px',
+        padding: {xs: '80px 0 80px 40px', md: '80px',},
         position: 'relative', // Para asegurar el posicionamiento correcto
         bottom: 0,
         width: '100%', // Se asegura de que el footer tome todo el ancho
@@ -58,16 +58,16 @@ const Footer = (props: any) => {
           </Grid>
 
           {/* Sección de Links */}
-          <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'center' } }}>
+          <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'left', md: 'center' } }}>
             <Typography variant="h6" gutterBottom color='secondary'>
               Enlaces
             </Typography>
             <MuiLink href="/" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
               Inicio
             </MuiLink>
-            <MuiLink href="/" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
+            {/* <MuiLink href="/" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
               Cursos Virtuales
-            </MuiLink>
+            </MuiLink> */}
             <MuiLink href="/campus-virtual-login" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
               Aula Virtual
             </MuiLink>
@@ -77,7 +77,7 @@ const Footer = (props: any) => {
           </Grid>
 
           {/* Sección de redes sociales */}
-          <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
+          <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
             <Typography variant="h6" gutterBottom>
               Síguenos en nuestras redes
             </Typography>

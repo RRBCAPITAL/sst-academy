@@ -25,7 +25,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ boxShadow: 'none' }}>
+    <AppBar position="static" sx={{ boxShadow: 'none', overflowX: 'hidden' }}>
       <Container sx={{ minWidth: '100%', background: "#f1edea", color: 'primary.main', overflowX: 'hidden' }}>
         <Toolbar disableGutters sx={{ maxWidth: '1200px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: 'auto' }}>
           {/* Logo al principio */}

@@ -11,6 +11,8 @@ import { DataCalificacion } from '@/Types/calificacion.types';
 
 interface ViewUserProps {
   user: DataUser | null;
+  cursosActivos: Curso[];
+  setCursosActivos: any;
   onClose: () => void;
 }
 
@@ -26,8 +28,7 @@ interface CalificacionCurso {
   calificacion: number;
 }
 
-const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
-  const [cursosActivos, setCursosActivos] = useState<Curso[]>([]);
+const ViewUser: React.FC<ViewUserProps> = ({ user, cursosActivos, setCursosActivos, onClose }) => {
   const [progreCurso, setProgreCurso] = useState<ProgresoCurso[]>([]);
   const [calificacionCurso, setCalificacionCurso] = useState<CalificacionCurso[]>([]);
   const [dataCalificacion, setDataCalificacion] = useState<DataCalificacion | null>(null);
@@ -35,42 +36,37 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
   useEffect(() => {
     if (!user || !user.user_id) return;
 
-    // Cargar los cursos activos y el progreso del usuario
+    // Limpiar el estado anterior para evitar mostrar datos incorrectos
+    setProgreCurso([]);
+    setCalificacionCurso([]);
+    setCursosActivos([]);
+
     const fetchCursos = async () => {
       try {
-        // Verifica si ya tienes los datos
-        if (!progreCurso.length) {
-          const userProgreCursosResponse = await axios.get<{ progresoCurso: ProgresoCurso[]}>(
-            `/api/usuario-curso-info-progreso?user_id=${user?.user_id}`
-          );
-          if(!userProgreCursosResponse) return
-          setProgreCurso(userProgreCursosResponse.data.progresoCurso);
-        }
+        // Obtener el progreso de los cursos
+        const userProgreCursosResponse = await axios.get<{ progresoCurso: ProgresoCurso[] }>(
+          `/api/usuario-curso-info-progreso?user_id=${user.user_id}`
+        );
+        setProgreCurso(userProgreCursosResponse.data.progresoCurso);
 
-        if (!calificacionCurso.length) {
-          const userCalificacionCursosResponse = await axios.get<{ calificacion: CalificacionCurso[] }>(
-            `/api/calificacion?user_id=${user?.user_id}`
-          );
-          if(!userCalificacionCursosResponse) return
-          setCalificacionCurso(userCalificacionCursosResponse.data.calificacion);
-        }
+        // Obtener las calificaciones de los cursos
+        const userCalificacionCursosResponse = await axios.get<{ calificacion: CalificacionCurso[] }>(
+          `/api/calificacion?user_id=${user.user_id}`
+        );
+        setCalificacionCurso(userCalificacionCursosResponse.data.calificacion);
 
-        if (!cursosActivos.length) {
-          const userCursosResponse = await axios.get<{ curso: Curso[] }>(
-            `/api/usuario-cursos?user_id=${user.user_id}`
-          );
-          userCursosResponse && setCursosActivos(userCursosResponse.data.curso)
-          
-        }
+        // Obtener los cursos activos
+        const userCursosResponse = await axios.get<{ curso: Curso[] }>(
+          `/api/usuario-cursos?user_id=${user.user_id}`
+        );
+        setCursosActivos(userCursosResponse.data.curso);
       } catch (error) {
         console.error('Error fetching user or courses data:', error);
       }
     };
 
-    if(user && user.user_id){
-      fetchCursos();
-    }
-  }, [user && user.user_id]); // Solo vuelve a ejecutar si `user.user_id` cambia
+    fetchCursos();
+  }, [user?.user_id]); // Ejecutar cada vez que el user_id cambie
 
   const handleCalificacion = (
     curso_id: string,
@@ -129,7 +125,7 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
       </DialogTitle>
       {cursosActivos.length ? (
         cursosActivos.map((curso) => {
-          const progreso = progreCurso?.find((p) => p.curso_id === curso.curso_id)?.porcentaje_completado || 0; // Encontrar el progreso del curso actual
+          const progreso = progreCurso?.find((p) => p.curso_id === curso.curso_id)?.porcentaje_completado || 0;
           const caliCurso = calificacionCurso?.find((p) => p.curso_id === curso.curso_id)?.calificacion || 'Aún no ha sido calificado.';
           return (
             <DialogContent key={curso.curso_id} sx={{ position: 'relative', borderBottom: '2px solid #ff8c2e', marginBottom: '2px' }}>

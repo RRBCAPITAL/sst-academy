@@ -24,23 +24,38 @@ const ContenidoLandingInicio = () => {
         textAlign: "center",
         color: "#737373",
         margin: 'auto',
-        marginTop: '40px'
+        marginTop: '40px',
+        overflowX: 'hidden', 
+        overflowY: 'hidden'
       }}
     >
       {/* Título principal */}
       <Box
-      data-aos="fade-top"
-        sx={{ maxWidth: "1200px", display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'center', justifyContent: 'center', margin: 'auto', marginY: "40px", fontSize: { xs: "20px", md: "26px" } }}
-      >
-        <Typography fontSize='26px'>Educación online</Typography>
-        <Typography fontSize='26px' style={{ fontWeight: "bold" }}>para tu crecimiento</Typography>
-        <Typography fontSize='26px' >profesional</Typography>
-      </Box>
+  data-aos="fade-top"
+  sx={{
+    maxWidth: "1200px",
+    display: "flex",
+    flexDirection: { xs: "column", md: "row" }, // Cambia flexDirection según el tamaño de pantalla
+    gap: "10px",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "auto",
+    marginY: "40px",
+    fontSize: { xs: "20px", md: "26px" }, // Cambia fontSize según el tamaño de pantalla
+  }}
+>
+  <Typography fontSize="26px">Educación online</Typography>
+  <Typography fontSize="26px" style={{ fontWeight: "bold" }}>
+    para tu crecimiento
+  </Typography>
+  <Typography fontSize="26px">profesional</Typography>
+</Box>
+
 
       {/* Sección con los tres cuadros */}
-      <Grid container spacing={1} justifyContent="center" sx={{maxWidth: "1200px", margin:'auto'}}>
+      <Grid container spacing={0} justifyContent="center" sx={{maxWidth: "1200px", margin:'auto'}}>
         {/* Cuadro 1 */}
-        <Grid item xs={12} sm={4} data-aos="fade-up">
+        <Grid item xs={12} sm={4} data-aos="fade-up" sx={{margin: '10px'}}>
           <Paper
             elevation={1}
             sx={{
@@ -67,7 +82,7 @@ const ContenidoLandingInicio = () => {
         </Grid>
 
         {/* Cuadro 2 */}
-        <Grid item xs={12} sm={4} data-aos="fade-up" data-aos-delay="200">
+        <Grid item xs={12} sm={4} data-aos="fade-up" data-aos-delay="200" sx={{margin: '0 10px'}}>
           <Paper
             elevation={1}
             sx={{
@@ -97,7 +112,7 @@ const ContenidoLandingInicio = () => {
         </Grid>
 
         {/* Cuadro 3 */}
-        <Grid item xs={12} sm={4} data-aos="fade-up" data-aos-delay="400">
+        <Grid item xs={12} sm={4} data-aos="fade-up" data-aos-delay="400" sx={{margin: '10px'}}>
           <Paper elevation={1} sx={{ display: "flex",
               flexDirection: "row",
               textAlign: "center",
@@ -195,7 +210,7 @@ const ContenidoLandingInicio = () => {
         }}>
       <Grid
           container
-          spacing={1}
+          spacing={0}
           alignItems="center"
           justifyContent="center"
           sx={{
@@ -237,7 +252,7 @@ const ContenidoLandingInicio = () => {
           </Grid>
 
           {/* Imagen del docente a la derecha */}
-          <Grid item xs={12} md={6} sx={{marginTop: {xs:  '15px', md: '0px'}}} data-aos="fade-right" data-aos-delay="800">
+          <Grid item xs={12} md={6} sx={{marginTop: {xs:  '30px', md: '0px'}}} data-aos="fade-right" data-aos-delay="800">
             <Box
               component="img"
               src="/images/IMG_docente.png"
@@ -249,7 +264,7 @@ const ContenidoLandingInicio = () => {
 
         <Grid
           container
-          spacing={4}
+          spacing={0}
           alignItems="center"
           justifyContent="center"
           sx={{ margin: 'auto', marginY: "40px",  maxWidth: "1200px" }}
@@ -265,7 +280,7 @@ const ContenidoLandingInicio = () => {
           </Grid>
 
           {/* Texto a la derecha */}
-          <Grid item xs={12} md={6} data-aos="fade-left" data-aos-delay="400">
+          <Grid item xs={12} md={6} data-aos="fade-left" data-aos-delay="400" sx={{marginTop: '20px', paddingLeft: '20px'}}>
             <Typography
               variant="h4"
               sx={{

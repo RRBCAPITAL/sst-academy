@@ -60,7 +60,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
   };
 
   return (
-    <Box sx={{ paddingBottom: '20px', minHeight: "100vh", maxWidth: '100vw' }}>
+    <Box sx={{ paddingBottom: '20px', minHeight: "100vh", maxWidth: '100vw', overflowX: 'hidden' }}>
       <Box
       sx={{ 
         display: 'flex', // Para habilitar flexbox
@@ -75,17 +75,19 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
         fontWeight: '500',
         overflowX: 'hidden',
         margin: '0',
-        padding: '0'
+        lineHeight: {xs: '1.1'},
+        padding: {xs: '0 10px'}
       }}
       >
          {curso?.length > 0 ? curso[0].curso_nombre : "Cargando..."}
       </Box>
      
-      <Grid container spacing={4}
+      <Grid container spacing={0}
       sx={{ 
       flexDirection: { xs: "column", md: "row" }, // Para pantallas pequeñas, columna; para grandes, fila
       maxWidth: '1200px',
-      margin: 'auto'
+      margin: 'auto',
+      padding: '10px'
       }}
       >
          <Rutas />
