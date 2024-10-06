@@ -68,7 +68,7 @@ const Footer = (props: any) => {
             <MuiLink href="/" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
               Cursos Virtuales
             </MuiLink>
-            <MuiLink href="/aula-virtual-login" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
+            <MuiLink href="/campus-virtual-login" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
               Aula Virtual
             </MuiLink>
             {/* <MuiLink href="/contact" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '10px' }}>
@@ -82,7 +82,7 @@ const Footer = (props: any) => {
               Síguenos en nuestras redes
             </Typography>
             <IconButton
-              href="https://facebook.com"
+              href="https://www.facebook.com/share/PZwBhCTmMHsYfsfJ/"
               target="_blank"
               color='secondary'
               sx={{
@@ -91,7 +91,7 @@ const Footer = (props: any) => {
             >
               <FacebookIcon />
             </IconButton>
-            <IconButton
+            {/* <IconButton
               href="https://twitter.com"
               target="_blank"
               color='secondary'
@@ -100,9 +100,9 @@ const Footer = (props: any) => {
               }}
             >
               <TwitterIcon />
-            </IconButton>
+            </IconButton> */}
             <IconButton
-              href="https://instagram.com"
+              href="https://www.instagram.com/sstacademype?igsh=MXRyMzZkbnAzODRhZw=="
               target="_blank"
               color='secondary'
               sx={{
@@ -112,7 +112,7 @@ const Footer = (props: any) => {
               <InstagramIcon />
             </IconButton>
             <IconButton
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/company/sst-academy-peru/?viewAsMember=true"
               target="_blank"
               color='secondary'
             >

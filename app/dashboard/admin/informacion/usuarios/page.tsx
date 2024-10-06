@@ -57,7 +57,8 @@ const Usuarios = () => {
 
   return (
     <PageContainer title="Shadow" description="this is Shadow">
-      <DashboardCard title="Todos los usuarios disponibles">
+      {/* title="Todos los usuarios disponibles" */}
+      <DashboardCard >
         <Grid container spacing={2}>
           <TableUsers usuarios = {usuarios} onUpdateUser = {updateUser}/>
         </Grid>

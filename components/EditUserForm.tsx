@@ -102,7 +102,7 @@ const EditUserForm = ({ user, onClose,  onUpdateUser }: { user: DataUser; onClos
 
   return (
     <Box sx={{ padding: 3 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom sx={{marginBottom: '30px', fontSize: '1.1rem'}}>
         Editar Usuario
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -272,10 +272,10 @@ const EditUserForm = ({ user, onClose,  onUpdateUser }: { user: DataUser; onClos
           </Grid>    
           {/* Botones */}
           <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
+            <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading} sx={{color: 'white', fontWeight:'bold'}}>
               {loading ? 'Actualizando...' : 'Actualizar Usuario'}
             </Button>
-            <Button variant="outlined" color="secondary" fullWidth onClick={onClose}>
+            <Button variant="outlined" color="secondary" fullWidth onClick={onClose} sx={{fontWeight: 'bold'}}>
               Cancelar
             </Button>
           </Grid>

@@ -21,7 +21,7 @@ const Menuitems = [
     id: uniqueId(),
     title: "Dashboard",
     icon: IconLayoutDashboard,
-    href: "/",
+    href: "/dashboard/admin",
   },
   {
     navlabel: true,
@@ -33,12 +33,12 @@ const Menuitems = [
     icon: IconUser,
     href: "/dashboard/admin/informacion/usuarios",
   },
-  {
-    id: uniqueId(),
-    title: "Cursos",
-    icon: IconCopy,
-    href: "/informacion/cursos",
-  },
+  // {
+  //   id: uniqueId(),
+  //   title: "Cursos",
+  //   icon: IconCopy,
+  //   href: "/informacion/cursos",
+  // },
   {
     navlabel: true,
     subheader: "Auth",
@@ -47,7 +47,7 @@ const Menuitems = [
     id: uniqueId(),
     title: "Login",
     icon: IconLogin,
-    href: "/authentication/login",
+    href: "/campus-virtual-login",
   },
   {
     id: uniqueId(),
@@ -65,12 +65,12 @@ const Menuitems = [
     icon: IconMoodHappy,
     href: "/",
   },
-  {
-    id: uniqueId(),
-    title: "Cursos Virtuales",
-    icon: IconAperture,
-    href: "/cursos-virtuales",
-  },
+  // {
+  //   id: uniqueId(),
+  //   title: "Cursos Virtuales",
+  //   icon: IconAperture,
+  //   href: "/cursos-virtuales",
+  // },
 ];
 
 export default Menuitems;

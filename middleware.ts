@@ -27,6 +27,9 @@ export async function middleware(request: NextRequest) {
     if (path.startsWith('/campus-virtual')) {
       url.pathname = '/campus-virtual-login'; // Redirige al login si no está autenticado
       return NextResponse.redirect(url);
+    }else if(path.startsWith('/dashboard/admin')){
+      url.pathname = '/campus-virtual-login'; // Redirige al login si no está autenticado
+      return NextResponse.redirect(url);
     }
   } else {
     // Verifica autorización

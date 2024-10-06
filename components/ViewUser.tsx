@@ -99,7 +99,7 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
 
   return (
     <Dialog open={!!user} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ color: 'blue' }}>Información del Usuario</DialogTitle>
+      <DialogTitle sx={{ color: '#ff8c2e' }}>Información del Usuario</DialogTitle>
       <DialogContent>
         <Typography variant="body1">
           <strong>Nombres:</strong> {user.nombres}
@@ -124,7 +124,7 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
         </Typography>
       </DialogContent>
 
-      <DialogTitle sx={{ color: 'blue', borderBottom: '2px solid #006aff', marginBottom: '10px' }}>
+      <DialogTitle sx={{ color: '#ff8c2e', borderBottom: '2px solid #ff8c2e', marginBottom: '10px' }}>
         Cursos Activos
       </DialogTitle>
       {cursosActivos.length ? (
@@ -132,7 +132,7 @@ const ViewUser: React.FC<ViewUserProps> = ({ user, onClose }) => {
           const progreso = progreCurso?.find((p) => p.curso_id === curso.curso_id)?.porcentaje_completado || 0; // Encontrar el progreso del curso actual
           const caliCurso = calificacionCurso?.find((p) => p.curso_id === curso.curso_id)?.calificacion || 'Aún no ha sido calificado.';
           return (
-            <DialogContent key={curso.curso_id} sx={{ position: 'relative', borderBottom: '2px solid #006aff', marginBottom: '2px' }}>
+            <DialogContent key={curso.curso_id} sx={{ position: 'relative', borderBottom: '2px solid #ff8c2e', marginBottom: '2px' }}>
               <Typography variant="body1">
                 <strong>ID:</strong> {curso.curso_id}
               </Typography>

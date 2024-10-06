@@ -22,6 +22,7 @@ import Rutas from "@/components/Rutas";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
 interface NombreDelCurso {
   nombre: string;
@@ -175,16 +176,36 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                           background: "#ff0000",
                         }}
                       >
-                      15% de dscto.
+                      20% de dscto.
                       </Typography>
-                      <Typography
-                        variant="h1"
-                        color="text.secondary"
-                        sx={{ fontSize: "1.6rem", color: '#737373', }}
-                      > 
-                        S/ {curso.curso_precio}{" "}
-                        {/* Cambia este valor si es necesario */}
-                      </Typography>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+    {/* Precio con descuento tachado */}
+    <Typography
+      variant="h1"
+      color="text.secondary"
+      sx={{
+        fontSize: "1.1rem",
+        color: '#494949',
+        fontWeight: '400',
+        textDecoration: 'line-through', // Tachado
+      }}
+    >
+      S/ {(curso.curso_precio * 0.80).toFixed(2)} {/* Aplica el 15% de descuento */}
+    </Typography>
+
+    {/* Precio original */}
+    <Typography
+      variant="h1"
+      color="text.secondary"
+      sx={{
+        fontSize: "1.6rem",
+        color: '#ff7f3a',
+        fontWeight: 'bold',
+      }}
+    >
+      S/ {curso.curso_precio}
+    </Typography>
+  </Box>
                     </Box>
                     <Box sx={{
                         display: "flex",
@@ -203,7 +224,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                         justifyContent: "center",
                       }}
                     >
-                      <AccessTimeIcon sx={{paddingRight: '4px'}} /> {curso.curso_duracion} horas
+                      <GroupAddIcon sx={{marginRight: '10px', fontSize: '1.6rem'}} /> {curso.curso_duracion} estudiantes
                     </Typography>
                     <Typography
                       variant="body2"
@@ -220,20 +241,26 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
                     </Box>
                   </Box>
                   <Button
-                    variant="contained"
-                    sx={{
-                      mt: 2,
-                      mb: 4,
-                      fontSize: "1rem",
-                      fontWeight: "500",
-                      padding: "10px 0",
-                      borderRadius: "10px",
-                      width: "100%",
-                      color: 'white'
-                    }}
-                  >
-                   <WhatsAppIcon sx={{paddingRight: '4px'}}/> Comprar ahora
-                  </Button>
+  variant="contained"
+  sx={{
+    mt: 2,
+    mb: 4,
+    fontSize: "1rem",
+    fontWeight: "500",
+    padding: "10px 0",
+    borderRadius: "10px",
+    width: "100%",
+    color: 'white'
+  }}
+  onClick={() => {
+    const phoneNumber = '932271898'; // Reemplaza con el número de WhatsApp
+    const message = `¡Hola! Estoy interesado en comprar el Programa de especialización ${curso.curso_nombre}`;
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  }}
+>
+  <WhatsAppIcon sx={{ paddingRight: '4px' }} /> Comprar ahora
+</Button>
                 </CardContent>
               </Card>
             ))}

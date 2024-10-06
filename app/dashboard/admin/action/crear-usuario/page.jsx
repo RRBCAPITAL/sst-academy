@@ -74,7 +74,7 @@ const CreateUserForm = () => {
 
   return (
     <Box sx={{ padding: 3 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom sx={{marginBottom: '30px', fontSize: '1.1rem'}}>
         Crear Usuario
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -297,6 +297,7 @@ const CreateUserForm = () => {
               color="primary"
               fullWidth
               disabled={loading}
+              sx={{color: 'white', fontWeight: 'bold'}}
             >
               {loading ? 'Creando...' : 'Crear Usuario'}
             </Button>

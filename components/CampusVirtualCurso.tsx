@@ -19,8 +19,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { ProgresoCurso } from "@/Types/progreso-curso.types";
 import Link from "next/link";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import EditNoteIcon from '@mui/icons-material/EditNote';
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 
 interface User {
   user_id: number;
@@ -35,7 +35,8 @@ const CampusVirtualCurso = (props: any) => {
   const [user, setUser] = useState<User>();
   const [cursoProgreso, setCursoProgreso] = useState<ProgresoCurso[]>();
   const [dataLeccionActual, SetDataLeccionActual] = useState<any>();
-  const [dataLeccionSeleccionada, setDataLeccionSeleccionada] = useState<any>(null);
+  const [dataLeccionSeleccionada, setDataLeccionSeleccionada] =
+    useState<any>(null);
   const [leccionHecha, setLeccionHecha] = useState<Boolean>(false);
 
   useEffect(() => {
@@ -52,11 +53,15 @@ const CampusVirtualCurso = (props: any) => {
         setCurso(res1.data.curso);
 
         // usuario - curso - porcentaje completado, total de lecciones completadas de un curso
-        const res2 = await axios.get(`/api/usuario-curso-info-progreso?user_id=${userLocal?.user_id}`);
+        const res2 = await axios.get(
+          `/api/usuario-curso-info-progreso?user_id=${userLocal?.user_id}`
+        );
         res2.data.success && setCursoProgreso(res2.data.progresoCurso);
 
         // usuario - curso - informacion del curso y completado es true o false - leccion actual
-        const res3 = await axios.get(`/api/usuario-curso-progreso?user_id=${userLocal?.user_id}&curso_id=${props?.curso_id}`);
+        const res3 = await axios.get(
+          `/api/usuario-curso-progreso?user_id=${userLocal?.user_id}&curso_id=${props?.curso_id}`
+        );
         res3.data.success && SetDataLeccionActual(res3.data.startCurso);
       } catch (error) {
         console.error("Error fetching course details:", error);
@@ -73,22 +78,29 @@ const CampusVirtualCurso = (props: any) => {
     setExpandedUnit(expandedUnit === unidadId ? null : unidadId);
   };
 
-  const videoUrl = dataLeccionSeleccionada?.[0]?.video_url || dataLeccionActual?.[0]?.video_intro;
-  const leccionNombre = dataLeccionSeleccionada?.[0]?.leccion_nombre || dataLeccionActual?.[0]?.leccion_nombre;
-  const unidadActual = dataLeccionSeleccionada?.[0]?.unidad || dataLeccionActual?.[0]?.unidad;
-  const leccionActual = dataLeccionSeleccionada?.[0]?.leccion || dataLeccionActual?.[0]?.leccion;
+  const videoUrl =
+    dataLeccionSeleccionada?.[0]?.video_url ||
+    dataLeccionActual?.[0]?.video_intro;
+  const leccionNombre =
+    dataLeccionSeleccionada?.[0]?.leccion_nombre ||
+    dataLeccionActual?.[0]?.leccion_nombre;
+  const unidadActual =
+    dataLeccionSeleccionada?.[0]?.unidad || dataLeccionActual?.[0]?.unidad;
+  const leccionActual =
+    dataLeccionSeleccionada?.[0]?.leccion || dataLeccionActual?.[0]?.leccion;
 
   const handleChangeLeccion = async (leccion_id: number) => {
     try {
-      console.log('seleccione ', leccion_id);
-      
+      console.log("seleccione ", leccion_id);
+
       setDataLeccionSeleccionada(null);
-      const res = await axios.get(`/api/usuario-leccion-seleccionada?leccion_id=${leccion_id}&user_id=${user?.user_id}`);
+      const res = await axios.get(
+        `/api/usuario-leccion-seleccionada?leccion_id=${leccion_id}&user_id=${user?.user_id}`
+      );
       if (res.data?.InfoLeccion) {
         setDataLeccionSeleccionada(res.data.InfoLeccion);
       }
-      console.log('respuesta de lo seleccionado', res);
-      
+      console.log("respuesta de lo seleccionado", res);
     } catch (error) {
       console.error("Error fetching: ", error);
     }
@@ -96,23 +108,25 @@ const CampusVirtualCurso = (props: any) => {
 
   const handleLeccionHecha = async () => {
     try {
-      const leccionId = dataLeccionSeleccionada?.[0]?.leccion_id || dataLeccionActual?.[0]?.leccion_id;
-  
+      const leccionId =
+        dataLeccionSeleccionada?.[0]?.leccion_id ||
+        dataLeccionActual?.[0]?.leccion_id;
+
       if (!leccionId || !user?.user_id) {
         console.log("Faltan datos de la lección o del usuario");
         return;
       }
-  
+
       const data = {
         user_id: user.user_id,
         leccion_id: leccionId,
       };
-  
+
       const res = await axios.post(`/api/usuario-leccion-hecha`, data);
-      
+
       if (res.data?.success) {
         setLeccionHecha(!leccionHecha);
-  
+
         // Actualizar el progreso de la lección completada dentro del curso
         setCurso((prevCurso) =>
           prevCurso.map((cursoItem) => {
@@ -122,7 +136,9 @@ const CampusVirtualCurso = (props: any) => {
                 unidades: cursoItem.unidades.map((unidad) => ({
                   ...unidad,
                   lecciones: unidad.lecciones.map((leccion) =>
-                    leccion.leccion_id === leccionId ? { ...leccion, completado: true } : leccion
+                    leccion.leccion_id === leccionId
+                      ? { ...leccion, completado: true }
+                      : leccion
                   ),
                 })),
               };
@@ -138,56 +154,73 @@ const CampusVirtualCurso = (props: any) => {
 
   const DataMaterialsExamen = [
     {
-      curso_id: 'A-1',
-      materiales_url: '',
-      examen_url: ''
+      curso_id: "A-1",
+      materiales_url:
+        "https://drive.google.com/drive/folders/1E7g6LMhN1NlQUeB4QcM88HFBt4c1aAS0?usp=sharing",
+      examen_url: "",
     },
     {
-      curso_id: 'B-1',
-      materiales_url: '',
-      examen_url: ''
+      curso_id: "B-1",
+      materiales_url:
+        "https://drive.google.com/drive/folders/1G5OWeVEktBNNpn41fcakB_2-qWpvcRct?usp=sharing",
+      examen_url: "",
     },
     {
-      curso_id: 'C-1',
-      materiales_url: '',
-      examen_url: ''
+      curso_id: "C-1",
+      materiales_url:
+        "https://drive.google.com/drive/folders/1BZm9kI6FN43GbcywqvEcZSEyJ7ezYmzF?usp=sharing",
+      examen_url: "",
     },
     {
-      curso_id: 'D-1',
-      materiales_url: '',
-      examen_url: ''
+      curso_id: "D-1",
+      materiales_url:
+        "https://drive.google.com/drive/folders/1DqKb1lpPkRp8MxQY2QVfRs6ZzvTd-0nT?usp=sharing",
+      examen_url: "",
     },
     {
-      curso_id: 'E-1',
-      materiales_url: '',
-      examen_url: ''
+      curso_id: "E-1",
+      materiales_url:
+        "https://drive.google.com/drive/folders/18Xa6CAKNkfVAXFGMvNvEeq5Yley826GO?usp=sharing",
+      examen_url: "",
     },
     {
-      curso_id: 'F-1',
-      materiales_url: '',
-      examen_url: ''
+      curso_id: "F-1",
+      materiales_url:
+        "https://drive.google.com/drive/folders/1sHi13VKvr2Pd64WOTG8EzbcbK3oRaiH6?usp=sharing",
+      examen_url: "",
     },
     {
-      curso_id: 'G-1',
-      materiales_url: '',
-      examen_url: ''
+      curso_id: "G-1",
+      materiales_url:
+        "https://drive.google.com/drive/folders/1-ebSOeKmorbfCWt-dvsUaH1AVvk4nA-E?usp=sharing",
+      examen_url: "",
     },
     {
-      curso_id: 'H-1',
-      materiales_url: '',
-      examen_url: ''
+      curso_id: "H-1",
+      materiales_url:
+        "https://drive.google.com/drive/folders/1FCxLKvYs6rpF5OtcevCtVpJcOyAinVWR?usp=sharing",
+      examen_url: "",
     },
     {
-      curso_id: 'I-1',
-      materiales_url: '',
-      examen_url: ''
+      curso_id: "I-1",
+      materiales_url: "",
+      examen_url: "",
     },
-  ]
+  ];
 
-  const MaterialExamen = DataMaterialsExamen.find(i => i.curso_id === props?.curso_id)
+  const MaterialExamen = DataMaterialsExamen.find(
+    (i) => i.curso_id === props?.curso_id
+  );
 
   return (
-    <Box sx={{ paddingBottom: "0px", minHeight: "100vh", maxWidth: "100vw", margin: "auto" }}>
+    <Box
+      sx={{
+        paddingBottom: "0px",
+        minHeight: "100vh",
+        maxWidth: "100vw",
+        margin: "auto",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -234,10 +267,14 @@ const CampusVirtualCurso = (props: any) => {
         <Grid item xs={12} md={8} sx={{ position: "relative" }}>
           {curso &&
             curso?.map((curso) => {
-              const leccionActualId = dataLeccionSeleccionada?.[0]?.leccion_id  ||  dataLeccionActual?.[0]?.leccion_id;
+              const leccionActualId =
+                dataLeccionSeleccionada?.[0]?.leccion_id ||
+                dataLeccionActual?.[0]?.leccion_id;
 
               const unidadActual = curso.unidades.find((unidad) =>
-                unidad.lecciones.some((leccion) => leccion.leccion_id === leccionActualId)
+                unidad.lecciones.some(
+                  (leccion) => leccion.leccion_id === leccionActualId
+                )
               );
 
               const leccionActual = unidadActual?.lecciones.find(
@@ -245,67 +282,92 @@ const CampusVirtualCurso = (props: any) => {
               );
 
               const leccionCompletada = leccionActual?.completado;
-              console.log('leccion actual id ', leccionActualId);
-              console.log('unidad actual ', unidadActual);
-              console.log('leccionactual ', leccionActual);
-              console.log('leccion completada ', leccionCompletada);
- 
+              console.log("leccion actual id ", leccionActualId);
+              console.log("unidad actual ", unidadActual);
+              console.log("leccionactual ", leccionActual);
+              console.log("leccion completada ", leccionCompletada);
+
               return (
-              <Card
-                key={curso.curso_id}
-                variant="outlined"
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  mb: 4,
-                }}
-              >
-                <Box
+                <Card
+                  key={curso.curso_id}
+                  variant="outlined"
                   sx={{
-                    position: "relative",
-                    width: "100%",
-                    paddingTop: "56.25%", // Proporción 16:9
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    mb: 4,
                   }}
                 >
-                  <VimeoPlayer video_url={videoUrl} />
-                </Box>
-                <CardContent
-                  sx={{
-                    background: "#292625",
-                    width: "100%",
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <Typography
-                    variant="h4"
-                    paragraph
+                  <Box
                     sx={{
-                      my: 0,
-                      marginBottom: "0px",
-                      marginLeft: "20px",
-                      fontSize: "1rem",
-                      color: "white",
-                      fontWeight: "bold",
-                      textShadow: "0 0 1px rgba(0, 0, 0, 0.1);",
+                      position: "relative",
+                      width: "100%",
+                      paddingTop: "56.25%", // Proporción 16:9
                     }}
                   >
-                    {leccionNombre}
-                  </Typography>
-                  {leccionCompletada ? (
-                    <Typography sx={{ background: '#38bb00', color: 'white', padding: '4px 8px', borderRadius: '6px' }}>
-                      LECCIÓN COMPLETADA
+                    <VimeoPlayer video_url={videoUrl} />
+                  </Box>
+                  <CardContent
+                    sx={{
+                      background: "#292625",
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography
+                      variant="h4"
+                      paragraph
+                      sx={{
+                        my: 0,
+                        marginBottom: "0px",
+                        marginLeft: "20px",
+                        marginRight: "6px",
+                        fontSize: "1rem",
+                        color: "white",
+                        fontWeight: "bold",
+                        textShadow: "0 0 1px rgba(0, 0, 0, 0.1);",
+                      }}
+                    >
+                      {curso.curso_id === "C-1"
+                        ? leccionNombre
+                            ?.split(" - ")
+                            ?.map((frase: string, index: number) => (
+                              <div key={index}>
+                                {index + 1}. {frase.trim()}
+                              </div>
+                            ))
+                        : leccionNombre}
                     </Typography>
-                  ) : (
-                    <Button sx={{ background: '#ff7f3f', color: 'white' }} onClick={() => handleLeccionHecha()}>
-                      Marcar como hecho
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            )
+
+                    {leccionCompletada ? (
+                      <Typography
+                        sx={{
+                          background: "#38bb00",
+                          color: "white",
+                          padding: "4px 8px",
+                          borderRadius: "6px",
+                          height: "fit-content",
+                        }}
+                      >
+                        HECHO
+                      </Typography>
+                    ) : (
+                      <Button
+                        sx={{
+                          background: "#ff7f3f",
+                          color: "white",
+                          height: "fit-content",
+                        }}
+                        onClick={() => handleLeccionHecha()}
+                      >
+                        Marcar como hecho
+                      </Button>
+                    )}
+                  </CardContent>
+                </Card>
+              );
             })}
         </Grid>
         {/* Listado de unidades y lecciones */}
@@ -322,7 +384,9 @@ const CampusVirtualCurso = (props: any) => {
                 fontSize: "1.5rem",
               }}
             >
-              {unidadActual}{" - "}{leccionActual}
+              {unidadActual}
+              {" - "}
+              {leccionActual}
             </Typography>
           )}
           {curso &&
@@ -330,7 +394,9 @@ const CampusVirtualCurso = (props: any) => {
               <Box key={curso.curso_id}>
                 {curso.unidades.map((unidad) => {
                   // Verificar si todas las lecciones de la unidad están completadas
-                  const allLessonsCompleted = unidad.lecciones.every((leccion) => leccion.completado);
+                  const allLessonsCompleted = unidad.lecciones.every(
+                    (leccion) => leccion.completado
+                  );
                   const isCurrentUnit = unidad.unidad === unidadActual;
 
                   return (
@@ -340,12 +406,18 @@ const CampusVirtualCurso = (props: any) => {
                       sx={{
                         mb: 1,
                         width: "100%",
-                        border: `1px solid ${allLessonsCompleted ? "#01ff3c" : '#ff914d'}`,
-                        background: allLessonsCompleted ? "#c7ffd4" : (isCurrentUnit ? "#ffe6d9" : "#f6f3f0"),
+                        border: `1px solid ${allLessonsCompleted ? "#01ff3c" : "#ff914d"}`,
+                        background: allLessonsCompleted
+                          ? "#c7ffd4"
+                          : isCurrentUnit
+                            ? "#ffe6d9"
+                            : "#f6f3f0",
                         color: "#281e1e",
                       }}
                     >
-                      <CardContent sx={{ display: "flex", flexDirection: "column" }}>
+                      <CardContent
+                        sx={{ display: "flex", flexDirection: "column" }}
+                      >
                         <Box
                           onClick={() => handleUnitClick(unidad.unidad)}
                           sx={{
@@ -369,13 +441,22 @@ const CampusVirtualCurso = (props: any) => {
                               textOverflow: "ellipsis",
                             }}
                           >
-                            <strong>{unidad.unidad}:</strong> {unidad.unidad_nombre}
+                            <strong>{unidad.unidad}:</strong>{" "}
+                            {unidad.unidad_nombre}
                           </Typography>
                           <IconButton
-                            aria-label={expandedUnit === unidad.unidad ? "Ocultar Temas" : "Ver Temas"}
+                            aria-label={
+                              expandedUnit === unidad.unidad
+                                ? "Ocultar Temas"
+                                : "Ver Temas"
+                            }
                             sx={{ p: 1 }}
                           >
-                            {expandedUnit === unidad.unidad ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                            {expandedUnit === unidad.unidad ? (
+                              <ExpandLessIcon />
+                            ) : (
+                              <ExpandMoreIcon />
+                            )}
                           </IconButton>
                         </Box>
                         <Collapse in={expandedUnit === unidad.unidad}>
@@ -384,7 +465,9 @@ const CampusVirtualCurso = (props: any) => {
                               .sort((a, b) => a.leccion_id - b.leccion_id) // Ordenar según leccion_id
                               .map((leccion, index) => {
                                 const isCurrentLesson =
-                                  leccion.leccion_id === (dataLeccionSeleccionada?.[0]?.leccion_id || dataLeccionActual?.[0]?.leccion_id);
+                                  leccion.leccion_id ===
+                                  (dataLeccionSeleccionada?.[0]?.leccion_id ||
+                                    dataLeccionActual?.[0]?.leccion_id);
                                 const isCompletedLesson = leccion.completado;
 
                                 return (
@@ -396,14 +479,41 @@ const CampusVirtualCurso = (props: any) => {
                                       py: 1,
                                       px: 1,
                                       fontSize: "0.8rem",
-                                      background: isCompletedLesson ? "#40d400" : (isCurrentLesson ? "#ff914d" : "#ffffff"),
-                                      color: isCompletedLesson ? "#ffffff" : (isCurrentLesson ? "#ffffff" : "#2c2927"),
+                                      background: isCompletedLesson
+                                        ? "#40d400"
+                                        : isCurrentLesson
+                                          ? "#ff914d"
+                                          : "#ffffff",
+                                      color: isCompletedLesson
+                                        ? "#ffffff"
+                                        : isCurrentLesson
+                                          ? "#ffffff"
+                                          : "#2c2927",
                                       cursor: "pointer",
                                       borderRadius: "5px",
                                     }}
-                                    onClick={() => handleChangeLeccion(leccion.leccion_id)}
+                                    onClick={() =>
+                                      handleChangeLeccion(leccion.leccion_id)
+                                    }
                                   >
-                                    ● <strong>Lección {index + 1}</strong> - {leccion.nombre}
+                                    {curso.curso_id === "C-1" ? (
+                                      leccion.nombre
+                                        ?.split(" - ")
+                                        ?.map(
+                                          (frase: string, index: number) => (
+                                            <div key={index}>
+                                              {index + 1}. {frase.trim()}
+                                            </div>
+                                          )
+                                        )
+                                    ) : (
+                                      <>
+                                        {" "}
+                                        ● <strong>
+                                          Lección {index + 1}
+                                        </strong> - {leccion.nombre}
+                                      </>
+                                    )}
                                   </Typography>
                                 );
                               })}
@@ -414,100 +524,105 @@ const CampusVirtualCurso = (props: any) => {
                   );
                 })}
 
-                    <Card
-                    variant="outlined"
-                    sx={{
-                      mb: 1,
-                      width: "100%",
-                      border: '2px solid #ff7931',
-                      background: "#f6f3f0",
-                      "&:hover": {
-                      border: '2px solid #ff914d', // Cambia el color del borde al pasar el mouse
+                <Card
+                  variant="outlined"
+                  sx={{
+                    mb: 1,
+                    width: "100%",
+                    border: "2px solid #ff7931",
+                    background: "#f6f3f0",
+                    "&:hover": {
+                      border: "2px solid #ff914d", // Cambia el color del borde al pasar el mouse
                       background: "#fff5e6", // Cambia el fondo al pasar el mouse
-                      },
-                    }}
+                    },
+                  }}
+                >
+                  <CardContent
+                    sx={{ display: "flex", flexDirection: "column" }}
                   >
-                    <CardContent sx={{ display: "flex", flexDirection: "column" }}>
-                      <Box
-                        onClick={() => handleUnitClick('1')}
-                        sx={{
+                    <Box
+                      onClick={() => handleUnitClick("1")}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        cursor: "pointer",
+                        userSelect: "none",
+                        px: 1,
+                        py: 1,
+                      }}
+                    >
+                      <Link
+                        href={MaterialExamen?.materiales_url || ""}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontSize: "1rem",
+                          fontWeight: "bold",
+                          flexGrow: 1,
+                          textOverflow: "ellipsis",
+                          textDecoration: "none",
                           display: "flex",
-                          alignItems: "center",
+                          flexDirection: "row",
                           justifyContent: "space-between",
-                          cursor: "pointer",
-                          userSelect: "none",
-                          px: 1,
-                          py: 1,
+                          color: "#ff7f3a",
                         }}
                       >
-                        <Link
-                          href={MaterialExamen?.materiales_url || ""}
-                          style={{
-                            fontSize: "1rem",
-                            fontWeight: "bold",
-                            flexGrow: 1,
-                            textOverflow: "ellipsis",
-                            textDecoration: 'none',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            color: "#ff7f3a",
-                          }}
-                        >
-                          Descargar Materiales
-                          <FileDownloadIcon />
-                        </Link>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                  <Card
-                    variant="outlined"
-                    sx={{
-                      mb: 1,
-                      width: "100%",
-                      border: '2px solid #ff7931',
-                      background: "#f6f3f0",
-                      "&:hover": {
-                      border: '2px solid #ff914d', // Cambia el color del borde al pasar el mouse
+                        Descargar Materiales
+                        <FileDownloadIcon />
+                      </Link>
+                    </Box>
+                  </CardContent>
+                </Card>
+                <Card
+                  variant="outlined"
+                  sx={{
+                    mb: 1,
+                    width: "100%",
+                    border: "2px solid #ff7931",
+                    background: "#f6f3f0",
+                    "&:hover": {
+                      border: "2px solid #ff914d", // Cambia el color del borde al pasar el mouse
                       background: "#fff5e6", // Cambia el fondo al pasar el mouse
-                      },
-                    }}
+                    },
+                  }}
+                >
+                  <CardContent
+                    sx={{ display: "flex", flexDirection: "column" }}
                   >
-                    <CardContent sx={{ display: "flex", flexDirection: "column" }}>
-                      <Box
-                        onClick={() => handleUnitClick('1')}
-                        sx={{
+                    <Box
+                      onClick={() => handleUnitClick("1")}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        cursor: "pointer",
+                        userSelect: "none",
+                        px: 1,
+                        py: 1,
+                      }}
+                    >
+                      <Link
+                        href={MaterialExamen?.examen_url || ""}
+                        style={{
+                          fontSize: "1rem",
+                          fontWeight: "bold",
+                          flexGrow: 1,
+                          textOverflow: "ellipsis",
+                          textDecoration: "none",
                           display: "flex",
-                          alignItems: "center",
+                          flexDirection: "row",
                           justifyContent: "space-between",
-                          cursor: "pointer",
-                          userSelect: "none",
-                          px: 1,
-                          py: 1,
+                          color: "#ff7f3a",
                         }}
                       >
-                        <Link
-                          href={MaterialExamen?.examen_url || ""}
-                          style={{
-                            fontSize: "1rem",
-                            fontWeight: "bold",
-                            flexGrow: 1,
-                            textOverflow: "ellipsis",
-                            textDecoration: 'none',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            color: "#ff7f3a",
-                          }}
-                        >
-                          Ir al Examen Final
-                          <EditNoteIcon />
-                        </Link>
-                      </Box>
-                    </CardContent>
-                  </Card>
+                        Ir al Examen Final
+                        <EditNoteIcon />
+                      </Link>
+                    </Box>
+                  </CardContent>
+                </Card>
               </Box>
-              
             ))}
         </Grid>
       </Grid>

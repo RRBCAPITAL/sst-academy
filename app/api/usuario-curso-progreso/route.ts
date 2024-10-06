@@ -14,12 +14,16 @@ export async function GET(request: Request) {
             return NextResponse.json({ success: false, error: 'User ID and Course ID are required' });
         }
 
-        // Consulta para obtener el progreso del usuario
-        const queryBase = sql`
+        // Consulta para obtener todas las lecciones completadas del usuario
+        const queryProgreso = sql`
             SELECT 
-                p.completado,
+                l.leccion_id,
+                l.nombre AS leccion_nombre,
                 l.leccion,
-                u.unidad
+                u.unidad_id,
+                u.nombre AS unidad_nombre,
+                u.unidad,
+                p.completado
             FROM 
                 progreso p
             INNER JOIN 
@@ -31,139 +35,80 @@ export async function GET(request: Request) {
             WHERE 
                 p.user_id = ${userId}
                 AND c.curso_id = ${cursoId}
+                AND p.completado = true
             ORDER BY 
-                u.unidad_id, l.leccion_id
-            LIMIT 1; -- Solo traer un valor
+                u.unidad_id, l.leccion_id;
         `;
 
-        const { rows: rowsProgreso } = await queryBase;
+        const { rows: rowsProgreso } = await queryProgreso;
 
-        if (rowsProgreso && rowsProgreso[0]?.completado) {
-            // Consulta para obtener la lección actual
-            const queryLeccionActual = sql`
-                WITH ÚltimaLección AS (
-                    SELECT
-                        p.user_id,
-                        l.unidad_id,
-                        l.leccion_id,
-                        l.nombre AS leccion_nombre,
-                        l.leccion,
-                        u.unidad,
-                        ROW_NUMBER() OVER (PARTITION BY l.unidad_id ORDER BY l.leccion_id DESC) AS rn
-                    FROM
-                        progreso p
-                    INNER JOIN
-                        leccion l ON p.leccion_id = l.leccion_id
-                    INNER JOIN
-                        unidad u ON l.unidad_id = u.unidad_id
-                    WHERE
-                        p.user_id = ${userId}
-                        AND p.completado = true
-                ),
-                ÚltimaLecciónUnidad AS (
-                    SELECT
-                        unidad_id,
-                        leccion_id,
-                        leccion_nombre,
-                        leccion,
-                        unidad
-                    FROM
-                        ÚltimaLección
-                    WHERE
-                        rn = 1
-                    LIMIT 1
-                ),
-                SiguienteLección AS (
-                    SELECT
-                        l.unidad_id,
-                        l.leccion_id,
-                        l.nombre AS leccion_nombre,
-                        l.leccion,
-                        u.unidad,
-                        l.video_url AS video_intro,
-                        l.material_descarga
-                    FROM
-                        leccion l
-                    INNER JOIN
-                        unidad u ON l.unidad_id = u.unidad_id
-                    INNER JOIN
-                        ÚltimaLecciónUnidad ul ON l.unidad_id = ul.unidad_id
-                    WHERE
-                        l.leccion_id = (
-                            SELECT MIN(leccion_id)
-                            FROM leccion
-                            WHERE unidad_id = ul.unidad_id
-                              AND leccion_id > ul.leccion_id
-                            LIMIT 1
-                        )
-                    LIMIT 1
-                ),
-                PrimeraLecciónSiguienteUnidad AS (
-                    SELECT
-                        l.unidad_id,
-                        l.leccion_id,
-                        l.nombre AS leccion_nombre,
-                        l.leccion,
-                        u.unidad,
-                        l.video_url AS video_intro,
-                        l.material_descarga
-                    FROM
-                        leccion l
-                    INNER JOIN
-                        unidad u ON l.unidad_id = u.unidad_id
-                    INNER JOIN
-                        (SELECT MIN(unidad_id) AS siguiente_unidad
-                         FROM leccion
-                         WHERE unidad_id > (SELECT unidad_id FROM ÚltimaLecciónUnidad LIMIT 1)
-                         LIMIT 1) su ON l.unidad_id = su.siguiente_unidad
-                    WHERE
-                        l.leccion_id = (
-                            SELECT MIN(leccion_id)
-                            FROM leccion
-                            WHERE unidad_id = su.siguiente_unidad
-                            LIMIT 1
-                        )
-                    LIMIT 1
-                )
+        if (rowsProgreso.length > 0) {
+            // Obtener la última lección completada
+            const ultimaLeccion = rowsProgreso[rowsProgreso.length - 1];
+            
+            // Consulta para obtener la siguiente lección en la misma unidad
+            const querySiguienteLeccion = sql`
                 SELECT
-                    c.curso_id,
-                    c.nombre AS curso_nombre,
+                    l.leccion_id,
+                    l.nombre AS leccion_nombre,
+                    l.leccion,
                     u.unidad_id,
                     u.nombre AS unidad_nombre,
                     u.unidad,
-                    COALESCE(s.leccion_id, ps.leccion_id) AS leccion_id,
-                    COALESCE(s.leccion_nombre, ps.leccion_nombre) AS leccion_nombre,
-                    COALESCE(s.leccion, ps.leccion) AS leccion,
-                    COALESCE(s.video_intro, ps.video_intro) AS video_intro,
-                    COALESCE(s.material_descarga, ps.material_descarga) AS material_descarga
-                FROM
-                    curso c
-                INNER JOIN
-                    unidad u ON c.curso_id = u.curso_id
-                LEFT JOIN
-                    SiguienteLección s ON u.unidad_id = s.unidad_id
-                LEFT JOIN
-                    PrimeraLecciónSiguienteUnidad ps ON u.unidad_id = ps.unidad_id
-                WHERE
-                    c.curso_id = ${cursoId}
-                ORDER BY
-                    CASE
-                        WHEN s.leccion_id IS NOT NULL THEN 1
-                        WHEN ps.leccion_id IS NOT NULL THEN 2
-                        ELSE 3
-                    END
+                    l.video_url AS video_intro,
+                    l.material_descarga
+                FROM 
+                    leccion l
+                INNER JOIN 
+                    unidad u ON l.unidad_id = u.unidad_id
+                WHERE 
+                    l.unidad_id = ${ultimaLeccion.unidad_id}
+                    AND l.leccion_id > ${ultimaLeccion.leccion_id}
+                ORDER BY 
+                    l.leccion_id
                 LIMIT 1;
             `;
 
-            const { rows: rowsLeccionActual } = await queryLeccionActual;
-            if (rowsLeccionActual.length > 0) {
-                return NextResponse.json({ success: true, progreso: true, startCurso: rowsLeccionActual });
+            const { rows: rowsSiguienteLeccion } = await querySiguienteLeccion;
+
+            if (rowsSiguienteLeccion.length > 0) {
+                // Devolver la siguiente lección dentro de la misma unidad
+                return NextResponse.json({ success: true, progreso: true, startCurso: rowsSiguienteLeccion });
             } else {
-                return NextResponse.json({ success: false, message: 'No existe información actualmente.' });
+                // Si no hay más lecciones en la misma unidad, buscar la primera lección de la siguiente unidad
+                const queryPrimeraLeccionSiguienteUnidad = sql`
+                    SELECT
+                        l.leccion_id,
+                        l.nombre AS leccion_nombre,
+                        l.leccion,
+                        u.unidad_id,
+                        u.nombre AS unidad_nombre,
+                        u.unidad,
+                        l.video_url AS video_intro,
+                        l.material_descarga
+                    FROM 
+                        leccion l
+                    INNER JOIN 
+                        unidad u ON l.unidad_id = u.unidad_id
+                    WHERE 
+                        u.unidad_id > ${ultimaLeccion.unidad_id}
+                    ORDER BY 
+                        u.unidad_id, l.leccion_id
+                    LIMIT 1;
+                `;
+
+                const { rows: rowsPrimeraLeccion } = await queryPrimeraLeccionSiguienteUnidad;
+
+                if (rowsPrimeraLeccion.length > 0) {
+                    // Devolver la primera lección de la siguiente unidad
+                    return NextResponse.json({ success: true, progreso: true, startCurso: rowsPrimeraLeccion });
+                } else {
+                    return NextResponse.json({ success: false, message: 'No hay más lecciones disponibles.' });
+                }
             }
         } else {
-            // Consulta para obtener la primera unidad y primera lección del curso
-            const noneProgreso = sql`
+            // Si no hay progreso, obtener la primera unidad y primera lección del curso
+            const queryPrimeraLeccion = sql`
                 SELECT 
                     c.curso_id,
                     c.nombre AS curso_nombre,
@@ -189,12 +134,12 @@ export async function GET(request: Request) {
                 LIMIT 1;
             `;
 
-            const { rows: rowsNoneProgreso } = await noneProgreso;
+            const { rows: rowsPrimeraLeccion } = await queryPrimeraLeccion;
 
-            if (rowsNoneProgreso.length > 0) {
-                return NextResponse.json({ success: true, progreso: false, startCurso: rowsNoneProgreso });
+            if (rowsPrimeraLeccion.length > 0) {
+                return NextResponse.json({ success: true, progreso: false, startCurso: rowsPrimeraLeccion });
             } else {
-                return NextResponse.json({ success: false, message: 'No se encontraron unidades ni lecciones', user: userId, curso: cursoId });
+                return NextResponse.json({ success: false, message: 'No se encontraron unidades ni lecciones.' });
             }
         }
     } catch (error) {

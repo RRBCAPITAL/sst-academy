@@ -18,6 +18,7 @@ import {
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
 // Define el componente Cursos
 const Cursos = () => {
@@ -86,7 +87,7 @@ const Cursos = () => {
                     padding: "10px 0",
                     fontSize: "1.2rem",
                     color: "#37423B",
-                    height: "80px",
+                    height: "60px",
                   }}
                 >
                   {curso.nombre}
@@ -111,21 +112,36 @@ const Cursos = () => {
                       color: "#ff7017",
                     }}
                   >
-                    <AccessTimeIcon sx={{ paddingRight: "4px" }} /> 24 horas
+                    <GroupAddIcon sx={{marginRight: '10px', fontSize: '1.6rem'}} /> {curso.duracion} estudiantes
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                      fontSize: "1rem",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#ff7017",
-                    }}
-                  >
-                    <StarBorderIcon /> 4.5{" "}
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+    {/* Precio con descuento tachado */}
+    <Typography
+      variant="h1"
+      color="text.secondary"
+      sx={{
+        fontSize: "0.9rem",
+        color: '#494949',
+        fontWeight: '400',
+        textDecoration: 'line-through', // Tachado
+      }}
+    >
+      S/ {Math.floor(curso.precio * 0.80)} {/* Aplica el 15% de descuento */}
+    </Typography>
+
+    {/* Precio original */}
+    <Typography
+      variant="h1"
+      color="text.secondary"
+      sx={{
+        fontSize: "1.4rem",
+        color: '#ff7f3a',
+        fontWeight: 'bold',
+      }}
+    >
+      S/ {Math.floor(curso.precio)}
+    </Typography>
+  </Box>
                 </Box>
                 <Link
                   href={`/cursos-virtuales/${slugify(curso.nombre)}`}

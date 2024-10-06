@@ -62,7 +62,7 @@ const ViewCalificacion: React.FC<ViewCalificacionProps> = ({ data, onClose }) =>
 
   return (
     <Dialog open={!!data} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ color: 'blue' }}>Calificación del curso</DialogTitle>
+      <DialogTitle sx={{ color: '#ff8c2e' }}>Calificación del curso</DialogTitle>
       <DialogContent>
         <Typography variant="body1">
           <strong>Curso:</strong> {data.curso_nombre}
@@ -87,6 +87,7 @@ const ViewCalificacion: React.FC<ViewCalificacionProps> = ({ data, onClose }) =>
             type="submit"
             variant="contained"
             color="primary"
+            sx={{color: 'white', fontWeight: 'bold'}}
             disabled={loading} // Desactivar el botón mientras se carga
           >
             {loading ? 'Enviando...' : 'Calificar'}

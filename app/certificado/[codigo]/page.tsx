@@ -161,7 +161,7 @@ const Certificado: React.FC<CertificadoProps> = ({ params }) => {
 
       <TableContainer component={Paper} sx={{ opacity: 0.95, maxWidth: '1200px'}}>
       {/* Título encima de la tabla */}
-      <Typography variant="h6" component="div" sx={{ padding: 2, textAlign: 'center', border: '1px solid #ddd', fontSize: '16px' }}>
+      <Typography variant="h6" component="div" sx={{ padding: 2, textAlign: 'center', borderRadius: '6px', border: '1px solid #ddd', fontSize: '16px', background: '#ff914d', color: 'white' }}>
         Detalles del estudiante
       </Typography>
 
