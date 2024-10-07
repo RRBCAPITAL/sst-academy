@@ -30,7 +30,7 @@ const Cursos = () => {
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
-  const ordenCursos = ["D-1", "A-1", "F-1", "E-1", "C-1", "B-1"];
+  const ordenCursos = ["D-1", "A-1", "F-1", "E-1", "C-1", "I-1", "B-1", "G-1", "H-1"];
 
   useEffect(() => {
     // Función para obtener la lista de cursos
