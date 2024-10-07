@@ -6,7 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { baselightTheme } from "@/utils/theme/DefaultColors";
 import Head from "next/head";
-import Footer from "@/components/Footer";
+import GoogleAnalytics from "./GoogleAnalytics";
 
 export default function RootLayout({
   children,
@@ -33,6 +33,7 @@ export default function RootLayout({
       </Head>
 
       <body>
+      <GoogleAnalytics />
         <ThemeProvider theme={baselightTheme}>
           <CssBaseline />
           {!shouldHideNavbar && !shouldHideNavbar2 && <Navbar />}
