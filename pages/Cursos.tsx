@@ -30,14 +30,22 @@ const Cursos = () => {
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
+  const ordenCursos = ["D-1", "A-1", "F-1", "E-1", "C-1", "B-1"];
+
   useEffect(() => {
     // Función para obtener la lista de cursos
     const fetchCursos = async () => {
       try {
         // Realiza la solicitud HTTP para obtener los cursos
         const response = await axios.get("/api/cursos"); // Cambia la URL según tu configuración de API
-        // Actualiza el estado con los cursos obtenidos
-        setCursos(response.data.curso);
+        const cursosObtenidos = response.data.curso;
+
+        // Ordenar los cursos según el array ordenCursos
+        const cursosOrdenados = cursosObtenidos.sort((a: Curso, b: Curso) => {
+          return ordenCursos.indexOf(a.curso_id) - ordenCursos.indexOf(b.curso_id);
+        });
+
+        setCursos(cursosOrdenados);
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
