@@ -24,6 +24,27 @@ import CursosVirtuales from "@/components/CursosVirtuales";
 import ContenidoLandingInicio from "@/components/ContenidoLandingInicio";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"; // Icono para subir
 
+export const metadata = {
+  title: "Programas Virtuales | SST Academy",
+  description:
+    "Potencia tus habilidades en las áreas de  seguridad y salud en el trabajo, sistemas integrados de gestión, auditor trinorma, iso 45001, iso 14001, iso 9001, residuos sólidos y  estudio de impacto ambiental con la plataforma de programas virtuales de SST Academy. ¡Conoce más!",
+  keywords: [
+    "seguridad",
+    "prevencionista de riesgos",
+    "medio ambiente",
+    "gestión ambiental",
+  ],
+  referrer: 'origin-when-cross-origin',
+  metadataBase: new URL('https://sstacademia.com/' || 'https://www.sstacademia.com/'),
+  alternates: {
+    canonical: "https://www.sstacademia.com/",
+  },
+  authors: [{ name: "RRB CAPITAL" }],
+  publisher: 'RRB CAPITAL',
+};
+
+
+
 const Inicio = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [codigo, setCodigo] = useState<string>("");
