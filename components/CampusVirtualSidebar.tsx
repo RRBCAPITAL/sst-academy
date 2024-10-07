@@ -16,6 +16,9 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Link from 'next/link';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 import {
     Box,
     Typography,
@@ -253,7 +256,7 @@ export default function CampusVirtualSidebar(props: any) {
           },
         }}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index % 2 === 0 ? <AppRegistrationIcon /> : <LogoutIcon />}
               </ListItemIcon>
               <Typography sx={{ fontWeight: 'bold', fontSize: '0.8rem', color: 'black'}}>
                 {item.text}

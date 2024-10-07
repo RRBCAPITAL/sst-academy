@@ -51,6 +51,26 @@ const Packs: React.FC<IDDelPack> = (props) => {
 
   return (
     <Box sx={{ paddingBottom: '20px', minHeight: "100vh", maxWidth: '100vw' }}>
+       <Box
+      sx={{ 
+        display: 'flex', // Para habilitar flexbox
+        justifyContent: 'center', // Centrado horizontal
+        alignItems: 'center', // Centrado vertical
+        background: '#ff914d',
+        width: '100%',
+        height: '124px',
+        textAlign: 'center',
+        fontSize: '2rem',
+        color: 'white',
+        fontWeight: '500',
+        overflowX: 'hidden',
+        margin: '0',
+        lineHeight: {xs: '1.1'},
+        padding: {xs: '0 10px'}
+      }}
+      >
+         {pack ? pack?.nombre : "Cargando..."}
+      </Box>
       <Grid container spacing={4}
       sx={{ 
       flexDirection: { xs: "column", md: "row" }, // Para pantallas pequeñas, columna; para grandes, fila
@@ -58,8 +78,9 @@ const Packs: React.FC<IDDelPack> = (props) => {
       margin: 'auto'
       }}
       >
+       
          <Rutas />
-        <Grid item xs={12} md={12} sx={{ position: "relative"}} >
+        <Grid item xs={12} md={12} sx={{ position: "relative",}} >
               <Card
                 key={pack?.id}
                 variant="outlined"
@@ -69,7 +90,9 @@ const Packs: React.FC<IDDelPack> = (props) => {
                   alignItems: "center",
                   mb: 4,
                   maxWidth: '800px',
-                  margin: 'auto'
+                  margin: 'auto',
+                  border: "2px solid #ff914d",
+                    borderRadius: "10px",
                 }}
               >
                 <Box
@@ -83,13 +106,12 @@ const Packs: React.FC<IDDelPack> = (props) => {
                     justifyContent: 'center'
                   }}
                 >
-                  <img src={pack?.imagenDetalle} alt={pack?.nombre} style={{maxWidth: '500px', height: 'fit-content'}}/>
+                  <img src={pack?.imagenDetalle} alt={pack?.nombre} style={{maxWidth: '100%', height: 'fit-content'}}/>
                 </Box>
                 <CardContent
                   sx={{
                     background: "#f1edea",
-                    border: "2px solid #ff914d",
-                    borderRadius: "10px",
+                    
                   }}
                 >
                   <Typography

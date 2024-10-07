@@ -21,6 +21,7 @@ import { ProgresoCurso } from "@/Types/progreso-curso.types";
 import Link from "next/link";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+import { DataMaterialsExamen } from "@/utils/DataMaterialsExamen";
 
 interface User {
   user_id: number;
@@ -152,62 +153,7 @@ const CampusVirtualCurso = (props: any) => {
     }
   };
 
-  const DataMaterialsExamen = [
-    {
-      curso_id: "A-1",
-      materiales_url:
-        "https://drive.google.com/drive/folders/1E7g6LMhN1NlQUeB4QcM88HFBt4c1aAS0?usp=sharing",
-      examen_url: "",
-    },
-    {
-      curso_id: "B-1",
-      materiales_url:
-        "https://drive.google.com/drive/folders/1G5OWeVEktBNNpn41fcakB_2-qWpvcRct?usp=sharing",
-      examen_url: "",
-    },
-    {
-      curso_id: "C-1",
-      materiales_url:
-        "https://drive.google.com/drive/folders/1BZm9kI6FN43GbcywqvEcZSEyJ7ezYmzF?usp=sharing",
-      examen_url: "",
-    },
-    {
-      curso_id: "D-1",
-      materiales_url:
-        "https://drive.google.com/drive/folders/1DqKb1lpPkRp8MxQY2QVfRs6ZzvTd-0nT?usp=sharing",
-      examen_url: "",
-    },
-    {
-      curso_id: "E-1",
-      materiales_url:
-        "https://drive.google.com/drive/folders/18Xa6CAKNkfVAXFGMvNvEeq5Yley826GO?usp=sharing",
-      examen_url: "",
-    },
-    {
-      curso_id: "F-1",
-      materiales_url:
-        "https://drive.google.com/drive/folders/1sHi13VKvr2Pd64WOTG8EzbcbK3oRaiH6?usp=sharing",
-      examen_url: "",
-    },
-    {
-      curso_id: "G-1",
-      materiales_url:
-        "https://drive.google.com/drive/folders/1-ebSOeKmorbfCWt-dvsUaH1AVvk4nA-E?usp=sharing",
-      examen_url: "",
-    },
-    {
-      curso_id: "H-1",
-      materiales_url:
-        "https://drive.google.com/drive/folders/1FCxLKvYs6rpF5OtcevCtVpJcOyAinVWR?usp=sharing",
-      examen_url: "",
-    },
-    {
-      curso_id: "I-1",
-      materiales_url: "",
-      examen_url: "",
-    },
-  ];
-
+ 
   const MaterialExamen = DataMaterialsExamen.find(
     (i) => i.curso_id === props?.curso_id
   );
@@ -574,6 +520,7 @@ const CampusVirtualCurso = (props: any) => {
                     </Box>
                   </CardContent>
                 </Card>
+                {MaterialExamen?.examen_url !== 'none' &&
                 <Card
                   variant="outlined"
                   sx={{
@@ -586,7 +533,7 @@ const CampusVirtualCurso = (props: any) => {
                       background: "#fff5e6", // Cambia el fondo al pasar el mouse
                     },
                   }}
-                >
+                >  
                   <CardContent
                     sx={{ display: "flex", flexDirection: "column" }}
                   >
@@ -602,8 +549,10 @@ const CampusVirtualCurso = (props: any) => {
                         py: 1,
                       }}
                     >
-                      <Link
+                       <Link
                         href={MaterialExamen?.examen_url || ""}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         style={{
                           fontSize: "1rem",
                           fontWeight: "bold",
@@ -618,10 +567,10 @@ const CampusVirtualCurso = (props: any) => {
                       >
                         Ir al Examen Final
                         <EditNoteIcon />
-                      </Link>
+                      </Link> 
                     </Box>
                   </CardContent>
-                </Card>
+                </Card>}
               </Box>
             ))}
         </Grid>

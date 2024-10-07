@@ -10,8 +10,9 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
 
-const pages = ['Inicio', 'Cursos'];
+const pages = ['Especializaciones'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -76,9 +77,10 @@ function ResponsiveAppBar() {
                   <Typography
                     textAlign="center"
                     component={Link}
-                    href={page === 'Inicio' ? '/' : '/cursos-virtuales'}
+                    href={page === 'Especializaciones' ? '/' : ''}
+                    sx={{textDecoration:'none', fontWeight: 'bold', color: '#818181', fontSize: '1.2rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 1}}
                   >
-                    {page}
+                   <FactCheckIcon sx={{color: '#ff914d'}} /> {page}
                   </Typography>
                 </MenuItem>
               ))}
@@ -89,9 +91,10 @@ function ResponsiveAppBar() {
                   fullWidth
                   onClick={handleCloseNavMenu}
                   component={Link}
-                  href="/login"
+                  href="/campus-virtual-login"
+                  sx={{color: 'white'}}
                 >
-                  Ingresar
+                  Campus Virtual
                 </Button>
               </MenuItem>
             </Menu>
