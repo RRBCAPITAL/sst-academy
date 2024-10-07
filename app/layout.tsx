@@ -21,10 +21,10 @@ export default function RootLayout({
     : false;
   const shouldHideNavbar2 = pathname ? pathname.startsWith("/campus-virtual-login") : false;
 
+  
   return (
     <html lang="en">
       <Head>
-      <title>Programas Online para que potencies tu carrera | SST Academy</title>
         <link rel="icon" href="/favicon_io/favicon.ico" />
         <link
           href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
