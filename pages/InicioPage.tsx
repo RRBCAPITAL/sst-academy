@@ -23,6 +23,7 @@ import ValidarCertificado from "@/components/ValidarCertificado";
 import CursosVirtuales from "@/components/CursosVirtuales";
 import ContenidoLandingInicio from "@/components/ContenidoLandingInicio";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"; // Icono para subir
+import { getCourses } from "@/utils/getCourses";
 
 const InicioPage = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -50,7 +51,6 @@ const InicioPage = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
 
   return (
     <Box sx={{with: '100vw',  overflowX: 'hidden',}}>
