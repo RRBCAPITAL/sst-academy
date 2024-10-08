@@ -20,9 +20,9 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { deslugify } from "@/utils/deslugify";
 import Rutas from "@/components/Rutas";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { useTheme, useMediaQuery } from "@mui/material";
 
 import { useParams } from 'next/navigation';
@@ -30,19 +30,20 @@ import { useParams } from 'next/navigation';
 const Curso = () => {
   const params = useParams();  // Puede ser null o un objeto con parámetros
 
+  // Llama los hooks siempre, antes del condicional
+  const [curso, setCurso] = useState<CursoDetallado[]>([]);
+  const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
+
   // Asegúrate de que params y nombre existan
   const nombre = params?.nombre as string | undefined;
 
-  // Maneja el caso donde `nombre` sea undefined
   if (!nombre) {
     return <p>Cargando...</p>;  // O cualquier otra UI de carga o error
   }
 
   const formatNombre = deslugify(nombre);
-  const [curso, setCurso] = useState<CursoDetallado[]>([]);
-  const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
-  const theme = useTheme();
-  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
   useEffect(() => {
     const nombreCurso = deslugify(formatNombre);
@@ -62,9 +63,7 @@ const Curso = () => {
       }
     };
 
-    if (nombreCurso) {
-      fetchCursos();
-    }
+    fetchCursos();
   }, [formatNombre]);
 
   const handleUnitClick = (unidadId: string) => {
@@ -133,19 +132,6 @@ const Curso = () => {
                     borderRadius: "10px",
                   }}
                 >
-                  {/* <Typography
-                    variant="h2"
-                    component="h1"
-                    color="primary"
-                    gutterBottom
-                    sx={{
-                      fontWeight: "bold",
-                      fontSize: "2.6rem",
-                      lineHeight: "1.1",
-                    }}
-                  >
-                    {curso.curso_nombre}
-                  </Typography> */}
                   <Typography
                     variant="h4"
                     paragraph
@@ -193,33 +179,33 @@ const Curso = () => {
                       20% de dscto.
                       </Typography>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-    {/* Precio con descuento tachado */}
-    <Typography
-      variant="h1"
-      color="text.secondary"
-      sx={{
-        fontSize: {xs: "0.9rem", md: "1.1rem"},
-        color: '#494949',
-        fontWeight: '400',
-        textDecoration: 'line-through', // Tachado
-      }}
-    >
-      S/ {Math.floor(curso.curso_precio * 0.80)} {/* Aplica el 15% de descuento */}
-    </Typography>
+                        {/* Precio con descuento tachado */}
+                        <Typography
+                          variant="h1"
+                          color="text.secondary"
+                          sx={{
+                            fontSize: {xs: "0.9rem", md: "1.1rem"},
+                            color: '#494949',
+                            fontWeight: '400',
+                            textDecoration: 'line-through', // Tachado
+                          }}
+                        >
+                          S/ {Math.floor(curso.curso_precio * 0.80)} {/* Aplica el 15% de descuento */}
+                        </Typography>
 
-    {/* Precio original */}
-    <Typography
-      variant="h1"
-      color="text.secondary"
-      sx={{
-        fontSize: {xs: "1.4rem", md: "1.6rem"},
-        color: '#ff7f3a',
-        fontWeight: 'bold',
-      }}
-    >
-      S/ {Math.floor(curso.curso_precio)}
-    </Typography>
-  </Box>
+                        {/* Precio original */}
+                        <Typography
+                          variant="h1"
+                          color="text.secondary"
+                          sx={{
+                            fontSize: {xs: "1.4rem", md: "1.6rem"},
+                            color: '#ff7f3a',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          S/ {Math.floor(curso.curso_precio)}
+                        </Typography>
+                      </Box>
                     </Box>
                     <Box sx={{
                         display: "flex",
@@ -255,127 +241,29 @@ const Curso = () => {
                     </Box>
                   </Box>
                   <Button
-  variant="contained"
-  sx={{
-    mt: 2,
-    mb: 4,
-    fontSize: "1rem",
-    fontWeight: "500",
-    padding: "10px 0",
-    borderRadius: "10px",
-    width: "100%",
-    color: 'white'
-  }}
-  onClick={() => {
-    const phoneNumber = '932271898'; // Reemplaza con el número de WhatsApp
-    const message = `¡Hola! Estoy interesado en comprar el Programa de especialización ${curso.curso_nombre}`;
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-  }}
->
-  <WhatsAppIcon sx={{ paddingRight: '4px' }} /> Comprar ahora
-</Button>
+                    variant="contained"
+                    sx={{
+                      mt: 2,
+                      mb: 4,
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      padding: "10px 0",
+                      borderRadius: "10px",
+                      width: "100%",
+                      color: 'white'
+                    }}
+                    onClick={() => {
+                      const phoneNumber = '932271898'; // Reemplaza con el número de WhatsApp
+                      const message = `¡Hola! Estoy interesado en comprar el Programa de especialización ${curso.curso_nombre}`;
+                      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                      window.open(url, '_blank');
+                    }}
+                    startIcon={<WhatsAppIcon />}
+                  >
+                    Comprar ahora
+                  </Button>
                 </CardContent>
               </Card>
-            ))}
-        </Grid>
-        <Grid item xs={12} md={4} sx={{order: { xs: 2, md: 1 }, padding: '20px 0'}}>
-          <Typography
-            variant="h5"
-            component="h2"
-            color="primary"
-            gutterBottom
-            sx={{
-              mb: 2,
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-            }}
-          >
-            Contenido del Curso
-          </Typography>
-          {curso &&
-            curso?.map((curso) => (
-              <Box key={curso.curso_id}>
-                {curso.unidades.map((unidad) => (
-                  <Card
-                    key={unidad.unidad}
-                    variant="outlined"
-                    sx={{
-                      mb: 1,
-                      width: "100%",
-                      border: "1px solid #ff914d",
-                      background: "#f6f3f0",
-                      color: "#281e1e",
-                    }}
-                  >
-                    <CardContent
-                      sx={{ display: "flex", flexDirection: "column" }}
-                    >
-                      <Box
-                        onClick={() => handleUnitClick(unidad.unidad)}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          cursor: "pointer",
-                          userSelect: "none", // Prevenir selección de texto
-                          px: 1,
-                          py: 1,
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          component="h3"
-                          sx={{
-                            fontSize: "1rem",
-                            color:'#737373',
-                            fontWeight: "bold",
-                            flexGrow: 1,
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          <strong>{unidad.unidad}:</strong>{" "}
-                          {unidad.unidad_nombre}
-                        </Typography>
-                        <IconButton
-                          aria-label={
-                            expandedUnit === unidad.unidad
-                              ? "Ocultar Temas"
-                              : "Ver Temas"
-                          }
-                          sx={{ p: 1 }}
-                        >
-                          {expandedUnit === unidad.unidad ? (
-                            <ExpandLessIcon />
-                          ) : (
-                            <ExpandMoreIcon />
-                          )}
-                        </IconButton>
-                      </Box>
-                      <Collapse in={expandedUnit === unidad.unidad}>
-                        <Box sx={{ pl: 2, width: "100%" }}>
-                          <Typography
-                            variant="subtitle1"
-                            component="h4"
-                            sx={{ mb: 1, fontSize: "1.125rem" }}
-                          >
-                            Temas
-                          </Typography>
-                          {unidad.lecciones.map((leccion) => (
-                            <Typography
-                              key={leccion.nombre}
-                              variant="body2"
-                              sx={{ mb: 1, fontSize: "1rem" }}
-                            >
-                              - {leccion.nombre}
-                            </Typography>
-                          ))}
-                        </Box>
-                      </Collapse>
-                    </CardContent>
-                  </Card>
-                ))}
-              </Box>
             ))}
         </Grid>
       </Grid>
