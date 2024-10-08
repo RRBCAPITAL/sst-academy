@@ -43,13 +43,11 @@ const Curso = () => {
     return <p>Cargando...</p>;  // O cualquier otra UI de carga o error
   }
 
-  const formatNombre = deslugify(nombre);
+  const formatNombre = deslugify(nombre ?? "");
 
   useEffect(() => {
+    if (!formatNombre) return;
     const nombreCurso = deslugify(formatNombre);
-    console.log("props ", formatNombre);
-    console.log(nombreCurso);
-
     if (!nombreCurso) return;
 
     const fetchCursos = async () => {
@@ -65,6 +63,11 @@ const Curso = () => {
 
     fetchCursos();
   }, [formatNombre]);
+
+  if (!nombre) {
+    return <p>Cargando...</p>;  // O cualquier otra UI de carga o error
+  }
+
 
   const handleUnitClick = (unidadId: string) => {
     setExpandedUnit(expandedUnit === unidadId ? null : unidadId);
