@@ -28,17 +28,10 @@ import { useTheme, useMediaQuery } from "@mui/material";
 import { useParams } from 'next/navigation';
 
 const Curso = () => {
-  const params = useParams();  // Puede ser null o un objeto con parámetros
-
-  // Asegúrate de que params y nombre existan
+  const params = useParams();  
   const nombre = params?.nombre as string | undefined;
 
-  // Maneja el caso donde `nombre` sea undefined
-  if (!nombre) {
-    return <p>Cargando...</p>;  // O cualquier otra UI de carga o error
-  }
-
- 
+  // Llamamos los hooks siempre, sin condicionales
   const [curso, setCurso] = useState<CursoDetallado[]>([]);
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
   const theme = useTheme();
@@ -60,12 +53,17 @@ const Curso = () => {
       }
     };
 
-      fetchCursos();
+    fetchCursos();
   }, [nombre]);
 
   const handleUnitClick = (unidadId: string) => {
     setExpandedUnit(expandedUnit === unidadId ? null : unidadId);
   };
+
+  // Aquí gestionamos el caso en que `nombre` no exista
+  if (!nombre) {
+    return <p>Cargando...</p>;
+  }
 
   return (
     <Box sx={{ paddingBottom: '20px', minHeight: "100vh", maxWidth: '100vw', overflowX: 'hidden' }}>
