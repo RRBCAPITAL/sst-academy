@@ -17,7 +17,7 @@ export const MetaDataCursos = [
         },
     },
     {
-        title: `Power Bi | SST Academy`,
+        title: `Power Bi con enfoque a SSOMA | SST Academy`,
         description: `Descubre cómo convertir datos en información valiosa con nuestro programa de Power BI. ¡Inscríbete ahora en SST Academy y potencia tu capacidad analítica!`,
         keywords: [
           "power bi",
@@ -63,7 +63,7 @@ export const MetaDataCursos = [
         },
     },
     {
-        title: `Programa Auditor interno de Sistemas Integrados de Gestón | SST Academy`,
+        title: `Auditor interno: Sistemas Integrados de Gestión | SST Academy`,
         description: `Aprende a auditar sistemas integrados de gestión a diferentes organizaciones de diferentes rubros, iso 9001, iso 45001, iso 14001. ¡Inscríbete ahora en SST Academy!`,
         keywords: [
           "Auditor interno",
@@ -91,7 +91,7 @@ export const MetaDataCursos = [
         },
     },
     {
-        title: `Sunafil: Fiscalización en seguridad y salud en el trabajo | SST Academy`,
+        title: `Sunafil: Fiscalización en SST | SST Academy`,
         description: `Aprende a manejar las fiscalizaciones de Sunafil en materia de seguridad y salud en el trabajo, las competencias de los inspectores y las multas según la gravedad de las infracciones. ¡Inscríbete ahora en SST Academy!`,
         keywords: [
           "Fiscalización laboral",
