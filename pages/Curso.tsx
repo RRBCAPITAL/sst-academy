@@ -6,31 +6,22 @@ import axios from "@/utils/axios.config";
 import VimeoPlayer from "@/components/VimeoPlayer";
 import {
   Box,
-  Container,
   Typography,
   Button,
   Card,
   CardContent,
   Grid,
-  Collapse,
-  IconButton,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { useTheme, useMediaQuery } from "@mui/material";
+import { useParams } from 'next/navigation';
 import { deslugify } from "@/utils/deslugify";
 import Rutas from "@/components/Rutas";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
-import { useTheme, useMediaQuery } from "@mui/material";
-
-import { useParams } from 'next/navigation';
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 const Curso = () => {
   const params = useParams();  // Puede ser null o un objeto con parámetros
-
-  // Llama los hooks siempre, antes del condicional
   const [curso, setCurso] = useState<CursoDetallado[]>([]);
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
   const theme = useTheme();
@@ -39,21 +30,16 @@ const Curso = () => {
   // Asegúrate de que params y nombre existan
   const nombre = params?.nombre as string | undefined;
 
-  if (!nombre) {
-    return <p>Cargando...</p>;  // O cualquier otra UI de carga o error
-  }
-
-  const formatNombre = deslugify(nombre ?? "");
-
   useEffect(() => {
-    if (!formatNombre) return;
-    const nombreCurso = deslugify(formatNombre);
-    if (!nombreCurso) return;
+    if (!nombre) return;  // Devuelve si no hay nombre
 
     const fetchCursos = async () => {
+      const formatNombre = deslugify(nombre);
+      if (!formatNombre) return; // Asegúrate de que el nombre formateado exista
+
       try {
         const response = await axios.get(
-          `/api/usuario-curso-detallado?curso_nombre=${nombreCurso}`
+          `/api/usuario-curso-detallado?curso_nombre=${formatNombre}`
         );
         setCurso(response.data.curso);
       } catch (error) {
@@ -62,12 +48,7 @@ const Curso = () => {
     };
 
     fetchCursos();
-  }, [formatNombre]);
-
-  if (!nombre) {
-    return <p>Cargando...</p>;  // O cualquier otra UI de carga o error
-  }
-
+  }, [nombre]); // Depende solo de `nombre`
 
   const handleUnitClick = (unidadId: string) => {
     setExpandedUnit(expandedUnit === unidadId ? null : unidadId);
@@ -76,198 +57,194 @@ const Curso = () => {
   return (
     <Box sx={{ paddingBottom: '20px', minHeight: "100vh", maxWidth: '100vw', overflowX: 'hidden' }}>
       <Box
-      sx={{ 
-        display: 'flex', // Para habilitar flexbox
-        justifyContent: 'center', // Centrado horizontal
-        alignItems: 'center', // Centrado vertical
-        background: '#ff914d',
-        width: '100%',
-        height: '124px',
-        textAlign: 'center',
-        fontSize: '2rem',
-        color: 'white',
-        fontWeight: '500',
-        overflowX: 'hidden',
-        margin: '0',
-        lineHeight: {xs: '1.1'},
-        padding: {xs: '0 10px'}
-      }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          background: '#ff914d',
+          width: '100%',
+          height: '124px',
+          textAlign: 'center',
+          fontSize: '2rem',
+          color: 'white',
+          fontWeight: '500',
+          overflowX: 'hidden',
+          margin: '0',
+          lineHeight: { xs: '1.1' },
+          padding: { xs: '0 10px' }
+        }}
       >
-         {curso?.length > 0 ? curso[0].curso_nombre : "Cargando..."}
+        {curso?.length > 0 ? curso[0].curso_nombre : "Cargando..."}
       </Box>
-     
+
       <Grid container spacing={0}
-      sx={{ 
-      flexDirection: { xs: "column", md: "row" }, // Para pantallas pequeñas, columna; para grandes, fila
-      maxWidth: '1200px',
-      margin: 'auto',
-      padding: '10px'
-      }}
+        sx={{
+          flexDirection: { xs: "column", md: "row" },
+          maxWidth: '1200px',
+          margin: 'auto',
+          padding: '10px'
+        }}
       >
-         <Rutas />
-        <Grid item xs={12} md={8} sx={{ position: "relative", padding: '20px'}} >
-          {curso &&
-            curso?.map((curso) => (
-              <Card
-                key={curso.curso_id}
-                variant="outlined"
+        <Rutas />
+        <Grid item xs={12} md={8} sx={{ position: "relative", padding: '20px' }}>
+          {curso.map((curso) => (
+            <Card
+              key={curso.curso_id}
+              variant="outlined"
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                mb: 4,
+              }}
+            >
+              <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  mb: 4,
+                  position: "relative",
+                  width: "100%",
+                  paddingTop: "56.25%",
+                  mb: 2,
                 }}
               >
+                <VimeoPlayer video_url={curso.video_intro} />
+              </Box>
+              <CardContent
+                sx={{
+                  background: "#f1edea",
+                  border: "2px solid #ff914d",
+                  borderRadius: "10px",
+                }}
+              >
+                <Typography
+                  variant="h4"
+                  paragraph
+                  sx={{
+                    my: 0,
+                    marginBottom: '40px',
+                    fontSize: "1.2rem",
+                    color: "black",
+                    textShadow: " 0 0 1px rgba(0, 0, 0, 0.1);",
+                  }}
+                >
+                  {curso.curso_descripcion}
+                </Typography>
                 <Box
                   sx={{
-                    position: "relative",
-                    width: "100%",
-                    paddingTop: "56.25%", // Proporción 16:9
-                    mb: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                    mb: 4,
                   }}
                 >
-                  <VimeoPlayer video_url={curso.video_intro} />
-                </Box>
-                <CardContent
-                  sx={{
-                    background: "#f1edea",
-                    border: "2px solid #ff914d",
-                    borderRadius: "10px",
-                  }}
-                >
-                  <Typography
-                    variant="h4"
-                    paragraph
-                    sx={{
-                      my: 0,
-                      marginBottom: '40px',
-                      fontSize: "1.2rem",
-                      color: "black",
-                      textShadow: " 0 0 1px rgba(0, 0, 0, 0.1);",
-                    }}
-                  >
-                    {curso.curso_descripcion}
-                  </Typography>
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                       gap: 2,
-                      mb: 4,
+                      width: "100%",
                     }}
                   >
-                    <Box
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
                       sx={{
                         display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between", // Alinea los elementos a los extremos
-                        gap: 2,
-                        width: "100%", // Asegura que ocupe todo el ancho disponible
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: { xs: '0.7rem', md: "1rem" },
+                        color: "white",
+                        fontWeight: "bold",
+                        padding: { xs: '2px 10px', md: '2px 20px' },
+                        background: "#ff0000",
                       }}
                     >
+                      20% de dscto.
+                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                       <Typography
-                        variant="body2"
+                        variant="h1"
                         color="text.secondary"
                         sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: {xs: '0.7rem', md: "1rem"},
-                          color: "white",
-                          fontWeight: "bold",
-                          padding: {xs: '2px 10px', md: '2px 20px'},
-                          background: "#ff0000",
+                          fontSize: { xs: "0.9rem", md: "1.1rem" },
+                          color: '#494949',
+                          fontWeight: '400',
+                          textDecoration: 'line-through',
                         }}
                       >
-                      20% de dscto.
+                        S/ {Math.floor(curso.curso_precio * 0.80)}
                       </Typography>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        {/* Precio con descuento tachado */}
-                        <Typography
-                          variant="h1"
-                          color="text.secondary"
-                          sx={{
-                            fontSize: {xs: "0.9rem", md: "1.1rem"},
-                            color: '#494949',
-                            fontWeight: '400',
-                            textDecoration: 'line-through', // Tachado
-                          }}
-                        >
-                          S/ {Math.floor(curso.curso_precio * 0.80)} {/* Aplica el 15% de descuento */}
-                        </Typography>
-
-                        {/* Precio original */}
-                        <Typography
-                          variant="h1"
-                          color="text.secondary"
-                          sx={{
-                            fontSize: {xs: "1.4rem", md: "1.6rem"},
-                            color: '#ff7f3a',
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          S/ {Math.floor(curso.curso_precio)}
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Box sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between", // Alinea los elementos a los extremos
-                        gap: 2,
-                        width: "100%", // Asegura que ocupe todo el ancho disponible
-                      }}>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{
-                        fontSize: "1.2rem",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <GroupAddIcon sx={{marginRight: '10px', fontSize: '1.6rem'}} /> {curso.curso_duracion} {isMdUp && 'estudiantes'}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{
-                        fontSize: "1.2rem",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                     <StarBorderIcon /> 4.5{" "}
-                    </Typography>
+                      <Typography
+                        variant="h1"
+                        color="text.secondary"
+                        sx={{
+                          fontSize: { xs: "1.4rem", md: "1.6rem" },
+                          color: '#ff7f3a',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        S/ {Math.floor(curso.curso_precio)}
+                      </Typography>
                     </Box>
                   </Box>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      mt: 2,
-                      mb: 4,
-                      fontSize: "1rem",
-                      fontWeight: "500",
-                      padding: "10px 0",
-                      borderRadius: "10px",
-                      width: "100%",
-                      color: 'white'
-                    }}
-                    onClick={() => {
-                      const phoneNumber = '932271898'; // Reemplaza con el número de WhatsApp
-                      const message = `¡Hola! Estoy interesado en comprar el Programa de especialización ${curso.curso_nombre}`;
-                      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                      window.open(url, '_blank');
-                    }}
-                    startIcon={<WhatsAppIcon />}
-                  >
-                    Comprar ahora
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                  <Box sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    gap: 2,
+                    width: "100%",
+                  }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        fontSize: "1.2rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <GroupAddIcon sx={{ marginRight: '10px', fontSize: '1.6rem' }} /> {curso.curso_duracion} {isMdUp && 'estudiantes'}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        fontSize: "1.2rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <StarBorderIcon /> 4.5{" "}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  sx={{
+                    mt: 2,
+                    mb: 4,
+                    fontSize: "1rem",
+                    fontWeight: "500",
+                    padding: "10px 0",
+                    borderRadius: "10px",
+                    width: "100%",
+                    color: 'white'
+                  }}
+                  onClick={() => {
+                    const phoneNumber = '932271898'; // Reemplaza con el número de WhatsApp
+                    const message = `¡Hola! Estoy interesado en comprar el Programa de especialización ${curso.curso_nombre}`;
+                    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                    window.open(url, '_blank');
+                  }}
+                  startIcon={<WhatsAppIcon />}
+                >
+                  Comprar ahora
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
         </Grid>
       </Grid>
     </Box>
