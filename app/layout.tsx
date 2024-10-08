@@ -23,7 +23,7 @@ export default function RootLayout({
 
   
   return (
-    <html lang="en">
+    <html lang="es">
       <Head>
         <link rel="icon" href="/favicon_io/favicon.ico" />
         <link

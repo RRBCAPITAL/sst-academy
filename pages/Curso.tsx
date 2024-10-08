@@ -25,19 +25,28 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { useTheme, useMediaQuery } from "@mui/material";
 
-interface NombreDelCurso {
-  nombre: string;
-}
+import { useParams } from 'next/navigation';
 
-const Curso: React.FC<NombreDelCurso> = (props) => {
+const Curso = () => {
+  const params = useParams();  // Puede ser null o un objeto con parámetros
+
+  // Asegúrate de que params y nombre existan
+  const nombre = params?.nombre as string | undefined;
+
+  // Maneja el caso donde `nombre` sea undefined
+  if (!nombre) {
+    return <p>Cargando...</p>;  // O cualquier otra UI de carga o error
+  }
+
+  const formatNombre = deslugify(nombre);
   const [curso, setCurso] = useState<CursoDetallado[]>([]);
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
   useEffect(() => {
-    const nombreCurso = deslugify(props?.nombre);
-    console.log("props ", props.nombre);
+    const nombreCurso = deslugify(formatNombre);
+    console.log("props ", formatNombre);
     console.log(nombreCurso);
 
     if (!nombreCurso) return;
@@ -56,7 +65,7 @@ const Curso: React.FC<NombreDelCurso> = (props) => {
     if (nombreCurso) {
       fetchCursos();
     }
-  }, [props.nombre]);
+  }, [formatNombre]);
 
   const handleUnitClick = (unidadId: string) => {
     setExpandedUnit(expandedUnit === unidadId ? null : unidadId);
