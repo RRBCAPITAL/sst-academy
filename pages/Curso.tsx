@@ -198,7 +198,7 @@ const Curso = () => {
         textDecoration: 'line-through', // Tachado
       }}
     >
-      S/ {Math.floor(curso.curso_precio * 0.80)} {/* Aplica el 15% de descuento */}
+      S/ {Math.floor(curso.curso_precio * 1.2)} {/* Aplica el 15% de descuento */}
     </Typography>
 
     {/* Precio original */}
