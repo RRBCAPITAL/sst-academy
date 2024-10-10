@@ -34,7 +34,6 @@ const Usuarios = () => {
     const fetchUsuarios = async () => {
       try {
         const response = await axios.get<{ user: DataUser[] }>('/api/users'); // Ajusta el endpoint según tu API
-        console.log(response.data);
         
         setUsuarios(response.data.user);
       } catch (err) {
@@ -50,7 +49,6 @@ const Usuarios = () => {
 
     fetchUsuarios();
   }, []);
-  console.log('users: ', usuarios);
   
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

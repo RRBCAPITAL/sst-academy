@@ -45,10 +45,7 @@ const Packs: React.FC<IDDelPack> = (props) => {
       fetchCursos();
     }
   }, [props.id]);
-
-  console.log('data ', pack);
   
-
   return (
     <Box sx={{ paddingBottom: '20px', minHeight: "100vh", maxWidth: '100vw' }}>
        <Box

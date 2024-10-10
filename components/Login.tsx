@@ -27,8 +27,6 @@ const LoginForm: React.FC = () => {
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
     try {
-      console.log('credenciales ', data);
-
       // Enviar los datos de inicio de sesión al backend
       const res = await axios.post('/api/login', data, {
         headers: {

@@ -8,7 +8,7 @@ import * as gtag from "../gtag";
 const GoogleAnalytics: React.FC = () => {
   
   // You can show in the console the GA_TRACKING_ID to confirm
-  console.log(gtag.GA_TRACKING_ID);
+ // console.log(gtag.GA_TRACKING_ID);
 
   return (
     <>

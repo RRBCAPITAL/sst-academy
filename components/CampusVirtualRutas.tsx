@@ -14,9 +14,6 @@ const CampusVirtualRutas = () => {
         const pathSegments = pathname?.split('/').filter(Boolean);
         const lastSegment = pathSegments ? pathSegments[pathSegments.length - 1] : '';
 
-        console.log(pathSegments);
-        
-
         return (
             <>
 

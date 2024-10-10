@@ -44,11 +44,8 @@ const CreateUserForm = () => {
         },
       });
 
-      console.log(res);
-
       // Obtener el ID del usuario recién creado
       const userId = res.data.user.user_id;
-      console.log('user id: ', userId);
 
       // Asignar los cursos al nuevo usuario
       await axios.post('/api/usuario-cursos', {

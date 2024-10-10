@@ -20,7 +20,6 @@ export async function middleware(request: NextRequest) {
   const cookies = parse(request.headers.get('cookie') || '');
   const token = cookies.token;
   const user = cookies.user ? JSON.parse(cookies.user) : null;
-  console.log(path);
   
   // Verifica autenticación
   if (!token) {

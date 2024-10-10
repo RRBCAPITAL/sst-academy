@@ -92,7 +92,6 @@ const CampusVirtualCurso = (props: any) => {
 
   const handleChangeLeccion = async (leccion_id: number) => {
     try {
-      console.log("seleccione ", leccion_id);
 
       setDataLeccionSeleccionada(null);
       const res = await axios.get(
@@ -101,7 +100,6 @@ const CampusVirtualCurso = (props: any) => {
       if (res.data?.InfoLeccion) {
         setDataLeccionSeleccionada(res.data.InfoLeccion);
       }
-      console.log("respuesta de lo seleccionado", res);
     } catch (error) {
       console.error("Error fetching: ", error);
     }
