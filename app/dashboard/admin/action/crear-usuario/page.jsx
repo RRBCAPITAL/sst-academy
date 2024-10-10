@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Grid, Typography, MenuItem, Select, FormControl, InputLabel, Checkbox, ListItemText, FormControlLabel, FormGroup } from '@mui/material';
+import { Box, TextField, Button, Grid, Typography, MenuItem, Select, FormControl, InputLabel, Checkbox, ListItemText, FormControlLabel, FormGroup, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useForm, Controller } from 'react-hook-form';
 import axios from '@/utils/axios.config'; // Ajusta la ruta según tu configuración
 
@@ -10,6 +11,7 @@ const CreateUserForm = () => {
   const [loading, setLoading] = useState(false);
   const [cursos, setCursos] = useState([]);
   const [selectedCursos, setSelectedCursos] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const fetchCursos = async () => {
@@ -68,6 +70,12 @@ const CreateUserForm = () => {
     setSelectedCursos(value);
     setValue('cursos', value); // Actualizar el valor del formulario
   };
+
+  // Función para cambiar el estado de mostrar/ocultar contraseña
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   return (
     <Box sx={{ padding: 3 }}>
@@ -202,10 +210,22 @@ const CreateUserForm = () => {
                   label="Contraseña"
                   variant="outlined"
                   fullWidth
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   error={!!errors.contrasenia}
                   helperText={errors.contrasenia ? 'Contraseña es requerida' : ''}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={togglePasswordVisibility}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />} {/* Mostrar el icono correspondiente */}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               )}
               rules={{ required: true, maxLength: 255 }}

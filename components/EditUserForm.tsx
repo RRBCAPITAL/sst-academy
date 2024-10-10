@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Grid, Typography, MenuItem, Select, InputLabel, FormControl, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import { Box, TextField, Button, Grid, Typography, MenuItem, Select, InputLabel, FormControl, Checkbox, FormGroup, FormControlLabel, IconButton, InputAdornment} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useForm, Controller } from 'react-hook-form';
 import axios from '@/utils/axios.config'; // Ajusta la ruta según tu configuración
 import { User } from '@/Types/user.types';
@@ -17,6 +18,7 @@ const EditUserForm = ({ user, onClose,  onUpdateUser }: { user: DataUser; onClos
   const [loading, setLoading] = useState(false);
   const [cursos, setCursos] = useState<Curso[]>([]); // Lista de todos los cursos
   const [selectedCursos, setSelectedCursos] = useState<number[]>([]); // Cursos seleccionados por el usuario (IDs)
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     // Cargar todos los cursos disponibles y los cursos seleccionados por el usuario
@@ -99,6 +101,8 @@ const EditUserForm = ({ user, onClose,  onUpdateUser }: { user: DataUser; onClos
         : [...prevSelected, cursoId]
     );
   };
+
+  const toggleShowPassword = () => setShowPassword(!showPassword);
 
   return (
     <Box sx={{ padding: 3 }}>
@@ -221,7 +225,20 @@ const EditUserForm = ({ user, onClose,  onUpdateUser }: { user: DataUser; onClos
                   label="Contraseña"
                   variant="outlined"
                   fullWidth
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={toggleShowPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               )}
             />

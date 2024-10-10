@@ -45,9 +45,9 @@ const Packs: React.FC<IDDelPack> = (props) => {
       fetchCursos();
     }
   }, [props.id]);
-  
+
   return (
-    <Box sx={{ paddingBottom: '20px', minHeight: "100vh", maxWidth: '100vw' }}>
+    <Box sx={{ paddingBottom: '20px', minHeight: "100vh", maxWidth: '100vw', overflowX: 'hidden' }}>
        <Box
       sx={{ 
         display: 'flex', // Para habilitar flexbox
@@ -68,16 +68,17 @@ const Packs: React.FC<IDDelPack> = (props) => {
       >
          {pack ? pack?.nombre : "Cargando..."}
       </Box>
-      <Grid container spacing={4}
+      <Grid container spacing={0}
       sx={{ 
       flexDirection: { xs: "column", md: "row" }, // Para pantallas pequeñas, columna; para grandes, fila
+      gap: { xs: '0', md: '4px'},
       maxWidth: '1200px',
-      margin: 'auto'
+      margin: 'auto',
       }}
       >
        
          <Rutas />
-        <Grid item xs={12} md={12} sx={{ position: "relative",}} >
+        <Grid item xs={12} md={12} sx={{ position: "relative", marginTop: {xs: '20px'}, margin: '10px'}} >
               <Card
                 key={pack?.id}
                 variant="outlined"
@@ -86,7 +87,7 @@ const Packs: React.FC<IDDelPack> = (props) => {
                   flexDirection: "column",
                   alignItems: "center",
                   mb: 4,
-                  maxWidth: '800px',
+                  maxWidth: {xs: '600px', md: '800px'},
                   margin: 'auto',
                   border: "2px solid #ff914d",
                     borderRadius: "10px",

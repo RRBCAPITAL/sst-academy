@@ -97,7 +97,7 @@ const Curso = () => {
       }}
       >
          <Rutas />
-        <Grid item xs={12} md={8} sx={{ position: "relative", padding: '20px'}} >
+        <Grid item xs={12} md={8} sx={{ position: "relative", padding: {xs: '0px', md: '20px'}, margin: {xs: '0px', md: '0px'}, marginTop: {xs: '20px', md: '0px'} }} >
           {curso &&
             curso?.map((curso) => (
               <Card
@@ -127,19 +127,6 @@ const Curso = () => {
                     borderRadius: "10px",
                   }}
                 >
-                  {/* <Typography
-                    variant="h2"
-                    component="h1"
-                    color="primary"
-                    gutterBottom
-                    sx={{
-                      fontWeight: "bold",
-                      fontSize: "2.6rem",
-                      lineHeight: "1.1",
-                    }}
-                  >
-                    {curso.curso_nombre}
-                  </Typography> */}
                   <Typography
                     variant="h4"
                     paragraph
@@ -273,7 +260,7 @@ const Curso = () => {
               </Card>
             ))}
         </Grid>
-        <Grid item xs={12} md={4} sx={{order: { xs: 2, md: 1 }, padding: '20px 0'}}>
+        <Grid item xs={12} md={4} sx={{order: { xs: 2, md: 1 }, padding: {xs: '20px 6px', md: '20px 0'}}}>
           <Typography
             variant="h5"
             component="h2"
