@@ -280,7 +280,7 @@ const ContenidoLandingInicio = () => {
           </Grid>
 
           {/* Texto a la derecha */}
-          <Grid item xs={12} md={6} data-aos="fade-left" data-aos-delay="400" sx={{marginTop: '20px', paddingLeft: '20px'}}>
+          <Grid item xs={12} md={6} data-aos="fade-left" data-aos-delay="400" sx={{marginTop: '20px', paddingLeft: {md: '60px'}}}>
             <Typography
               variant="h4"
               sx={{
