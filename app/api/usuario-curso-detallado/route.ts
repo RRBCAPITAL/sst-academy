@@ -14,7 +14,25 @@ export async function GET(request: Request) {
 
 
         if(cursoNombre){
-            queryCursoNombre = sql`SELECT curso_id FROM curso WHERE LOWER(TRANSLATE(nombre, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) = LOWER(${cursoNombre});`   
+            queryCursoNombre = sql`
+            SELECT curso_id 
+            FROM curso 
+            WHERE LOWER(
+                REGEXP_REPLACE(
+                TRANSLATE(nombre, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou'), 
+                '[^a-zA-Z0-9 ]', 
+                '', 
+                'g'
+                )
+            ) = LOWER(
+                REGEXP_REPLACE(
+                TRANSLATE(${cursoNombre}, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou'), 
+                '[^a-zA-Z0-9 ]', 
+                '', 
+                'g'
+                )
+            );
+            `;
             const { rows } = await queryCursoNombre;
             if(rows.length > 0){
             cursoId = rows[0].curso_id

@@ -355,14 +355,22 @@ const Curso = () => {
                           >
                             Temas
                           </Typography>
-                          {unidad.lecciones.map((leccion) => (
-                            <Typography
-                              key={leccion.nombre}
-                              variant="body2"
-                              sx={{ mb: 1, fontSize: "1rem" }}
-                            >
-                              - {leccion.nombre}
-                            </Typography>
+                          {unidad.lecciones.map((leccion, leccionIndex) => (
+                            (["C-1", "E-1", "F-1", "G-1", "I-1"].includes(curso.curso_id)) ? (
+                              leccion.nombre?.split(" - ")?.map((frase, index) => (
+                                <div key={`${leccionIndex}-${index}`}>
+                                  {index + 1}. {frase.trim()}
+                                </div>
+                              ))
+                            ) : (
+                              <Typography
+                                key={leccion.nombre}
+                                variant="body2"
+                                sx={{ mb: 1, fontSize: "1rem" }}
+                              >
+                                - {leccion.nombre}
+                              </Typography>
+                            )
                           ))}
                         </Box>
                       </Collapse>

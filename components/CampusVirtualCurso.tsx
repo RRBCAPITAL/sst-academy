@@ -442,7 +442,7 @@ const CampusVirtualCurso = (props: any) => {
                                       handleChangeLeccion(leccion.leccion_id)
                                     }
                                   >
-                                    {curso.curso_id === "C-1" ? (
+                                    {(curso.curso_id === "C-1" || curso.curso_id === "E-1" || curso.curso_id === "F-1" || curso.curso_id === "G-1" || curso.curso_id === "I-1") ? (
                                       leccion.nombre
                                         ?.split(" - ")
                                         ?.map(
