@@ -228,10 +228,6 @@ const CampusVirtualCurso = (props: any) => {
               );
 
               const leccionCompletada = leccionActual?.completado;
-              console.log("leccion actual id ", leccionActualId);
-              console.log("unidad actual ", unidadActual);
-              console.log("leccionactual ", leccionActual);
-              console.log("leccion completada ", leccionCompletada);
 
               return (
                 <Card
@@ -276,7 +272,7 @@ const CampusVirtualCurso = (props: any) => {
                         textShadow: "0 0 1px rgba(0, 0, 0, 0.1);",
                       }}
                     >
-                      {curso.curso_id === "C-1"
+                      {(curso.curso_id === "C-1" || curso.curso_id === "E-1" || curso.curso_id === "F-1" || curso.curso_id === "G-1" || curso.curso_id === "I-1")
                         ? leccionNombre
                             ?.split(" - ")
                             ?.map((frase: string, index: number) => (
